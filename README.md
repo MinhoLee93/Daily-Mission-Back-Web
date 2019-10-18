@@ -1,12 +1,32 @@
-## 기술 스택은?
-   1) React(SPA)
-   2) Spring Boot & Srping Cloud(MSA)
-   3) JPA
-   4) QueryDSL
-   5) IntelliJ (IDE)         
+## 기술 스택
+   1) React (SPA)
+   2) Spring Boot (Framework)
+   3) JPA & QueryDSL (ORM)
+   4) OAuth2.0 + JWT (Security)
+   6) AWS (Cloud)
+   7) Jenkins (CI/CD)
+   8) ELK Stack (Search)
+   9) IntelliJ (IDE)
 
- 
-## React 
-## Spring Boot & Srping Cloud(MSA)
-## JPA
-## QueryDSL
+## React (SPA)
+- 리액트를 다루는 기술
+
+## Spring Boot (Framework)
+- 스프링 부트 코딩 공작소
+
+## JPA & QueryDSL (ORM)
+- 자바 ORM 표준 JPA 프로그래밍
+
+## OAuth2.0 + JWT (Security)
+
+
+## AWS (Cloud)
+
+
+## Jenkins (CI/CD)
+
+
+## ELK Stack (Search)
+
+
+## IntellJ (IDE)
