@@ -21,7 +21,7 @@
 
 
 ## AWS (Cloud)
-
+- 아마존 웹서비스를 다루는 기술
 
 ## Jenkins (CI/CD)
 
