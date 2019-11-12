@@ -2,11 +2,12 @@
    1) Spring Boot (Framework)
    2) JPA & QueryDSL (ORM)
    3) AWS (Cloud)
-   4) React (SPA)
-   5) OAuth2.0 + JWT (Security)
-   6) Rabbit MQ (Message Queue)
-   7) ELK Stack (Search)
-   8) Jenkins (CI/CD)
+   4) MongoDB (NoSQL) 
+   5) Redis (Caching)
+   6) OAuth2.0 + JWT (Security)
+   7) Rabbit MQ (Message Queue)
+   8) ELK Stack (Search)
+   9) React (SPA) * 
 
 ## Spring Boot (Framework)
 - 스프링 부트 코딩 공작소
@@ -17,8 +18,11 @@
 ## AWS (Cloud)
 - 아마존 웹서비스를 다루는 기술
 
-## React (SPA)
-- 리액트를 다루는 기술
+## MongoDB (NoSQL)
+
+
+## Redis (Caching)
+
 
 ## OAuth2.0 + JWT (Security)
 
@@ -29,5 +33,5 @@
 ## ELK Stack (Search)
 
 
-## Jenkins (CI/CD)
-
+## React (SPA)
+- 리액트를 다루는 기술
