@@ -24,8 +24,8 @@
 ## Redis (Caching)
 
 
-## OAuth2.0 + JWT (Security)
-
+## OAuth2.0 (Security)
+- Oauth 2.0 마스터
 
 ## Rabbit MQ (Message Queue)
 
