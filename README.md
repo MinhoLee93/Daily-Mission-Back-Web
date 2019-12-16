@@ -4,7 +4,7 @@
    3) AWS (Cloud)
    4) MongoDB (NoSQL) 
    5) Redis (Caching)
-   6) OAuth2.0 + JWT (Security)
+   6) OAuth2.0 (Security)
    7) Rabbit MQ (Message Queue)
    8) ELK Stack (Search)
    9) React (SPA) * 
