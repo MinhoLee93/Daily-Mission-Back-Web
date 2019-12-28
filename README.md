@@ -25,9 +25,11 @@
 
 
 ## OAuth2.0 (Security)
+- 생활코딩 OAuth2.0 : https://opentutorials.org/course/3405
 - Oauth 2.0 마스터
 
 ## Rabbit MQ (Message Queue)
+- Udemy RabiitMQ : https://www.udemy.com/course/rabbitmq-java-spring-boot-for-system-integration/
 - RabbitMQ 따라잡기
 
 ## ELK Stack (Search)
