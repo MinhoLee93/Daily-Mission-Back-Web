@@ -1,33 +1,46 @@
 package com.dailymission.api.springboot.web.controller;
 
 import com.sun.org.apache.regexp.internal.RE;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import javax.annotation.security.RunAs;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class DefualtControllerTest {
+public class DefaultControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Test
-    public void hello_world_return() throws Exception {
-        String result = "Hello World";
+    public void test() throws Exception {
+        String result = "test";
 
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(result));
+    }
+
+    @Test
+    public void dto_test() throws Exception {
+        // given
+        String name = "test";
+        int amount = 1;
+
+        // when
+        mvc.perform(get("/default/dto")
+                    .param("name", name)
+                    .param("amount", String.valueOf(amount)))
+        // then
+                    .andExpect(jsonPath("$.name", Matchers.is(name)))
+                    .andExpect(jsonPath("$.amount", Matchers.is(amount)));
+
+
     }
 }
