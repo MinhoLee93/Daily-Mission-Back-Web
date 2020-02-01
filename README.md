@@ -17,3 +17,8 @@
 # Front-end 
 • React (SPA)  
   
+# ERD
+• ErdCloud : https://www.erdcloud.com/d/HcjicwpDs8zmGdCqL
+
+# API Document
+• GitBook : https://app.gitbook.com/@minholee93/s/daily-mission/~/settings/share
