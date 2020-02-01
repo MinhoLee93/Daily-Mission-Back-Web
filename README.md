@@ -1,20 +1,19 @@
-## 기술 스택
-   # Back-end :  
-     1) Spring Boot (Framework)
-     2) JPA & QueryDSL (ORM)
-     3) MariaDB (RDB)
-     4) OAuth2.0 (Login) : https://velog.io/@minholee_93/series/OAuth
-     5) Redis (Caching) : https://velog.io/@minholee_93/series/Redis
-     7) JUnit (Test) : https://velog.io/@minholee_93/series/JUnit
-     
-   # Infra :
-     1) AWS (Cloud) : https://velog.io/@minholee_93/series/AWS
-     2) Nginx (Web Server) : https://velog.io/@minholee_93/series/Nginx
-     3) Rabbit MQ (Message Broker) : https://velog.io/@minholee_93/series/RabbitMQ
-   
-   # Devops :
-     1) Jenkins & Codedeploy (CI/CD) : https://velog.io/@minholee_93/series/Jenkins
-   
-   # Front-end :
-     1) React (SPA)
+# Back-end  
+• Spring Boot (Framework)
+• JPA & QueryDSL (ORM)
+• MariaDB (RDB)
+• OAuth2.0 (Login) : https://velog.io/@minholee_93/series/OAuth
+• Redis (Caching) : https://velog.io/@minholee_93/series/Redis
+• JUnit (Test) : https://velog.io/@minholee_93/series/JUnit
+  
+# Infra 
+• AWS (Cloud) : https://velog.io/@minholee_93/series/AWS
+• Nginx (Web Server) : https://velog.io/@minholee_93/series/Nginx
+• Rabbit MQ (Message Broker) : https://velog.io/@minholee_93/series/RabbitMQ
+
+# Devops 
+• Jenkins & Codedeploy (CI/CD) : https://velog.io/@minholee_93/series/Jenkins
+
+# Front-end 
+• React (SPA)
   
