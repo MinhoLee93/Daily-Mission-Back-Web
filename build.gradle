@@ -25,12 +25,27 @@ repositories {
 }
 
 dependencies {
+    //db
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+    // lombok
     compileOnly 'org.projectlombok:lombok'
+
+    // devtool
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // annotation processor
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // test
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
