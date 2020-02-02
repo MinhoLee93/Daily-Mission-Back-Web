@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.1.9.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'java'
 }
 
@@ -16,6 +17,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -55,8 +57,34 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    // querydsl
+    def querydslVersion = "4.1.4"
+    compile ("com.querydsl:querydsl-apt")
+    compile ("com.querydsl:querydsl-jpa")
 }
 
 test {
     useJUnitPlatform()
+}
+
+// querydsl 적용
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
+    }
 }
