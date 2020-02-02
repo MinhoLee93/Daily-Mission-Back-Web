@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.domain;
+package com.dailymission.api.springboot.web.domain.posts;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -2,13 +2,12 @@ package com.dailymission.api.springboot.web.dto;
 
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@SpringBootTest
 public class DefaultDtoTest {
 
     @Test
