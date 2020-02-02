@@ -3,3 +3,7 @@ spring:
     show-sql: true
     properties:
       dialect : org.hibernate.dialect.MySQL5InnoDBDialect
+
+  h2:
+    console:
+      enabled: true
