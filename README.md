@@ -1,7 +1,8 @@
 # Back-end  
 • Spring Boot (Framework)  
-• JPA & QueryDSL (ORM)  
 • MariaDB (RDB)  
+• MongoDB (NoSQL) : https://velog.io/@minholee_93/series/MongoDB  
+• JPA & QueryDSL (ORM) : https://velog.io/@minholee_93/series/JPA  
 • OAuth2.0 (Login) : https://velog.io/@minholee_93/series/OAuth  
 • Redis (Caching) : https://velog.io/@minholee_93/series/Redis  
 • JUnit (Test) : https://velog.io/@minholee_93/series/JUnit  
@@ -17,3 +18,8 @@
 # Front-end 
 • React (SPA)  
   
+# ERD
+• ErdCloud : https://www.erdcloud.com/d/HcjicwpDs8zmGdCqL
+
+# API Document
+• GitBook : https://app.gitbook.com/@minholee93/s/daily-mission/~/settings/share
