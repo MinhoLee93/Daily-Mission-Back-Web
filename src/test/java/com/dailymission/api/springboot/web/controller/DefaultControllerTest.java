@@ -1,6 +1,5 @@
 package com.dailymission.api.springboot.web.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;

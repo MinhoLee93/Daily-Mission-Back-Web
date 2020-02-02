@@ -1,1 +1,5 @@
-
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      dialect : org.hibernate.dialect.MySQL5InnoDBDialect
