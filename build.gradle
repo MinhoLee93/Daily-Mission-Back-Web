@@ -31,6 +31,9 @@ dependencies {
     // h2 for test
     compile 'com.h2database:h2'
 
+    // mustache
+    compile 'org.springframework.boot:spring-boot-starter-mustache'
+
     // jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
