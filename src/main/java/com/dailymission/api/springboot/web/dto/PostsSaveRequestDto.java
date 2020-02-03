@@ -23,7 +23,7 @@ public class PostsSaveRequestDto implements Serializable {
 
     public Posts toEntitiy(){
         return Posts.builder()
-                .title(content)
+                .title(title)
                 .content(content)
                 .author(author)
                 .build();
