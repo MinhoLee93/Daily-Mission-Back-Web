@@ -2,9 +2,10 @@ package com.dailymission.api.springboot.web.dto;
 
 import com.dailymission.api.springboot.web.domain.posts.Posts;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class PostsListResponseDto {
+public class PostsListResponseDto implements Serializable {
     private Long id;
     private  String title;
     private  String author;

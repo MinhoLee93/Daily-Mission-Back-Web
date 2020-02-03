@@ -62,6 +62,9 @@ dependencies {
     def querydslVersion = "4.1.4"
     compile ("com.querydsl:querydsl-apt")
     compile ("com.querydsl:querydsl-jpa")
+
+    // gson dependency
+    compile 'com.google.code.gson:gson'
 }
 
 test {

@@ -3,8 +3,10 @@ package com.dailymission.api.springboot.web.dto;
 import com.dailymission.api.springboot.web.domain.posts.Posts;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class PostsResponseDto {
+public class PostsResponseDto  implements Serializable {
     private  Long id;
     private String title;
     private String content;

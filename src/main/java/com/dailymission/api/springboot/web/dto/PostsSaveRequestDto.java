@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
-public class PostsSaveRequestDto {
+public class PostsSaveRequestDto implements Serializable {
     private String title;
     private String content;
     private String author;
