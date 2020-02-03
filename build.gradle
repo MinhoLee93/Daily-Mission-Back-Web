@@ -65,6 +65,9 @@ dependencies {
 
     // gson dependency
     compile 'com.google.code.gson:gson'
+
+    // oauth
+    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 test {

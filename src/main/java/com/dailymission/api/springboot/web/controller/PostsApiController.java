@@ -5,7 +5,6 @@ import com.dailymission.api.springboot.web.dto.PostsSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.PostsUpdateRequestDto;
 import com.dailymission.api.springboot.web.service.PostsService;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
