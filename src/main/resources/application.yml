@@ -10,3 +10,6 @@ spring:
 
   profiles:
     include: oauth
+
+  session:
+    store-type: jdbc
