@@ -1,12 +1,25 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.9.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.1.9.RELEASE'
+        querydslPluginVersion = '1.0.10'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+    }
 }
 
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 group = 'com.dailymission.api'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = '1.8'
 
 configurations {
@@ -17,7 +30,6 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
-    querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -27,65 +39,56 @@ repositories {
 }
 
 dependencies {
-    //db
-    //implementation 'org.mariadb.jdbc:mariadb-java-client'
-
+    // web
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    // lombok
+    compile 'org.projectlombok:lombok'
+    // jpa
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // mustache
+    compile 'org.springframework.boot:spring-boot-starter-mustache'
     // h2 for test
     compile 'com.h2database:h2'
 
-    // mustache
-    compile 'org.springframework.boot:spring-boot-starter-mustache'
+    // oauth
+    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // session db
+    compile 'org.springframework.session:spring-session-jdbc'
 
-    // jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //db
+    compile 'org.mariadb.jdbc:mariadb-java-client'
 
-    // web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-web-services'
-
-    // lombok
-    compileOnly 'org.projectlombok:lombok'
-
-    // devtool
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // test auth
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.security:spring-security-test'
 
     // annotation processor
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // test
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
     // querydsl
-    def querydslVersion = "4.1.4"
     compile ("com.querydsl:querydsl-apt")
     compile ("com.querydsl:querydsl-jpa")
+
+    // devtool
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // gson dependency
     compile 'com.google.code.gson:gson'
 
-    // oauth
-    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // session db
-    compile 'org.springframework.session:spring-session-jdbc'
-
-    // test auth
-    testCompile 'org.springframework.security:spring-security-test'
 }
+//
+//test {
+//    useJUnitPlatform()
+//}
 
-test {
-    useJUnitPlatform()
-}
-
-tasks.withType(Test) {
-    scanForTestClasses = false
-    include "**/*Test.class" // whatever Ant pattern matches your test class files
-}
+//tasks.withType(Test) {
+//    scanForTestClasses = false
+//    include "**/*Test.class" // whatever Ant pattern matches your test class files
+//}
 
 // querydsl 적용
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
 def querydslSrcDir = 'src/main/generated'
 
 querydsl {
@@ -94,14 +97,18 @@ querydsl {
     querydslSourcesDir = querydslSrcDir
 }
 
-compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
-}
-
 sourceSets {
     main {
         java {
             srcDirs = ['src/main/java', querydslSrcDir]
         }
     }
+}
+
+ext {
+    gradleVersion= '4.10.2'
+}
+
+wrapper {
+    gradleVersion = "$gradleVersion"
 }
