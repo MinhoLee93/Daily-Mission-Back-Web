@@ -1,6 +1,5 @@
 package com.dailymission.api.springboot.config.security;
 
-import com.dailymission.api.springboot.web.domain.user.Role;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

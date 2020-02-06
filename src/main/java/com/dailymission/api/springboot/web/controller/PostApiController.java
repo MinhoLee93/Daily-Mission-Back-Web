@@ -45,7 +45,7 @@ public class PostApiController {
         return id;
     }
 
-    @GetMapping("/api/posts/all")
+    @GetMapping("/api/post/all")
     public String all(){
         List<PostListResponseDto> responseDtoList =  postService.findAllDesc();
         String json = new Gson().toJson(responseDtoList);

@@ -1,7 +1,7 @@
 package com.dailymission.api.springboot.web.service;
 
-import com.dailymission.api.springboot.web.domain.post.Post;
-import com.dailymission.api.springboot.web.domain.post.PostRepository;
+import com.dailymission.api.springboot.web.repository.post.Post;
+import com.dailymission.api.springboot.web.repository.post.PostRepository;
 import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
@@ -53,6 +53,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                         .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id =" + id));
 
-        postRepository.delete(post);
+        // delete flag -> 'Y'
+        post.delete();
     }
 }

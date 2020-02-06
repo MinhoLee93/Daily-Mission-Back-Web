@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-public class PostUpdateRequestDto implements Serializable {
+public class PostUpdateRequestDto  {
     private String title;
     private String content;
 

@@ -1,12 +1,14 @@
 package com.dailymission.api.springboot.web.dto.post;
 
-import com.dailymission.api.springboot.web.domain.post.Post;
-import com.dailymission.api.springboot.web.domain.user.User;
+import com.dailymission.api.springboot.web.repository.post.Post;
+import com.dailymission.api.springboot.web.repository.user.User;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class PostListResponseDto implements Serializable {
+@Getter
+public class PostListResponseDto {
     private Long id;
     private String title;
     private User user;

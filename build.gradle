@@ -39,6 +39,8 @@ repositories {
 }
 
 dependencies {
+    //mariadb
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
     // web
     compile 'org.springframework.boot:spring-boot-starter-web'
     // lombok
@@ -48,15 +50,12 @@ dependencies {
     // mustache
     compile 'org.springframework.boot:spring-boot-starter-mustache'
     // h2 for test
-    compile 'com.h2database:h2'
+    testCompile 'com.h2database:h2'
 
     // oauth
-    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // session db
-    compile 'org.springframework.session:spring-session-jdbc'
-
-    //db
-    compile 'org.mariadb.jdbc:mariadb-java-client'
+    // compile 'org.springframework.session:spring-session-jdbc'
 
     // test auth
     testCompile 'org.springframework.boot:spring-boot-starter-test'
@@ -70,22 +69,29 @@ dependencies {
     compile ("com.querydsl:querydsl-apt")
     compile ("com.querydsl:querydsl-jpa")
 
+    testCompile ("com.querydsl:querydsl-apt")
+    testCompile ("com.querydsl:querydsl-jpa")
+
     // devtool
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // gson dependency
     compile 'com.google.code.gson:gson'
 
-}
-//
-//test {
-//    useJUnitPlatform()
-//}
+    // log4j
+    compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 
-//tasks.withType(Test) {
-//    scanForTestClasses = false
-//    include "**/*Test.class" // whatever Ant pattern matches your test class files
-//}
+    compile 'org.springframework.boot:spring-boot-starter-security'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class" // whatever Ant pattern matches your test class files
+}
 
 // querydsl 적용
 apply plugin: "com.ewerk.gradle.plugins.querydsl"

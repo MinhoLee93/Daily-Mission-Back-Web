@@ -32,6 +32,7 @@ out/
 .vscode/
 
 ## OAuth
+application.yml
 application-oauth.yml
 
 ## QueryDSL
