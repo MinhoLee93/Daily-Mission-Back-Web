@@ -22,7 +22,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/posts',
+            url: '/api/post',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -43,7 +43,7 @@ var main = {
 
         $.ajax({
             type: 'PUT',
-            url: '/api/posts/'+id,
+            url: '/api/post/'+id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -59,7 +59,7 @@ var main = {
 
         $.ajax({
             type: 'DELETE',
-            url: '/api/posts/'+id,
+            url: '/api/post/'+id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function() {

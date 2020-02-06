@@ -33,3 +33,6 @@ out/
 
 ## OAuth
 application-oauth.yml
+
+## QueryDSL
+generated

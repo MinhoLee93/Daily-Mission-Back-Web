@@ -1,46 +1,40 @@
 package com.dailymission.api.springboot.web.controller;
 
-import com.dailymission.api.springboot.config.auth.LoginUser;
-import com.dailymission.api.springboot.config.auth.dto.SessionUser;
-import com.dailymission.api.springboot.web.domain.user.User;
-import com.dailymission.api.springboot.web.dto.PostsResponseDto;
-import com.dailymission.api.springboot.web.service.PostsService;
+import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
+import com.dailymission.api.springboot.web.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.servlet.http.HttpSession;
-
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
 
-    private final PostsService postsService;
-    private final HttpSession httpSession;
+    private final PostService postService;
 
     @GetMapping("/")
-    public String index(Model model, @LoginUser SessionUser user){
-        model.addAttribute("posts", postsService.findAllDesc());
+    public String index(Model model){
+        model.addAttribute("post", postService.findAllDesc());
 
-        if(user != null){
-            model.addAttribute("userName", user.getName());
-        }
+//        if(user != null){
+//            model.addAttribute("userName", user.getName());
+//        }
 
         return "index";
     }
 
-    @GetMapping("/posts/save")
+    @GetMapping("/post/save")
     public String postsSave(){
-        return "posts-save";
+        return "post-save";
     }
 
-    @GetMapping("/posts/update/{id}")
-    public String postsUpdate(@PathVariable Long id, Model model){
-        PostsResponseDto dto = postsService.findById(id);
+    @GetMapping("/post/update/{id}")
+    public String postUpdate(@PathVariable Long id, Model model){
+        PostResponseDto dto = postService.findById(id);
         model.addAttribute("post", dto);
 
-        return "posts-update";
+        return "post-update";
     }
 }

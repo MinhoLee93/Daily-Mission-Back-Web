@@ -23,6 +23,6 @@ public class IndexControllerTest {
         String body = this.restTemplate.getForObject("/", String.class);
 
         // then
-        assertThat(body).contains("daily-mission");
+        assertThat(body).contains("daily-Mission");
     }
 }

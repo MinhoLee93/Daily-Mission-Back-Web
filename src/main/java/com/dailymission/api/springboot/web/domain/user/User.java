@@ -2,11 +2,16 @@ package com.dailymission.api.springboot.web.domain.user;
 
 
 import com.dailymission.api.springboot.web.domain.common.BaseTimeEntity;
+import com.dailymission.api.springboot.web.domain.mission.Mission;
+import com.dailymission.api.springboot.web.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -15,20 +20,25 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name="NAME", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name="EMAIL", nullable = false)
     private String email;
 
-    @Column
+    @Column(name="PICTURE")
     private String picture;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name="ROLE", nullable = false)
     private Role role;
+
+    @Column(name = "DELETE_FLAG", nullable = false)
+    @ColumnDefault("'N'")
+    private String deleteFlag;
 
     @Builder
     public User(String name, String email, String picture, Role role){
@@ -46,6 +56,13 @@ public class User extends BaseTimeEntity {
     }
 
     public String getRoleKey(){
+
         return this.role.getKey();
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Mission> missions = new ArrayList<>();
 }
