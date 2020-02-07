@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.repository.user;
+package com.dailymission.api.springboot.web.repository.account;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,15 +6,15 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import javax.persistence.EntityManager;
 
-public class UserRepositoryCustomImpl extends QuerydslRepositorySupport implements  UserRepositoryCustom {
+public class AccountRepositoryCustomImpl extends QuerydslRepositorySupport implements AccountRepositoryCustom {
 
     @Autowired
     EntityManager em;
 
     private JPAQueryFactory queryFactory;
 
-    public UserRepositoryCustomImpl(){
-        super(User.class);
+    public AccountRepositoryCustomImpl(){
+        super(Account.class);
         this.queryFactory = new JPAQueryFactory(em);
     }
 }

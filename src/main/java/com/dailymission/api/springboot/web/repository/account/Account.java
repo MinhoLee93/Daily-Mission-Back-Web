@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.repository.user;
+package com.dailymission.api.springboot.web.repository.account;
 
 
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +18,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class User extends BaseTimeEntity {
+@DynamicInsert
+@DynamicUpdate
+public class Account extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,14 +46,13 @@ public class User extends BaseTimeEntity {
     private String deleteFlag;
 
     @Builder
-    public User(String name, String email, String picture, Role role){
+    public Account(String name, String email, String picture){
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.role = role;
     }
 
-    public User update(String name, String picture){
+    public Account update(String name, String picture){
         this.name = name;
         this.picture = picture;
 
@@ -61,9 +64,9 @@ public class User extends BaseTimeEntity {
         return this.role.getKey();
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "account")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "account")
     private List<Mission> missions = new ArrayList<>();
 }

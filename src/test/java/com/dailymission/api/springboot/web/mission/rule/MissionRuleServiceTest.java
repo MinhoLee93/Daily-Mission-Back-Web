@@ -1,9 +1,10 @@
-package com.dailymission.api.springboot.web.service;
+package com.dailymission.api.springboot.web.mission.rule;
 
 import com.dailymission.api.springboot.web.dto.missionRule.MissionRuleUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRuleRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
+import com.dailymission.api.springboot.web.service.MissionRuleService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

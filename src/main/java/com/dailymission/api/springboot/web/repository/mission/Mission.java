@@ -3,11 +3,13 @@ package com.dailymission.api.springboot.web.repository.mission;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.post.Post;
-import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Mission extends BaseTimeEntity {
 
     @Id
@@ -50,12 +54,13 @@ public class Mission extends BaseTimeEntity {
 
 
     @Builder
-    public Mission(String title, String content, Date startDate, Date endDate, String endFlag, String deleteFlag){
+    public Mission(String title, String content, Date startDate, Date endDate, String endFlag, MissionRule missionRule, Account account){
         this.title = title;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
-
+        this.missionRule = missionRule;
+        this.account = account;
         this.credential = createCredential();
     }
 
@@ -67,13 +72,13 @@ public class Mission extends BaseTimeEntity {
     }
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "MISSION_RULE_ID")
     private MissionRule missionRule;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "ACCOUNT_ID")
+    private Account account;
 
     @OneToMany(mappedBy = "mission")
     private List<Post> posts = new ArrayList<>();

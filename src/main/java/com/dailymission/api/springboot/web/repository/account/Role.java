@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.repository.user;
+package com.dailymission.api.springboot.web.repository.account;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

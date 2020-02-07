@@ -6,12 +6,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class MissionRule extends BaseTimeEntity {
 
     @Id
@@ -35,7 +39,6 @@ public class MissionRule extends BaseTimeEntity {
             throw new IllegalArgumentException("week 값 내부엔 N/Y만 입력할 수 있습니다.");
         }
 
-        this.deleteFlag = "N";
         this.week = week;
     }
 

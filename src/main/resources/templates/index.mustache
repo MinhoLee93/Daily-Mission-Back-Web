@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
             {{#userName}}
-                Logged in as: <span id="user">{{userName}}</span>
+                Logged in as: <span id="account">{{userName}}</span>
                 <a href="/logout" class="btn btn-info active" role="button">Logout</a>
             {{/userName}}
             {{^userName}}
@@ -33,7 +33,7 @@
             <tr>
                 <td>{{id}}</td>
                 <td><a href="/post/update/{{id}}">{{title}}</a></td>
-                <td>{{user}}</td>
+                <td>{{account}}</td>
                 <td>{{modifiedDate}}</td>
             </tr>
         {{/post}}

@@ -18,8 +18,8 @@ public class IndexController {
     public String index(Model model){
         model.addAttribute("post", postService.findAllDesc());
 
-//        if(user != null){
-//            model.addAttribute("userName", user.getName());
+//        if(account != null){
+//            model.addAttribute("userName", account.getName());
 //        }
 
         return "index";

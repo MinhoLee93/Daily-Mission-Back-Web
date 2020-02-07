@@ -1,12 +1,14 @@
 package com.dailymission.api.springboot.web.repository.post;
 
+import com.dailymission.api.springboot.web.repository.account.Account;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
-import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -14,6 +16,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class Post extends BaseTimeEntity {
 
     @Id
@@ -32,16 +36,16 @@ public class Post extends BaseTimeEntity {
     private Mission mission;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
-    private User user;
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "id", nullable = false)
+    private Account account;
 
 
     @Builder
-    public Post(String title, String content, Mission mission, User user){
+    public Post(String title, String content, Mission mission, Account account){
         this.title = title;
         this.content = content;
         this.mission = mission;
-        this.user = user;
+        this.account = account;
     }
 
     public void update(String title, String content) {
