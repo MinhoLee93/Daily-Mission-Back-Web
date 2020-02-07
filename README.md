@@ -22,4 +22,4 @@
 • ErdCloud : https://www.erdcloud.com/d/HcjicwpDs8zmGdCqL
 
 # API Document
-• GitBook : https://app.gitbook.com/@minholee93/s/daily-mission/~/settings/share
+• GitBook : https://minholee93.gitbook.io/daily-mission/~/settings/share
