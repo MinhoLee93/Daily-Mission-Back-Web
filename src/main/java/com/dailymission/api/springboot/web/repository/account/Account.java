@@ -50,6 +50,9 @@ public class Account extends BaseTimeEntity {
         this.name = name;
         this.email = email;
         this.picture = picture;
+
+        this.role = Role.USER;
+        this.deleteFlag = "N";
     }
 
     public Account update(String name, String picture){

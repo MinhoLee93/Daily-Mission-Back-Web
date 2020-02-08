@@ -1,7 +1,7 @@
-package com.dailymission.api.springboot.web.controller;
+package com.dailymission.api.springboot.web.controller.index;
 
 import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
-import com.dailymission.api.springboot.web.service.PostService;
+import com.dailymission.api.springboot.web.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

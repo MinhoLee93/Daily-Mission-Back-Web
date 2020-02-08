@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.dto.missionRule;
+package com.dailymission.api.springboot.web.dto.mission.rule;
 
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;

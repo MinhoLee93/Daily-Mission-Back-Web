@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.service;
+package com.dailymission.api.springboot.web.service.post;
 
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
@@ -56,4 +56,6 @@ public class PostService {
         // delete flag -> 'Y'
         post.delete();
     }
+
+
 }

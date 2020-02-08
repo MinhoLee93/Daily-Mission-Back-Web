@@ -59,6 +59,7 @@ public class MissionRule extends BaseTimeEntity {
 
     }
 
+
     public boolean ruleCheck(Week week){
         RuleChecker checker = RuleChecker.builder().build();
 

@@ -1,9 +1,9 @@
-package com.dailymission.api.springboot.web.controller;
+package com.dailymission.api.springboot.web.controller.post;
 
 import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
-import com.dailymission.api.springboot.web.service.PostService;
+import com.dailymission.api.springboot.web.service.post.PostService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,13 @@ public class PostApiController {
 
     private final PostService postService;
 
+    @PostMapping("/api/post")
+    public Long save(@RequestBody String requestJson){
+        PostSaveRequestDto requestDto =  new Gson().fromJson(requestJson, PostSaveRequestDto.class);
+
+        return postService.save(requestDto);
+    }
+
     @GetMapping("/api/post/{id}")
     public String findById (@PathVariable Long id){
         String json = new Gson().toJson(postService.findById(id));
@@ -24,12 +31,6 @@ public class PostApiController {
         return json;
     }
 
-    @PostMapping("/api/post")
-    public Long save(@RequestBody String requestJson){
-        PostSaveRequestDto requestDto =  new Gson().fromJson(requestJson, PostSaveRequestDto.class);
-
-        return postService.save(requestDto);
-    }
 
     @PutMapping("/api/post/{id}")
     public Long update(@PathVariable Long id, @RequestBody String requestJson){
@@ -52,4 +53,5 @@ public class PostApiController {
 
         return json;
     }
+
 }

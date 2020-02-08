@@ -1,17 +1,16 @@
 package com.dailymission.api.springboot.web.mission.rule;
 
-import com.dailymission.api.springboot.web.dto.missionRule.MissionRuleUpdateRequestDto;
+import com.dailymission.api.springboot.web.dto.mission.rule.MissionRuleUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRuleRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
-import com.dailymission.api.springboot.web.service.MissionRuleService;
+import com.dailymission.api.springboot.web.service.mission.rule.MissionRuleService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 
 import java.util.NoSuchElementException;
 
@@ -33,13 +32,13 @@ public class MissionRuleServiceTest {
     @Before
     public void setup() throws Exception {
         Week week =  Week.builder()
-                         .sun("Y")
-                         .mon("Y")
-                         .tue("Y")
-                         .wed("Y")
-                         .thu("Y")
-                         .fri("N")
-                         .sat("N").build();
+                .sun("Y")
+                .mon("Y")
+                .tue("Y")
+                .wed("Y")
+                .thu("Y")
+                .fri("N")
+                .sat("N").build();
 
         missionRule = MissionRule.builder().week(week).build();
     }
@@ -59,8 +58,8 @@ public class MissionRuleServiceTest {
 
         Long id = 1L;
         MissionRuleUpdateRequestDto requestDto = MissionRuleUpdateRequestDto
-                                                .builder()
-                                                .week(update).build();
+                .builder()
+                .week(update).build();
 
         given(missionRuleRepository.findById(any())).willReturn(java.util.Optional.ofNullable(missionRule));
 

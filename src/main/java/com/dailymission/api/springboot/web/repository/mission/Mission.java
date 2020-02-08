@@ -1,9 +1,9 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
+import com.dailymission.api.springboot.web.repository.account.Account;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.post.Post;
-import com.dailymission.api.springboot.web.repository.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +28,17 @@ public class Mission extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MISSION_RULE_ID")
+    private MissionRule missionRule;
+
+    @ManyToOne
+    @JoinColumn(name = "ACCOUNT_ID")
+    private Account account;
+
+    @OneToMany(mappedBy = "mission")
+    private List<Post> posts = new ArrayList<>();
 
     @Column(name = "TITLE", nullable = false)
     private String title;
@@ -54,16 +65,19 @@ public class Mission extends BaseTimeEntity {
 
 
     @Builder
-    public Mission(String title, String content, Date startDate, Date endDate, String endFlag, MissionRule missionRule, Account account){
+    public Mission(MissionRule missionRule, Account account, String title, String content, Date startDate, Date endDate, String endFlag){
+        this.missionRule = missionRule;
+        this.account = account;
         this.title = title;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.missionRule = missionRule;
-        this.account = account;
+
+        // credential
         this.credential = createCredential();
     }
 
+    // 비밀번호
     private String createCredential(){
         String genId = UUID.randomUUID().toString();
         genId = genId.replace("-","");
@@ -71,15 +85,22 @@ public class Mission extends BaseTimeEntity {
         return genId;
     }
 
+    // 업데이트
+    public void update(MissionRule missionRule, String title, String content,  Date startDate, Date endDate) {
+        this.missionRule = missionRule;
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MISSION_RULE_ID")
-    private MissionRule missionRule;
+    // 삭제
+    public void delete(){
+        this.deleteFlag = "Y";
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "ACCOUNT_ID")
-    private Account account;
-
-    @OneToMany(mappedBy = "mission")
-    private List<Post> posts = new ArrayList<>();
+    // 종료
+    public void end(){
+        this.endFlag = "Y";
+    }
 }
