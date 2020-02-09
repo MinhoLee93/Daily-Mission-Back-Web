@@ -24,7 +24,7 @@ public class MissionService {
     @Transactional
     public Long save(MissionSaveRequestDto requestDto){
 
-        return missionRepository.save(requestDto.toEntitiy()).getId();
+        return missionRepository.save(requestDto.toEntity()).getId();
     }
 
     @Transactional(readOnly = true)

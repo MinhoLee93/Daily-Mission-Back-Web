@@ -2,7 +2,7 @@ package com.dailymission.api.springboot.web.repository.account;
 
 
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
-import com.dailymission.api.springboot.web.repository.join.JoinMission;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import lombok.Builder;
@@ -75,5 +75,5 @@ public class Account extends BaseTimeEntity {
     private List<Mission> missions = new ArrayList<>();
 
     @OneToMany(mappedBy = "account")
-    private List<JoinMission> joinMissions = new ArrayList<>();
+    private List<Participant> participants = new ArrayList<>();
 }

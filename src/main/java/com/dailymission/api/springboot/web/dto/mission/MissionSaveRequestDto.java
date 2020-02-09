@@ -27,7 +27,7 @@ public class MissionSaveRequestDto {
         this.endDate = endDate;
     }
 
-    public Mission toEntitiy(){
+    public Mission toEntity(){
         return Mission.builder()
                       .missionRule(missionRule)
                       .account(account)

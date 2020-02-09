@@ -1,23 +1,29 @@
-package com.dailymission.api.springboot.web.repository.join;
+package com.dailymission.api.springboot.web.repository.participant;
 
 import com.dailymission.api.springboot.web.repository.account.Account;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
 @Entity
-@IdClass(JoinMissionId.class)
-public class JoinMission extends BaseTimeEntity {
+public class Participant extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID")
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "MISSION_ID")
     private Mission mission;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
@@ -27,7 +33,7 @@ public class JoinMission extends BaseTimeEntity {
     private String attendFlag;
 
     @Builder
-    public JoinMission(Mission mission, Account account){
+    public Participant(Mission mission, Account account){
         this.mission = mission;
         this.account = account;
 
