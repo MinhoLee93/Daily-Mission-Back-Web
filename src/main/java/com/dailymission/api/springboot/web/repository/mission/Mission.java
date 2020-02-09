@@ -2,6 +2,7 @@ package com.dailymission.api.springboot.web.repository.mission;
 
 import com.dailymission.api.springboot.web.repository.account.Account;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
+import com.dailymission.api.springboot.web.repository.join.JoinMission;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import lombok.Builder;
@@ -36,6 +37,9 @@ public class Mission extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
+
+    @OneToMany(mappedBy = "mission")
+    private List<JoinMission> joinMissions = new ArrayList<>();
 
     @OneToMany(mappedBy = "mission")
     private List<Post> posts = new ArrayList<>();
