@@ -25,12 +25,6 @@ public class Post extends BaseTimeEntity {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "TITLE", length = 500, nullable = false)
-    private String title;
-
-    @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
-    private String content;
-
     @ManyToOne
     @JoinColumn(name = "MISSION_ID", referencedColumnName = "id",  nullable = false)
     private Mission mission;
@@ -39,13 +33,25 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "id", nullable = false)
     private Account account;
 
+    @Column(name = "TITLE", length = 500, nullable = false)
+    private String title;
+
+    @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
+    private String content;
+
+
+    @Column(name = "DELETE_FLAG")
+    @ColumnDefault("'N'")
+    private String deleteFlag;
 
     @Builder
-    public Post(String title, String content, Mission mission, Account account){
-        this.title = title;
-        this.content = content;
+    public Post(Mission mission, Account account , String title, String content){
         this.mission = mission;
         this.account = account;
+        this.title = title;
+        this.content = content;
+
+        this.deleteFlag = "N";
     }
 
     public void update(String title, String content) {
@@ -56,10 +62,6 @@ public class Post extends BaseTimeEntity {
     public void delete(){
         this.deleteFlag = "Y";
     }
-
-    @Column(name = "DELETE_FLAG")
-    @ColumnDefault("'N'")
-    private String deleteFlag;
 
 //    @OneToOne
 //    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", nullable = false)

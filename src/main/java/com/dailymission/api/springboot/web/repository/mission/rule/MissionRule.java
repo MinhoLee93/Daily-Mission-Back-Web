@@ -40,6 +40,7 @@ public class MissionRule extends BaseTimeEntity {
         }
 
         this.week = week;
+        this.deleteFlag = "N";
     }
 
     @OneToOne(mappedBy = "missionRule")

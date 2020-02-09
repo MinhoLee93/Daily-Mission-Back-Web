@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class PostApiController {
+public class PostController {
 
     private final PostService postService;
 

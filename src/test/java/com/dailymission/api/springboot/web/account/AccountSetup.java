@@ -5,9 +5,11 @@ import lombok.Builder;
 
 public class AccountSetup {
 
-    @Builder
-    public AccountSetup(){
+    private String name;
 
+    @Builder
+    public AccountSetup(String name){
+        this.name = name;
     }
 
     public Account build(){
@@ -17,7 +19,7 @@ public class AccountSetup {
     private Account buildAccount() {
         return Account.builder()
                 .email("test")
-                .name("test")
+                .name(name)
                 .picture("test")
                 .build();
     }

@@ -77,7 +77,7 @@ public class MissionTest {
     }
 
     @Test
-    public void 생성후_credentail_값이_Null이_아닌지(){
+    public void 생성후_credential_값이_null_아닌지(){
         // when
         String credential = mission.getCredential();
 

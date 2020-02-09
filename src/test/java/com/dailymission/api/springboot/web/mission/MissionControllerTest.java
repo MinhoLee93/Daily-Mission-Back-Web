@@ -67,7 +67,7 @@ public class MissionControllerTest {
     }
 
     @Test
-    public void mission_생성후_정상등록_확인() throws Exception{
+    public void mission_생성후_정상등록_확인() throws Exception {
         // given
         mission = missionSetup.build();
 

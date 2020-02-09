@@ -36,6 +36,13 @@ public class MissionService {
         return new MissionResponseDto(mission);
     }
 
+    @Transactional(readOnly = true)
+    public List<MissionListResponseDto> findAllDesc(){
+        return missionRepository.findAllDesc().stream()
+                .map(MissionListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public Long update(Long id, MissionUpdateRequestDto requestDto){
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findById(id))
@@ -51,17 +58,14 @@ public class MissionService {
         return id;
     }
 
-    public List<MissionListResponseDto> findAllDesc(){
-        return missionRepository.findAllDesc().stream()
-                                .map(MissionListResponseDto::new)
-                                .collect(Collectors.toList());
-    }
+
 
     @Transactional
     public void delete(Long id){
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findById(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
 
+        // delete flag -> 'Y'
         Mission mission = optional.get();
         mission.delete();
     }
@@ -71,6 +75,7 @@ public class MissionService {
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findById(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
 
+        // end flag -> 'Y'
         Mission mission = optional.get();
         mission.end();
     }

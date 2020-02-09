@@ -35,7 +35,7 @@ public class MissionServiceTest {
 
 
     @Before
-    public void setup()throws Exception {
+    public void setup() throws Exception {
         mission = Mission.builder().build();
     }
 

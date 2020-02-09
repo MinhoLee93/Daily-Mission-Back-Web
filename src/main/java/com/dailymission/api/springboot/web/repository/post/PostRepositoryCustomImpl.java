@@ -26,4 +26,6 @@ public class PostRepositoryCustomImpl extends QuerydslRepositorySupport implemen
         List<Post> postList = queryFactory.selectFrom(post).orderBy(post.id.desc()).fetch();
         return postList;
     }
+
+
 }

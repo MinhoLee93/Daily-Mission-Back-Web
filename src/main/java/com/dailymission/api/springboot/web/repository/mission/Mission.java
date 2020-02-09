@@ -75,6 +75,9 @@ public class Mission extends BaseTimeEntity {
 
         // credential
         this.credential = createCredential();
+
+        this.endFlag = "N";
+        this.deleteFlag = "N";
     }
 
     // 비밀번호
