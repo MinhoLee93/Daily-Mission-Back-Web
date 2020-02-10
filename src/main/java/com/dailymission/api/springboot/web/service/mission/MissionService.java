@@ -6,10 +6,13 @@ import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
+import com.dailymission.api.springboot.web.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -21,10 +24,21 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
 
-    @Transactional
-    public Long save(MissionSaveRequestDto requestDto){
+    private final ImageService imageService;
 
-        return missionRepository.save(requestDto.toEntity()).getId();
+    @Transactional
+    public Long save(MissionSaveRequestDto requestDto, MultipartFile file) throws Exception {
+        // create mission with default image
+        Mission mission = missionRepository.save(requestDto.toEntity());
+
+        // change image
+        if(!file.isEmpty()){
+            String imagePath = imageService.uploadS3(file, mission.getTitle());
+            mission.updateImage(imagePath);
+        }
+
+        return mission.getId();
+
     }
 
     @Transactional(readOnly = true)
@@ -58,6 +72,19 @@ public class MissionService {
         return id;
     }
 
+    @Transactional
+    public Long updateImage(Long id, MultipartFile file) throws IOException {
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findById(id))
+                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
+
+        Mission mission = optional.get();
+
+        // change image
+        String imagePath = imageService.uploadS3(file, mission.getTitle());
+        mission.updateImage(imagePath);
+
+        return id;
+    }
 
 
     @Transactional

@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -16,8 +14,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert
-@DynamicUpdate
 public class Post extends BaseTimeEntity {
 
     @Id
@@ -39,6 +35,8 @@ public class Post extends BaseTimeEntity {
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name="IMAGE_PATH", nullable = false)
+    private String imagePath;
 
     @Column(name = "DELETE_FLAG")
     @ColumnDefault("'N'")
@@ -51,6 +49,9 @@ public class Post extends BaseTimeEntity {
         this.title = title;
         this.content = content;
 
+        // s3
+        this.imagePath = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/default/daily-mission.png";
+
         this.deleteFlag = "N";
     }
 
@@ -59,11 +60,12 @@ public class Post extends BaseTimeEntity {
         this.content = content;
     }
 
+    public void updateImage(String imagePath){
+        this.imagePath = imagePath;
+    }
+
     public void delete(){
         this.deleteFlag = "Y";
     }
 
-//    @OneToOne
-//    @JoinColumn(name = "IMAGE_ID", referencedColumnName = "id", nullable = false)
-//    private Image image;
 }

@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -50,7 +51,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void post_저장_성공(){
+    public void post_저장_성공() throws IOException {
         // given
         PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                                                           .mission(post.getMission())
@@ -64,7 +65,7 @@ public class PostServiceTest {
         given(postRepository.save(any())).willReturn(post);
 
         // when
-        Long id  = postService.save(requestDto);
+        Long id  = postService.save(requestDto, null);
 
         // then
         assertThat(id).isEqualTo(post.getId());

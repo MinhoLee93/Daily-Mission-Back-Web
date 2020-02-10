@@ -40,14 +40,14 @@ public class MissionServiceTest {
     }
 
     @Test
-    public void mission_저장_성공(){
+    public void mission_저장_성공() throws Exception {
         // given
         MissionSaveRequestDto requestDto = MissionSaveRequestDto.builder().build();
 
         given(missionRepository.save(any())).willReturn(mission);
 
         // when
-        Long id = missionService.save(requestDto);
+        Long id = missionService.save(requestDto, null);
 
         // then
         assertThat(id).isEqualTo(mission.getId());

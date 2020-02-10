@@ -7,7 +7,9 @@ import com.dailymission.api.springboot.web.service.mission.MissionService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,10 +19,11 @@ public class MissionController {
     private final MissionService missionService;
 
     @PostMapping("/api/mission")
-    public Long save(@RequestBody String requestJson){
+    public Long save(@RequestPart("requestJson") String requestJson, @RequestPart("file") MultipartFile file) throws Exception {
+
         MissionSaveRequestDto requestDto = new Gson().fromJson(requestJson, MissionSaveRequestDto.class);
 
-        return missionService.save(requestDto);
+        return missionService.save(requestDto, file);
     }
 
     @GetMapping("/api/mission/{id}")
@@ -31,11 +34,19 @@ public class MissionController {
     }
 
     @PutMapping("/api/mission/{id}")
-    public Long update(@PathVariable Long id, @RequestBody String requestJson){
+    public Long update(@PathVariable Long id, @RequestBody String requestJson) {
+
         MissionUpdateRequestDto requestDto = new Gson().fromJson(requestJson, MissionUpdateRequestDto.class);
 
         return missionService.update(id, requestDto);
     }
+
+    @PutMapping("/api/mission/{id}/image")
+    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
+
+        return missionService.updateImage(id, file);
+    }
+
 
     @DeleteMapping("/api/mission/{id}")
     public Long delete(@PathVariable Long id){

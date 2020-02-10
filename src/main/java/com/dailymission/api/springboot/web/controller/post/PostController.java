@@ -7,7 +7,9 @@ import com.dailymission.api.springboot.web.service.post.PostService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,10 +20,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/api/post")
-    public Long save(@RequestBody String requestJson){
+    public Long save(@RequestPart("requestJson") String requestJson, @RequestPart("file") MultipartFile file) throws Exception{
         PostSaveRequestDto requestDto =  new Gson().fromJson(requestJson, PostSaveRequestDto.class);
 
-        return postService.save(requestDto);
+        return postService.save(requestDto, file);
     }
 
     @GetMapping("/api/post/{id}")
@@ -31,12 +33,17 @@ public class PostController {
         return json;
     }
 
-
     @PutMapping("/api/post/{id}")
     public Long update(@PathVariable Long id, @RequestBody String requestJson){
         PostUpdateRequestDto requestDto =  new Gson().fromJson(requestJson, PostUpdateRequestDto.class);
 
         return postService.update(id, requestDto);
+    }
+
+    @PutMapping("/api/post/{id}/image")
+    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
+
+        return postService.updateImage(id, file);
     }
 
     @DeleteMapping("/api/post/{id}")

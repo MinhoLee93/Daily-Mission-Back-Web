@@ -1,44 +1,34 @@
 {{>layout/header}}
+<head>
+    <title> SpringBoot & AWS S3</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
 <h1>daily-mission</h1>
+<h1>
+    S3 이미지 업로더
+</h1>
 <div class="col-md-12">
-    <div class="row">
-        <div class="col-md-6">
-            <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
-            {{#userName}}
-                Logged in as: <span id="account">{{userName}}</span>
-                <a href="/logout" class="btn btn-info active" role="button">Logout</a>
-            {{/userName}}
-            {{^userName}}
-                <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
-            {{/userName}}
-            {{^userName}}
-                <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
-            {{/userName}}
-        </div>
+    <div class="col-md-2">
+        <form>
+            <div class="form-group">
+                <label for="img">파일 업로드</label>
+                <input type="file" id="img">
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-save">저장</button>
+        </form>
     </div>
-    <br>
-    <!-- 목록 출력 영역 -->
-    <table class="table table-horizontal table-bordered">
-        <thead class="thead-strong">
-        <tr>
-            <th>게시글번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>최종수정일</th>
-        </tr>
-        </thead>
-        <tbody id="tbody">
-        {{#post}}
-            <tr>
-                <td>{{id}}</td>
-                <td><a href="/post/update/{{id}}">{{title}}</a></td>
-                <td>{{account}}</td>
-                <td>{{modifiedDate}}</td>
-            </tr>
-        {{/post}}
-        </tbody>
-    </table>
+    <div class="col-md-10">
+        <p><strong>결과 이미지입니다.</strong></p>
+        <img src="" id="result-image">
+    </div>
 </div>
 
 {{>layout/footer}}

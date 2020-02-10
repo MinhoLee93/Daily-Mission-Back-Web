@@ -10,11 +10,14 @@ import lombok.Getter;
 public class ParticipantSaveRequestDto {
     private Mission mission;
     private Account account;
+    private String credential;
 
     @Builder
-    public ParticipantSaveRequestDto(Mission mission, Account account){
+    public ParticipantSaveRequestDto(Mission mission, Account account, String credential){
         this.mission = mission;
         this.account = account;
+
+        this.credential = credential;
     }
 
     public Participant toEntity(){

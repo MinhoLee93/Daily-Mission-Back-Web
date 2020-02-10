@@ -14,24 +14,23 @@ var main = {
         });
     },
     save : function () {
-        var data = {
-            title: $('#title').val(),
-            author: $('#author').val(),
-            content: $('#content').val()
-        };
+        var file = $('#img')[0].files[0];
+        var formData = new FormData();
+        formData.append('file', file);
 
+        var json = '{ "title" : "test"}';
+        formData.append("requestJson", JSON.stringify(json));
         $.ajax({
             type: 'POST',
-            url: '/api/post',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function() {
-            alert('글이 등록되었습니다.');
-            window.location.href = '/';
+            url: '/api/mission',
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function (data) {
+            $('#result-image').attr("src", data);
         }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });
+            alert(error);
+        })
     },
     update : function () {
         var data = {

@@ -14,6 +14,7 @@ public class MissionListResponseDto {
     private MissionRule missionRule;
     private String title;
     private String content;
+    private String imagePath;
     private Date startDate;
     private Date endDate;
     private String endFlag;
@@ -23,6 +24,7 @@ public class MissionListResponseDto {
         this.missionRule = entity.getMissionRule();
         this.title = entity.getTitle();
         this.content = entity.getContent();
+        this.imagePath = entity.getImagePath();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.endFlag = entity.getEndFlag();

@@ -8,10 +8,13 @@ import com.dailymission.api.springboot.web.repository.account.AccountRepository;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
+import com.dailymission.api.springboot.web.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,8 +30,10 @@ public class PostService {
 
     private final AccountRepository accountRepository;
 
+    private final ImageService imageService;
+
     @Transactional
-    public Long save(PostSaveRequestDto requestDto){
+    public Long save(PostSaveRequestDto requestDto, MultipartFile file) throws IOException {
         Post post = requestDto.toEntitiy();
 
         if(!missionRepository.existsById(post.getMission().getId())){
@@ -39,7 +44,15 @@ public class PostService {
             throw  new NoSuchElementException("존재하지 않는 유저입니다. ID=" + post.getAccount().getId());
         }
 
-        return postRepository.save(requestDto.toEntitiy()).getId();
+        post = postRepository.save(post);
+
+        // change image
+        if(!file.isEmpty()){
+            String imagePath = imageService.uploadS3(file, post.getMission().getTitle() + imageService.genDir());
+            post.updateImage(imagePath);
+        }
+
+        return post.getId();
     }
 
     @Transactional(readOnly = true)
@@ -66,6 +79,20 @@ public class PostService {
 
         Post post = optional.get();
         post.update(requestDto.getTitle(), requestDto.getContent());
+
+        return id;
+    }
+
+    @Transactional
+    public Long updateImage(Long id, MultipartFile file) throws IOException {
+        Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
+                .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
+
+        Post post = optional.get();
+
+        // change image
+        String imagePath = imageService.uploadS3(file, post.getMission().getTitle() + imageService.genDir());
+        post.updateImage(imagePath);
 
         return id;
     }

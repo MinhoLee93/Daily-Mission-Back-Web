@@ -11,12 +11,14 @@ public class PostListResponseDto {
     private Long id;
     private String title;
     private Account account;
+    private String imagePath;
     private LocalDateTime modifiedDate;
 
     public PostListResponseDto(Post entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.account = entity.getAccount();
+        this.imagePath = entity.getImagePath();
         this.modifiedDate = entity.getModifiedDate();
     }
 }

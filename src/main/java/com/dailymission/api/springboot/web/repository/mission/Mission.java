@@ -2,15 +2,13 @@ package com.dailymission.api.springboot.web.repository.mission;
 
 import com.dailymission.api.springboot.web.repository.account.Account;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
-import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,8 +19,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert
-@DynamicUpdate
 public class Mission extends BaseTimeEntity {
 
     @Id
@@ -49,6 +45,9 @@ public class Mission extends BaseTimeEntity {
 
     @Column(name = "CONTENT", nullable = false)
     private String content;
+
+    @Column(name="IMAGE_PATH", nullable = false)
+    private String imagePath;
 
     @Column(name = "CREDENTIAL", nullable = false)
     private String credential;
@@ -80,11 +79,14 @@ public class Mission extends BaseTimeEntity {
         // credential
         this.credential = createCredential();
 
+        // s3
+        this.imagePath = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/default/daily-mission.png";
+
         this.endFlag = "N";
         this.deleteFlag = "N";
     }
 
-    // 비밀번호
+    // 비밀번호 생성
     private String createCredential(){
         String genId = UUID.randomUUID().toString();
         genId = genId.replace("-","");
@@ -92,8 +94,23 @@ public class Mission extends BaseTimeEntity {
         return genId;
     }
 
+    // 비밀번호 확인
+
+    public boolean checkCredential(String credential){
+        if(this.credential.equals(credential)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // 이미지 변경
+    public void updateImage(String imagePath){
+        this.imagePath = imagePath;
+    }
+
     // 업데이트
-    public void update(MissionRule missionRule, String title, String content,  Date startDate, Date endDate) {
+    public void update(MissionRule missionRule, String title, String content, Date startDate, Date endDate) {
         this.missionRule = missionRule;
         this.title = title;
         this.content = content;

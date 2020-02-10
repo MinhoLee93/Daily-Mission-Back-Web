@@ -36,6 +36,8 @@ repositories {
     mavenCentral()
     // jojuldu
     jcenter()
+    // AWS
+    maven { url 'https://repo.spring.io/libs-milestone'}
 }
 
 dependencies {
@@ -66,11 +68,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // querydsl
-    compile ("com.querydsl:querydsl-apt")
-    compile ("com.querydsl:querydsl-jpa")
+    compile 'com.querydsl:querydsl-apt'
+    compile 'com.querydsl:querydsl-jpa'
 
-    testCompile ("com.querydsl:querydsl-apt")
-    testCompile ("com.querydsl:querydsl-jpa")
+    testCompile 'com.querydsl:querydsl-apt'
+    testCompile 'com.querydsl:querydsl-jpa'
 
     // devtool
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -82,6 +84,9 @@ dependencies {
     compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
 
     compile 'org.springframework.boot:spring-boot-starter-security'
+
+    // AWS
+    compile 'org.springframework.cloud:spring-cloud-starter-aws'
 }
 
 test {
@@ -117,4 +122,11 @@ ext {
 
 wrapper {
     gradleVersion = "$gradleVersion"
+}
+
+// AWS
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RC2'
+    }
 }

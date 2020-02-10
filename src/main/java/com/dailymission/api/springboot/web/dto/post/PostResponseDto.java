@@ -12,6 +12,7 @@ public class PostResponseDto {
     private Account account;
     private String title;
     private String content;
+    private String imagePath;
 
     public PostResponseDto(Post entity){
         this.id = entity.getId();
@@ -19,5 +20,6 @@ public class PostResponseDto {
         this.account = entity.getAccount();
         this.title = entity.getTitle();
         this.content = entity.getContent();
+        this.imagePath = entity.getImagePath();
     }
 }
