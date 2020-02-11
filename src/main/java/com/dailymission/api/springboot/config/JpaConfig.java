@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.config.jpa;
+package com.dailymission.api.springboot.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

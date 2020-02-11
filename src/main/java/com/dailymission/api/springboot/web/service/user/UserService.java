@@ -1,9 +1,10 @@
-package com.dailymission.api.springboot.web.service.account;
+package com.dailymission.api.springboot.web.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class AccountService {
+public class UserService {
+
 }

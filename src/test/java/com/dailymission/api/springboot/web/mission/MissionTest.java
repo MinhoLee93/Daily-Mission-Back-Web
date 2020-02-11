@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.mission;
 
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
@@ -32,7 +32,7 @@ public class MissionTest {
 
         MissionRule missionRule = MissionRule.builder().week(week).build();
 
-        // account
+        // user
         String jsonAccount = "{\n" +
                 "  \"id\" : 1,\n" +
                 "  \"created_date\" : \"2020-02-07 09:07:34.703000\",\n" +
@@ -44,7 +44,7 @@ public class MissionTest {
                 "  \"role\" : \"USER\"\n" +
                 "}";
 
-        Account account = new Gson().fromJson(jsonAccount, Account.class);
+        User user = new Gson().fromJson(jsonAccount, User.class);
 
         // date
         Calendar cal = Calendar.getInstance();
@@ -59,7 +59,7 @@ public class MissionTest {
                          .startDate(startDate)
                          .endDate(endDate)
                          .missionRule(missionRule)
-                         .account(account)
+                         .user(user)
                          .build();
 
     }
@@ -67,11 +67,11 @@ public class MissionTest {
     @Test
     public void 생성후_내부값_동일한지(){
         // when
-        Account account = mission.getAccount();
+        User user = mission.getUser();
         Week week = mission.getMissionRule().getWeek();
 
         // then
-        assertThat(account.getId()).isEqualTo(1L);
+        assertThat(user.getId()).isEqualTo(1L);
         assertThat(week.getThu()).isEqualTo("Y");
         assertThat(week.getFri()).isEqualTo("N");
     }

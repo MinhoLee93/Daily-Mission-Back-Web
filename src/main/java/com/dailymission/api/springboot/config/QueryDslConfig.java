@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.config.queryDSL;
+package com.dailymission.api.springboot.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.mission;
 
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
@@ -11,11 +11,11 @@ import java.util.Date;
 
 public class MissionSetup {
 
-    private Account account;
+    private User user;
 
     @Builder
-    public MissionSetup(Account account){
-        this.account = account;
+    public MissionSetup(User user){
+        this.user = user;
     }
 
     public Mission build(){
@@ -47,7 +47,7 @@ public class MissionSetup {
                 .startDate(startDate)
                 .endDate(endDate)
                 .missionRule(missionRule)
-                .account(account)
+                .user(user)
                 .build();
 
 

@@ -1,9 +1,9 @@
 package com.dailymission.api.springboot.web.post;
 
-import com.dailymission.api.springboot.web.account.AccountSetup;
+import com.dailymission.api.springboot.web.user.UserSetup;
 import com.dailymission.api.springboot.web.mission.MissionSetup;
-import com.dailymission.api.springboot.web.repository.account.Account;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
@@ -24,7 +24,7 @@ public class PostRepositoryTest {
     private MissionRepository missionRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -36,27 +36,27 @@ public class PostRepositoryTest {
     @Before
     public void setup(){
         // 미션 생성 유저 정보
-        AccountSetup accountSetup = AccountSetup.builder()
+        UserSetup userSetup = UserSetup.builder()
                                                 .name("미션 생성자")
                                                 .build();
-        Account missionCreator = accountRepository.save(accountSetup.build());
+        User missionCreator = userRepository.save(userSetup.build());
 
         // 미션
         MissionSetup missionSetup = MissionSetup.builder()
-                                                .account(missionCreator)
+                                                .user(missionCreator)
                                                 .build();
         mission = missionRepository.save(missionSetup.build());
 
         // 포스트 생성 유저 정보
-        accountSetup = AccountSetup.builder()
+        userSetup = UserSetup.builder()
                                     .name("포스트 생성자")
                                     .build();
-        Account postCreator = accountRepository.save(accountSetup.build());
+        User postCreator = userRepository.save(userSetup.build());
 
         // 포스트
         PostSetup postSetup = PostSetup.builder()
                                         .mission(mission)
-                                        .account(postCreator)
+                                        .user(postCreator)
                                         .build();
     }
 
@@ -72,7 +72,7 @@ public class PostRepositoryTest {
     @Test(expected = NullPointerException.class)
     public void post_save_할때_존재하지_않는_Account_에러가_발생하는지(){
         // given
-        accountRepository.delete(post.getAccount());
+        userRepository.delete(post.getUser());
 
         // when
         postRepository.save(post);

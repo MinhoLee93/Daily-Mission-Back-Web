@@ -2,8 +2,8 @@ package com.dailymission.api.springboot.web.post;
 
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
-import com.dailymission.api.springboot.web.repository.account.Account;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
@@ -36,17 +36,17 @@ public class PostServiceTest {
     private MissionRepository missionRepository;
 
     @Mock
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     private Post post;
 
     @Before
     public void setup() throws Exception {
         Mission mission = Mission.builder().build();
-        Account account = Account.builder().build();
+        User user = User.builder().build();
         post = Post.builder()
                     .mission(mission)
-                    .account(account)
+                    .user(user)
                     .build();
     }
 
@@ -55,13 +55,13 @@ public class PostServiceTest {
         // given
         PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                                                           .mission(post.getMission())
-                                                          .account(post.getAccount())
+                                                          .user(post.getUser())
                                                           .title(post.getTitle())
                                                           .content(post.getContent())
                                                           .build();
 
         given(missionRepository.existsById(any())).willReturn(true);
-        given(accountRepository.existsById(any())).willReturn(true);
+        given(userRepository.existsById(any())).willReturn(true);
         given(postRepository.save(any())).willReturn(post);
 
         // when

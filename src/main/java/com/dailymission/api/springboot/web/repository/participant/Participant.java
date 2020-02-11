@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.repository.participant;
 
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import lombok.Builder;
@@ -25,17 +25,17 @@ public class Participant extends BaseTimeEntity {
     private Mission mission;
 
     @ManyToOne
-    @JoinColumn(name = "ACCOUNT_ID")
-    private Account account;
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Column(name="ATTEND_FLAG", nullable = false)
     @ColumnDefault("'Y'")
     private String attendFlag;
 
     @Builder
-    public Participant(Mission mission, Account account){
+    public Participant(Mission mission, User user){
         this.mission = mission;
-        this.account = account;
+        this.user = user;
 
         this.attendFlag = "Y";
     }

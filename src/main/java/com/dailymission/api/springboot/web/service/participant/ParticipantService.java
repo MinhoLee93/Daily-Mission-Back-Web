@@ -4,7 +4,7 @@ import com.dailymission.api.springboot.web.dto.participant.ParticipantListRespon
 import com.dailymission.api.springboot.web.dto.participant.ParticipantResponseDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantUpdateRequestDto;
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
@@ -40,8 +40,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public ParticipantResponseDto findByMissionAndAccount (Mission mission, Account account){
-        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndAccount(mission, account))
+    public ParticipantResponseDto findByMissionAndAccount (Mission mission, User user){
+        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(mission, user))
                 .orElseThrow(()-> new NoSuchElementException("해당 참여내용은 존재하지 않습니다"));
 
         Participant participant = optional.get();
@@ -58,9 +58,9 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<ParticipantListResponseDto> findAllByAccount (Account account){
+    public List<ParticipantListResponseDto> findAllByAccount (User user){
 
-        return participantRepository.findAllByAccount(account)
+        return participantRepository.findAllByUser(user)
                 .stream()
                 .map(ParticipantListResponseDto::new)
                 .collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class ParticipantService {
 
     @Transactional
     public Long ban(ParticipantUpdateRequestDto requestDto){
-        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndAccount(requestDto.getMission(), requestDto.getAccount()))
+        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(requestDto.getMission(), requestDto.getUser()))
                                         .orElseThrow(()-> new NoSuchElementException("미션에 참가하고 있는 사용자가 아닙니다"));
 
         Participant participant = optional.get();

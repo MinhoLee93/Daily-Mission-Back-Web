@@ -55,7 +55,9 @@ dependencies {
     testCompile 'com.h2database:h2'
 
     // oauth
-    // compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     // session db
     // compile 'org.springframework.session:spring-session-jdbc'
 
@@ -82,8 +84,6 @@ dependencies {
 
     // log4j
     compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
-
-    compile 'org.springframework.boot:spring-boot-starter-security'
 
     // AWS
     compile 'org.springframework.cloud:spring-cloud-starter-aws'

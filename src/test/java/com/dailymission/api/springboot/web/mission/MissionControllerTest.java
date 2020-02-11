@@ -1,12 +1,12 @@
 package com.dailymission.api.springboot.web.mission;
 
 
-import com.dailymission.api.springboot.web.account.AccountSetup;
+import com.dailymission.api.springboot.web.user.UserSetup;
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
 import com.dailymission.api.springboot.web.mission.rule.MissionRuleSetup;
-import com.dailymission.api.springboot.web.repository.account.Account;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
@@ -42,26 +42,26 @@ public class MissionControllerTest {
     protected MockMvc mvc;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private MissionRepository missionRepository;
 
     private MissionSetup missionSetup;
 
-    private AccountSetup accountSetup;
+    private UserSetup userSetup;
 
     private Mission mission;
 
-    private Account account;
+    private User user;
 
     @Before
     public void setup(){
-        accountSetup = AccountSetup.builder().build();
+        userSetup = UserSetup.builder().build();
 
-        account = accountRepository.save(accountSetup.build());
+        user = userRepository.save(userSetup.build());
 
-        missionSetup = MissionSetup.builder().account(account).build();
+        missionSetup = MissionSetup.builder().user(user).build();
 
         mission = missionSetup.build();
     }
@@ -73,7 +73,7 @@ public class MissionControllerTest {
 
         MissionSaveRequestDto requestDto = MissionSaveRequestDto.builder()
                                                                 .missionRule(mission.getMissionRule())
-                                                                .account(mission.getAccount())
+                                                                .user(mission.getUser())
                                                                 .title(mission.getTitle())
                                                                 .content(mission.getContent())
                                                                 .startDate(mission.getStartDate())

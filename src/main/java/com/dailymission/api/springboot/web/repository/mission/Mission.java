@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
@@ -31,8 +31,8 @@ public class Mission extends BaseTimeEntity {
     private MissionRule missionRule;
 
     @ManyToOne
-    @JoinColumn(name = "ACCOUNT_ID")
-    private Account account;
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @OneToMany(mappedBy = "mission")
     private List<Participant> participants = new ArrayList<>();
@@ -68,9 +68,9 @@ public class Mission extends BaseTimeEntity {
 
 
     @Builder
-    public Mission(MissionRule missionRule, Account account, String title, String content, Date startDate, Date endDate){
+    public Mission(MissionRule missionRule, User user, String title, String content, Date startDate, Date endDate){
         this.missionRule = missionRule;
-        this.account = account;
+        this.user = user;
         this.title = title;
         this.content = content;
         this.startDate = startDate;

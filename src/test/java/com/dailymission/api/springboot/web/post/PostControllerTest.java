@@ -1,10 +1,10 @@
 package com.dailymission.api.springboot.web.post;
 
-import com.dailymission.api.springboot.web.account.AccountSetup;
+import com.dailymission.api.springboot.web.user.UserSetup;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
 import com.dailymission.api.springboot.web.mission.MissionSetup;
-import com.dailymission.api.springboot.web.repository.account.Account;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
@@ -44,30 +44,30 @@ public class PostControllerTest {
     private MissionRepository missionRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     private Post post;
 
     @Before
     public void setup(){
         // 미션 생성자
-        AccountSetup accountSetup = AccountSetup.builder().name("미션 생성자").build();
-        Account missionCreator = accountSetup.build();
-        accountRepository.save(missionCreator);
+        UserSetup userSetup = UserSetup.builder().name("미션 생성자").build();
+        User missionCreator = userSetup.build();
+        userRepository.save(missionCreator);
 
         // 미션
-        MissionSetup missionSetup = MissionSetup.builder().account(missionCreator).build();
+        MissionSetup missionSetup = MissionSetup.builder().user(missionCreator).build();
         Mission mission = missionSetup.build();
         missionRepository.save(mission);
 
         // 포스트 작성자
-        accountSetup = AccountSetup.builder().name("포스트 생성자").build();
-        Account postCreator = accountSetup.build();
-        accountRepository.save(postCreator);
+        userSetup = UserSetup.builder().name("포스트 생성자").build();
+        User postCreator = userSetup.build();
+        userRepository.save(postCreator);
 
 
         // 포스트
-        PostSetup postSetup = PostSetup.builder().account(postCreator).mission(mission).build();
+        PostSetup postSetup = PostSetup.builder().user(postCreator).mission(mission).build();
         post = postSetup.build();
     }
 
@@ -76,7 +76,7 @@ public class PostControllerTest {
         // given
         PostSaveRequestDto requestDto = PostSaveRequestDto.builder()
                                                           .mission(post.getMission())
-                                                          .account(post.getAccount())
+                                                          .user(post.getUser())
                                                           .title(post.getTitle())
                                                           .content(post.getContent())
                                                           .build();

@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.repository.post;
 
-import com.dailymission.api.springboot.web.repository.account.Account;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import lombok.Builder;
@@ -26,8 +26,8 @@ public class Post extends BaseTimeEntity {
     private Mission mission;
 
     @ManyToOne
-    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "id", nullable = false)
-    private Account account;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @Column(name = "TITLE", length = 500, nullable = false)
     private String title;
@@ -43,9 +43,9 @@ public class Post extends BaseTimeEntity {
     private String deleteFlag;
 
     @Builder
-    public Post(Mission mission, Account account , String title, String content){
+    public Post(Mission mission, User user, String title, String content){
         this.mission = mission;
-        this.account = account;
+        this.user = user;
         this.title = title;
         this.content = content;
 

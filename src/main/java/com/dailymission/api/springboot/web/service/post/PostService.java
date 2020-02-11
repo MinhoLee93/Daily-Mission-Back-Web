@@ -4,7 +4,7 @@ import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
@@ -28,7 +28,7 @@ public class PostService {
 
     private final MissionRepository missionRepository;
 
-    private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     private final ImageService imageService;
 
@@ -40,8 +40,8 @@ public class PostService {
             throw  new NoSuchElementException("존재하지 않는 미션입니다. ID=" + post.getMission().getId());
         }
 
-        if(!accountRepository.existsById(post.getAccount().getId())){
-            throw  new NoSuchElementException("존재하지 않는 유저입니다. ID=" + post.getAccount().getId());
+        if(!userRepository.existsById(post.getUser().getId())){
+            throw  new NoSuchElementException("존재하지 않는 유저입니다. ID=" + post.getUser().getId());
         }
 
         post = postRepository.save(post);

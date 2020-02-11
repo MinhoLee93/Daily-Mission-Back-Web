@@ -1,8 +1,8 @@
 package com.dailymission.api.springboot.web.mission;
 
-import com.dailymission.api.springboot.web.account.AccountSetup;
-import com.dailymission.api.springboot.web.repository.account.Account;
-import com.dailymission.api.springboot.web.repository.account.AccountRepository;
+import com.dailymission.api.springboot.web.user.UserSetup;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRuleRepository;
@@ -23,7 +23,7 @@ public class MissionRepositoryTest {
     private MissionRepository missionRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private MissionRuleRepository missionRuleRepository;
@@ -31,16 +31,16 @@ public class MissionRepositoryTest {
 
     private MissionSetup missionSetup;
 
-    private AccountSetup accountSetup;
+    private UserSetup userSetup;
 
 
     @Before
     public void setup(){
-        accountSetup = AccountSetup.builder().build();
+        userSetup = UserSetup.builder().build();
 
-        Account account = accountRepository.save(accountSetup.build());
+        User user = userRepository.save(userSetup.build());
 
-        missionSetup = MissionSetup.builder().account(account).build();
+        missionSetup = MissionSetup.builder().user(user).build();
     }
 
     @Test
