@@ -51,8 +51,10 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     // mustache
     compile 'org.springframework.boot:spring-boot-starter-mustache'
-    // h2 for test
+
+    // h2
     testCompile 'com.h2database:h2'
+    runtime 'com.h2database:h2'
 
     // oauth
     compile 'org.springframework.boot:spring-boot-starter-security'
@@ -87,6 +89,10 @@ dependencies {
 
     // AWS
     compile 'org.springframework.cloud:spring-cloud-starter-aws'
+
+    // batch
+    compile 'org.springframework.boot:spring-boot-starter-batch'
+    testCompile 'org.springframework.batch:spring-batch-test'
 }
 
 test {
