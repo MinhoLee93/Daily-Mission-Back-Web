@@ -27,13 +27,13 @@ public class MissionRuleRepositoryTest {
     @Before
     public void setup(){
         week =  Week.builder()
-                        .sun("Y")
-                        .mon("Y")
-                        .tue("Y")
-                        .wed("Y")
-                        .thu("Y")
-                        .fri("N")
-                        .sat("N").build();
+                        .sun(true)
+                        .mon(true)
+                        .tue(true)
+                        .wed(true)
+                        .thu(true)
+                        .fri(false)
+                        .sat(false).build();
 
         missionRule = missionRuleRepository.save(MissionRule.builder().week(week).build());
     }

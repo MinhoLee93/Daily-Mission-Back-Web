@@ -32,13 +32,13 @@ public class MissionRuleServiceTest {
     @Before
     public void setup() throws Exception {
         Week week =  Week.builder()
-                .sun("Y")
-                .mon("Y")
-                .tue("Y")
-                .wed("Y")
-                .thu("Y")
-                .fri("N")
-                .sat("N").build();
+                .sun(true)
+                .mon(true)
+                .tue(true)
+                .wed(true)
+                .thu(true)
+                .fri(false)
+                .sat(false).build();
 
         missionRule = MissionRule.builder().week(week).build();
     }
@@ -47,13 +47,13 @@ public class MissionRuleServiceTest {
     public void MissionRule_존재할경우_업데이트_성공(){
         // given
         Week update =  Week.builder()
-                .sun("Y")
-                .mon("Y")
-                .tue("Y")
-                .wed("Y")
-                .thu("Y")
-                .fri("Y")
-                .sat("Y").build();
+                .sun(true)
+                .mon(true)
+                .tue(true)
+                .wed(true)
+                .thu(true)
+                .fri(true)
+                .sat(true).build();
 
 
         Long id = 1L;
@@ -67,26 +67,26 @@ public class MissionRuleServiceTest {
         final Long updatedId = missionRuleService.update(id, requestDto);
 
         // then
-        assertThat(missionRule.getWeek().getSun()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getMon()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getTue()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getWed()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getThu()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getFri()).isEqualTo("Y");
-        assertThat(missionRule.getWeek().getSat()).isEqualTo("Y");
+        assertThat(missionRule.getWeek().isSun()).isTrue();
+        assertThat(missionRule.getWeek().isMon()).isTrue();
+        assertThat(missionRule.getWeek().isTue()).isTrue();
+        assertThat(missionRule.getWeek().isWed()).isTrue();
+        assertThat(missionRule.getWeek().isThu()).isTrue();
+        assertThat(missionRule.getWeek().isFri()).isTrue();
+        assertThat(missionRule.getWeek().isSat()).isTrue();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void MissionRule_존재하지않을경우_업데이트_실패(){
         // given
         Week update =  Week.builder()
-                .sun("Y")
-                .mon("Y")
-                .tue("Y")
-                .wed("Y")
-                .thu("Y")
-                .fri("Y")
-                .sat("Y").build();
+                .sun(true)
+                .mon(true)
+                .tue(true)
+                .wed(true)
+                .thu(true)
+                .fri(true)
+                .sat(true).build();
 
 
         Long id = 1L;

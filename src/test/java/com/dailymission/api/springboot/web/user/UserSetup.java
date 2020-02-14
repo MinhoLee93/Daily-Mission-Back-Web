@@ -1,5 +1,7 @@
 package com.dailymission.api.springboot.web.user;
 
+
+import com.dailymission.api.springboot.web.repository.user.AuthProvider;
 import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 
@@ -18,9 +20,11 @@ public class UserSetup {
 
     private User buildAccount() {
         return User.builder()
-                .email("test")
-                .name(name)
-                .picture("test")
+                .name("test")
+                .email("test@google.com")
+                .imageUrl("https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/default/daily-mission.png")
+                .provider(AuthProvider.google)
+                .providerId("123456789")
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.mission.rule;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -15,13 +16,13 @@ public class MissionRuleTest {
     @Before
     public void setup() {
         givenWeek = Week.builder()
-                .sun("Y")
-                .mon("Y")
-                .tue("Y")
-                .wed("Y")
-                .thu("Y")
-                .fri("N")
-                .sat("N").build();
+                .sun(true)
+                .mon(true)
+                .tue(true)
+                .wed(true)
+                .thu(true)
+                .fri(true)
+                .sat(true).build();
     }
 
     @Test
@@ -31,13 +32,13 @@ public class MissionRuleTest {
 
         // then
         Week checkWeek = missionRule.getWeek();
-        assertThat(checkWeek.getSun()).isEqualTo("Y");
-        assertThat(checkWeek.getMon()).isEqualTo("Y");
-        assertThat(checkWeek.getTue()).isEqualTo("Y");
-        assertThat(checkWeek.getWed()).isEqualTo("Y");
-        assertThat(checkWeek.getThu()).isEqualTo("Y");
-        assertThat(checkWeek.getFri()).isEqualTo("N");
-        assertThat(checkWeek.getSat()).isEqualTo("N");
+        assertThat(checkWeek.isSun()).isTrue();
+        assertThat(checkWeek.isMon()).isTrue();
+        assertThat(checkWeek.isTue()).isTrue();
+        assertThat(checkWeek.isWed()).isTrue();
+        assertThat(checkWeek.isThu()).isTrue();
+        assertThat(checkWeek.isFri()).isFalse();
+        assertThat(checkWeek.isSat()).isFalse();
     }
 
     @Test
@@ -46,18 +47,18 @@ public class MissionRuleTest {
         MissionRule missionRule = new MissionRule(givenWeek);
 
         //when
-        Week week = new Week("Y","Y", "Y", "Y", "Y","Y","Y");
+        Week week = new Week(true,true, true, true, true,true,true);
         missionRule.update(week);
 
         // then
         Week updatedWeek = missionRule.getWeek();
-        assertThat(updatedWeek.getSun()).isEqualTo("Y");
-        assertThat(updatedWeek.getMon()).isEqualTo("Y");
-        assertThat(updatedWeek.getTue()).isEqualTo("Y");
-        assertThat(updatedWeek.getWed()).isEqualTo("Y");
-        assertThat(updatedWeek.getThu()).isEqualTo("Y");
-        assertThat(updatedWeek.getFri()).isEqualTo("Y");
-        assertThat(updatedWeek.getSat()).isEqualTo("Y");
+        assertThat(updatedWeek.isSun()).isTrue();
+        assertThat(updatedWeek.isMon()).isTrue();
+        assertThat(updatedWeek.isTue()).isTrue();
+        assertThat(updatedWeek.isWed()).isTrue();
+        assertThat(updatedWeek.isThu()).isTrue();
+        assertThat(updatedWeek.isFri()).isTrue();
+        assertThat(updatedWeek.isSat()).isTrue();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -79,22 +80,26 @@ public class MissionRuleTest {
         missionRule.update(givenWeek);
     }
 
+    // String -> Boolean으로 변경되면서 더이상 테스트할 필요가 없어졌다.
     @Test(expected = IllegalArgumentException.class)
+    @Ignore
     public void save할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
         // given
-        givenWeek.update("X", "Y", "Y", "Y", "Y", "Y", "Y");
+        givenWeek.update(true, true, true, true, true, true, true);
 
         // when
         MissionRule missionRule = new MissionRule(givenWeek);
     }
 
+    // String -> Boolean으로 변경되면서 더이상 테스트할 필요가 없어졌다.
     @Test(expected = IllegalArgumentException.class)
+    @Ignore
     public void update할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
         // given
         MissionRule missionRule = new MissionRule(givenWeek);
 
         // when
-        givenWeek.update("X", "Y", "Y", "Y", "Y", "Y", "Y");
+        givenWeek.update(true, true, true, true, true, true, true);
         missionRule.update(givenWeek);
 
     }

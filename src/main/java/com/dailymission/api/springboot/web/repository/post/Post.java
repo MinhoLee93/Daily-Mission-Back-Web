@@ -1,12 +1,11 @@
 package com.dailymission.api.springboot.web.repository.post;
 
-import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
+import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -35,37 +34,55 @@ public class Post extends BaseTimeEntity {
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name="IMAGE_PATH", nullable = false)
-    private String imagePath;
+    @Column(name="IMAGE_URL", nullable = false)
+    private String imageUrl;
 
-    @Column(name = "DELETE_FLAG")
-    @ColumnDefault("'N'")
-    private String deleteFlag;
+    @Column(name="THUMBNAIL_URL", nullable = false)
+    private String thumbnailUrl;
+
+    @Column(name = "DELETED")
+    private boolean deleted;
 
     @Builder
-    public Post(Mission mission, User user, String title, String content){
+    public Post(Mission mission, User user, String title, String content
+                , String imageUrl){
         this.mission = mission;
         this.user = user;
         this.title = title;
         this.content = content;
 
-        // s3
-        this.imagePath = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/default/daily-mission.png";
+        // 이미지
+        this.imageUrl = imageUrl;
 
-        this.deleteFlag = "N";
+        // 썸네일
+        this.thumbnailUrl = imageUrl;
+
+        this.deleted = false;
     }
 
+    // 내용 업데이트
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public void updateImage(String imagePath){
-        this.imagePath = imagePath;
+    // 이미지 업데이트
+    public void updateImage(String imageUrl){
+        // 이미지
+        this.imageUrl = imageUrl;
+        // 썸네일 -> 재생성
+        this.thumbnailUrl = imageUrl;
     }
 
+    // 썸네일 업데이트
+    public void updateThumbnail(String thumbnailUrl){
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+
+    // 삭제
     public void delete(){
-        this.deleteFlag = "Y";
+        this.deleted = true ;
     }
 
 }

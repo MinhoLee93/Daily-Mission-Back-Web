@@ -5,17 +5,12 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@DynamicInsert
-@DynamicUpdate
 public class MissionRule extends BaseTimeEntity {
 
     @Id
@@ -25,9 +20,8 @@ public class MissionRule extends BaseTimeEntity {
 
     @Embedded Week week;
 
-    @Column(name = "DELETE_FLAG", nullable = false)
-    @ColumnDefault("'N'")
-    private String deleteFlag;
+    @Column(name = "DELETED", nullable = false)
+    private boolean deleted;
 
     @Builder
     public MissionRule(Week week){
@@ -40,7 +34,7 @@ public class MissionRule extends BaseTimeEntity {
         }
 
         this.week = week;
-        this.deleteFlag = "N";
+        this.deleted = false;
     }
 
     @OneToOne(mappedBy = "missionRule")
@@ -68,6 +62,6 @@ public class MissionRule extends BaseTimeEntity {
     }
 
     public void delete(){
-        this.deleteFlag = "Y";
+        this.deleted = true;
     }
 }

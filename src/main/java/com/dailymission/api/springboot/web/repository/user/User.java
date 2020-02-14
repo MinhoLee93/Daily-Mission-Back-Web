@@ -6,6 +6,7 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -61,4 +62,14 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Participant> participants = new ArrayList<>();
+
+    // 테스트용 빌더
+    @Builder
+    public User(String name, String email, String imageUrl, AuthProvider provider, String providerId){
+        this.name = name;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 }

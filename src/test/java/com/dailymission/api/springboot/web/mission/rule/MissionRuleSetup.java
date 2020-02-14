@@ -17,13 +17,13 @@ public class MissionRuleSetup {
 
     private MissionRule buildMissionRule(){
         Week week = Week.builder()
-                .sun("Y")
-                .mon("Y")
-                .tue("Y")
-                .wed("Y")
-                .thu("Y")
-                .fri("Y")
-                .sat("Y").build();
+                .sun(true)
+                .mon(true)
+                .tue(true)
+                .wed(true)
+                .thu(true)
+                .fri(true)
+                .sat(true).build();
 
         MissionRule missionRule = MissionRule.builder().week(week).build();
 

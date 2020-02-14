@@ -104,7 +104,7 @@ public class MissionServiceTest {
         missionService.delete(1L);
 
         // then
-        assertThat(mission.getDeleteFlag()).isEqualTo("Y");
+        assertThat(mission.isDeleted()).isTrue();
     }
 
     @Test
@@ -118,6 +118,6 @@ public class MissionServiceTest {
         missionService.end(1L);
 
         // then
-        assertThat(mission.getEndFlag()).isEqualTo("Y");
+        assertThat(mission.isEnded()).isTrue();
     }
 }

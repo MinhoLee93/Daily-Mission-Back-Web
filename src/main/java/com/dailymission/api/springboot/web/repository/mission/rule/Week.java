@@ -3,7 +3,6 @@ package com.dailymission.api.springboot.web.repository.mission.rule;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,35 +13,28 @@ import javax.persistence.Embeddable;
 public class Week {
 
     @Column(name = "SUNDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String sun;
+    private boolean sun;
 
     @Column(name = "MONDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String mon;
+    private boolean mon;
 
     @Column(name = "TUESDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String tue;
+    private boolean tue;
 
     @Column(name = "WEDNESDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String wed;
+    private boolean wed;
 
     @Column(name = "THURSDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String thu;
+    private boolean thu;
 
     @Column(name = "FRIDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String fri;
+    private boolean fri;
 
     @Column(name = "SATURDAY", nullable = false)
-    @ColumnDefault("'Y'")
-    private String sat;
+    private boolean sat;
 
     @Builder
-    public Week(String sun, String mon, String tue, String wed, String thu, String fri, String sat){
+    public Week(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat){
         this.sun = sun;
         this.mon = mon;
         this.tue = tue;
@@ -52,7 +44,7 @@ public class Week {
         this.sat = sat;
     }
 
-    public void update(String sun, String mon, String tue, String wed, String thu, String fri, String sat){
+    public void update(boolean sun, boolean mon, boolean tue, boolean wed, boolean thu, boolean fri, boolean sat){
         this.sun = sun;
         this.mon = mon;
         this.tue = tue;

@@ -124,7 +124,7 @@ public class MissionControllerTest {
         List<Mission> all = missionRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo("update");
         assertThat(all.get(0).getContent()).isEqualTo("update");
-        assertThat(all.get(0).getMissionRule().getWeek().getFri()).isEqualTo("Y");
-        assertThat(all.get(0).getMissionRule().getWeek().getSat()).isEqualTo("Y");
+        assertThat(all.get(0).getMissionRule().getWeek().isFri()).isTrue();
+        assertThat(all.get(0).getMissionRule().getWeek().isSat()).isTrue();
     }
 }

@@ -1,15 +1,14 @@
 package com.dailymission.api.springboot.web.mission;
 
-import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
+import com.dailymission.api.springboot.web.repository.user.User;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,13 +21,13 @@ public class MissionTest {
     public void setup(){
         // week
         Week week = Week.builder()
-                        .sun("Y")
-                        .mon("Y")
-                        .tue("Y")
-                        .wed("Y")
-                        .thu("Y")
-                        .fri("N")
-                        .sat("N").build();
+                        .sun(true)
+                        .mon(true)
+                        .tue(true)
+                        .wed(true)
+                        .thu(true)
+                        .fri(false)
+                        .sat(false).build();
 
         MissionRule missionRule = MissionRule.builder().week(week).build();
 
@@ -47,10 +46,8 @@ public class MissionTest {
         User user = new Gson().fromJson(jsonAccount, User.class);
 
         // date
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        Date startDate = new Date();
-        Date endDate = cal.getTime();
+        LocalDate startDate = LocalDate.of(2020,01,01);
+        LocalDate endDate = LocalDate.of(2020,03,31);
 
         // mission
         mission = Mission.builder()
@@ -72,8 +69,8 @@ public class MissionTest {
 
         // then
         assertThat(user.getId()).isEqualTo(1L);
-        assertThat(week.getThu()).isEqualTo("Y");
-        assertThat(week.getFri()).isEqualTo("N");
+        assertThat(week.isThu()).isTrue();
+        assertThat(week.isFri()).isFalse();
     }
 
     @Test
