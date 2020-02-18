@@ -65,7 +65,6 @@ public class User extends BaseTimeEntity {
     private List<Mission> missions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     private List<Participant> participants = new ArrayList<>();
 
     // 테스트용 빌더

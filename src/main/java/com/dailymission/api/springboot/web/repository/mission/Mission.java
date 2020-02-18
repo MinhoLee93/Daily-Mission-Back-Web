@@ -5,6 +5,7 @@ import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Mission extends BaseTimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "mission")
+    @JsonBackReference
     private List<Participant> participants = new ArrayList<>();
 
     @OneToMany(mappedBy = "mission")

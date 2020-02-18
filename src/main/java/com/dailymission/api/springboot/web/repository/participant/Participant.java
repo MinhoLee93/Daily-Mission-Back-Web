@@ -3,6 +3,8 @@ package com.dailymission.api.springboot.web.repository.participant;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +23,12 @@ public class Participant extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "MISSION_ID")
+    @JsonManagedReference
     private Mission mission;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
+    @JsonBackReference
     private User user;
 
     @Column(name="BANNED", nullable = false)

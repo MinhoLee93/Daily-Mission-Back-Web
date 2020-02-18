@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.controller.user;
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.CurrentUser;
 import com.dailymission.api.springboot.security.UserPrincipal;
+import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,20 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
+    public UserResponseDto getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+        UserResponseDto userResponseDto = UserResponseDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .imageUrl(user.getImageUrl())
+                        .build();
+
+        // mock
+        userResponseDto.filter(user.getParticipants());
+
+        return userResponseDto;
     }
 }
