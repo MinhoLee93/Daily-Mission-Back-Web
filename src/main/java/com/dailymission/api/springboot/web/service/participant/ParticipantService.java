@@ -1,18 +1,22 @@
 package com.dailymission.api.springboot.web.service.participant;
 
+import com.dailymission.api.springboot.exception.ResourceNotFoundException;
+import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantListResponseDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantResponseDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantUpdateRequestDto;
-import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -26,17 +30,36 @@ public class ParticipantService {
 
     private final MissionRepository missionRepository;
 
+    private final UserRepository userRepository;
+
     @Transactional
-    public Long save(ParticipantSaveRequestDto requestDto){
-        Optional<Mission> optional = missionRepository.findById(requestDto.getMission().getId());
-        Mission mission = optional.get();
+    public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+        // mission
+        Mission mission = missionRepository.findById(requestDto.getMission().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", requestDto.getMission().getId()));
+
+        // 종료 및 삭제여부 확인
+        if(!mission.checkStatus()){
+            throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
+        }
+
+        // 참여가능 날짜 확인 (시작 날짜가 지났으면 참여 불가능)
+        if(!mission.checkStartDate(LocalDate.now())){
+            throw new IllegalArgumentException("미션 참여 가능기간이 아닙니다.");
+        }
 
         // 비밀번호 확인
         if(!mission.checkCredential(requestDto.getCredential())){
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 
-        return participantRepository.save(requestDto.toEntity()).getId();
+        // entity
+        Participant participant =  requestDto.toEntity(user);
+        return participantRepository.save(participant).getId();
     }
 
     @Transactional(readOnly = true)

@@ -103,10 +103,28 @@ public class Mission extends BaseTimeEntity {
     // 비밀번호 확인
 
     public boolean checkCredential(String credential){
-        if(this.credential.equals(credential)){
-            return true;
-        }else{
+        if(!this.credential.equals(credential)){
             return false;
+        }else{
+            return true;
+        }
+    }
+
+    // 종료 및 삭제여부 확인
+    public boolean checkStatus(){
+        if(this.ended || this.deleted){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // 시작날짜 확인
+    public boolean checkStartDate(LocalDate date){
+        if(date.isAfter(this.startDate)){
+            return false;
+        }else{
+            return true;
         }
     }
 

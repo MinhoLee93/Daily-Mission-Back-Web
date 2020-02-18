@@ -45,7 +45,6 @@ public class MissionController {
 //        return missionService.updateImage(id, file);
 //    }
 
-
     @DeleteMapping("/api/mission/{id}")
     @PreAuthorize("hasRole('USER')")
     public MissionDeleteResponseDto delete(@PathVariable Long id, @CurrentUser UserPrincipal userPrincipal){
