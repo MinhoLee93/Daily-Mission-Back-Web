@@ -81,8 +81,15 @@ public class Post extends BaseTimeEntity {
 
 
     // 삭제
-    public void delete(){
-        this.deleted = true ;
-    }
+    public void delete(User user){
+        if(this.user.getId() != user.getId()){
+            throw new IllegalArgumentException("허용되지 않은 유저입니다.");
+        }
 
+        if(this.deleted){
+            throw new IllegalArgumentException("이미 삭제된 게시글입니다.");
+        }
+
+        this.deleted = true;
+    }
 }

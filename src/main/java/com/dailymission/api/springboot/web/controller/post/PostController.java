@@ -1,15 +1,16 @@
 package com.dailymission.api.springboot.web.controller.post;
 
+import com.dailymission.api.springboot.security.CurrentUser;
+import com.dailymission.api.springboot.security.UserPrincipal;
+import com.dailymission.api.springboot.web.dto.post.PostDeleteResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
+import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
 import com.dailymission.api.springboot.web.service.post.PostService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -20,45 +21,59 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/api/post")
-    public Long save(@RequestPart("requestJson") String requestJson, @RequestPart("file") MultipartFile file) throws Exception{
-        PostSaveRequestDto requestDto =  new Gson().fromJson(requestJson, PostSaveRequestDto.class);
+    @PreAuthorize("hasRole('USER')")
+    public Long save(PostSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws Exception{
 
-        return postService.save(requestDto, file);
+        return postService.save(requestDto, userPrincipal);
     }
 
     @GetMapping("/api/post/{id}")
-    public String findById (@PathVariable Long id){
-        String json = new Gson().toJson(postService.findById(id));
+    public PostResponseDto findById (@PathVariable Long id) throws Exception {
 
-        return json;
+        return postService.findById(id);
     }
 
-    @PutMapping("/api/post/{id}")
-    public Long update(@PathVariable Long id, @RequestBody String requestJson){
-        PostUpdateRequestDto requestDto =  new Gson().fromJson(requestJson, PostUpdateRequestDto.class);
-
-        return postService.update(id, requestDto);
-    }
-
-    @PutMapping("/api/post/{id}/image")
-    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
-
-        return postService.updateImage(id, file);
-    }
+//    @PutMapping("/api/post/{id}")
+//    public Long update(@PathVariable Long id, @RequestBody String requestJson){
+//        PostUpdateRequestDto requestDto =  new Gson().fromJson(requestJson, PostUpdateRequestDto.class);
+//
+//        return postService.update(id, requestDto);
+//    }
+//
+//    @PutMapping("/api/post/{id}/image")
+//    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
+//
+//        return postService.updateImage(id, file);
+//    }
 
     @DeleteMapping("/api/post/{id}")
-    public Long delete(@PathVariable Long id){
-        postService.delete(id);
+    @PreAuthorize("hasRole('USER')")
+    public PostDeleteResponseDto delete(@PathVariable Long id, @CurrentUser UserPrincipal userPrincipal){
+        postService.delete(id, userPrincipal);
 
-        return id;
+        return PostDeleteResponseDto.builder().id(id).build();
     }
 
+    // 전체
     @GetMapping("/api/post/all")
-    public String all(){
-        List<PostListResponseDto> responseDtoList =  postService.findAllDesc();
-        String json = new Gson().toJson(responseDtoList);
+    public List<PostListResponseDto> findAll(){
 
-        return json;
+        return postService.findAll();
+    }
+
+    // 개인별
+    @GetMapping("/api/post/all/me")
+    @PreAuthorize("hasRole('USER')")
+    public List<PostListResponseDto> findAllByUser (@CurrentUser UserPrincipal userPrincipal) {
+
+        return postService.findAllByUser(userPrincipal);
+    }
+
+    // 미션별
+    @GetMapping("/api/post/all/mission/{id}")
+    public List<PostListResponseDto> findAllByMission (@PathVariable Long id) {
+
+        return postService.findAllByMission(id);
     }
 
 }

@@ -1,13 +1,19 @@
 package com.dailymission.api.springboot.web.service.post;
 
+import com.dailymission.api.springboot.exception.ResourceNotFoundException;
+import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
 import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
-import com.dailymission.api.springboot.web.repository.user.UserRepository;
+import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
+import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,52 +31,94 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
 
+    private final ImageService imageService;
+
     private final PostRepository postRepository;
 
     private final MissionRepository missionRepository;
 
     private final UserRepository userRepository;
 
-    private final ImageService imageService;
+    private final ParticipantRepository participantRepository;
+
 
     @Transactional
-    public Long save(PostSaveRequestDto requestDto, MultipartFile file) throws IOException {
-        Post post = requestDto.toEntitiy();
+    public Long save(PostSaveRequestDto requestDto, UserPrincipal userPrincipal) throws IOException {
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-        if(!missionRepository.existsById(post.getMission().getId())){
-            throw  new NoSuchElementException("존재하지 않는 미션입니다. ID=" + post.getMission().getId());
+        // mission
+        Mission mission = missionRepository.findById(requestDto.getMissionId())
+                .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", requestDto.getMissionId()));
+
+        // participant
+        Participant participant = participantRepository.findByMissionAndUser(mission, user)
+                .orElseThrow(()-> new NoSuchElementException("해당 참여내용은 존재하지 않습니다"));
+
+        // 강퇴여부 확인
+        if(participant.isBanned()){
+            throw new IllegalAccessError("당신은 강퇴당하셨습니다.");
         }
 
-        if(!userRepository.existsById(post.getUser().getId())){
-            throw  new NoSuchElementException("존재하지 않는 유저입니다. ID=" + post.getUser().getId());
+        // 미션 종료 및 삭제여부 확인
+        if(!mission.checkStatus()){
+            throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
         }
 
+        // 미션 종료 날짜 확인 (이미 종료된 미션엔 제출 불가능)
+        if(!mission.checkEndDate(LocalDate.now())){
+            throw new IllegalArgumentException("이미 종료된 미션입니다.");
+        }
+
+        // entity
+        Post post = requestDto.toEntity(user, mission);
+
+        // upload image
+        String imageUrl = imageService.uploadS3(requestDto.getFile(), mission.getTitle());
+        post.updateImage(imageUrl);
+
+        // create post
         post = postRepository.save(post);
-
-        // change image
-        if(!file.isEmpty()){
-            String imagePath = imageService.uploadS3(file, post.getMission().getTitle() + imageService.genDir());
-            post.updateImage(imagePath);
-        }
 
         return post.getId();
     }
 
     @Transactional(readOnly = true)
-    public PostResponseDto findById (Long id){
-        Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
+    public PostResponseDto findById (Long id) throws Exception {
+        Post post = postRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
 
-        Post post = optional.get();
         return new PostResponseDto(post);
     }
 
     @Transactional(readOnly = true)
-    public List<PostListResponseDto> findAllDesc(){
-        return postRepository.findAllDesc().stream()
+    public List<PostListResponseDto> findAll(){
+        return postRepository.findAllDescAndDeletedIsFalse().stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
+    }
 
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> findAllByUser(UserPrincipal userPrincipal){
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+        return postRepository.findAllByUserEqualsAndDeletedIsFalse(user).stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> findAllByMission(Long id){
+        // mission
+        Mission mission = missionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
+
+        return postRepository.findAllByMissionAndDeletedIsFalse(mission).stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -99,13 +148,18 @@ public class PostService {
 
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id, UserPrincipal userPrincipal){
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+        // post
         Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
                         .orElseThrow(()-> new NoSuchElementException("해당 게시글이 없습니다. id =" + id));
 
         // delete flag -> 'Y'
         Post post = optional.get();
-        post.delete();
+        post.delete(user);
     }
 
 

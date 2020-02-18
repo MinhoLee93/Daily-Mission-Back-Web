@@ -55,8 +55,7 @@ public class MissionController {
 
     @GetMapping("/api/mission/all")
     public List<MissionListResponseDto> all(){
-        List<MissionListResponseDto> responseDtoList = missionService.findAllDesc();
 
-        return responseDtoList;
+        return  missionService.findAllDesc();
     }
 }

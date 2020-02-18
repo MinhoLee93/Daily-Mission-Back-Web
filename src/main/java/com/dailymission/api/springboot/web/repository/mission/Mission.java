@@ -103,7 +103,6 @@ public class Mission extends BaseTimeEntity {
     }
 
     // 비밀번호 확인
-
     public boolean checkCredential(String credential){
         if(!this.credential.equals(credential)){
             return false;
@@ -123,6 +122,15 @@ public class Mission extends BaseTimeEntity {
 
     // 시작날짜 확인
     public boolean checkStartDate(LocalDate date){
+        if(date.isAfter(this.startDate)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // 종료날짜 확인
+    public boolean checkEndDate(LocalDate date){
         if(date.isAfter(this.startDate)){
             return false;
         }else{
@@ -156,6 +164,10 @@ public class Mission extends BaseTimeEntity {
     public void delete(User user){
         if(this.user.getId() != user.getId()){
             throw new IllegalArgumentException("허용되지 않은 유저입니다.");
+        }
+
+        if(this.deleted){
+            throw new IllegalArgumentException("이미 삭제된 미션입니다.");
         }
 
         this.deleted = true;

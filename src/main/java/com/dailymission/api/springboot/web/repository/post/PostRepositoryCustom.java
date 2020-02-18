@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
     // all post desc by id
-    List<Post> findAllDesc();
+    List<Post> findAllDescAndDeletedIsFalse();
 }
