@@ -18,7 +18,12 @@ var main = {
         var formData = new FormData();
         formData.append('file', file);
 
-        var json = '{ "title" : "test"}';
+        var json = '{ "title" : "test",' +
+            '         "content" : "test",' +
+            '          "user" : {"id": 1L},' +
+            '          "startDate" : "2020-01-01",' +
+            '          "endDate" : "2020-03-28"' +
+            '}';
         formData.append("requestJson", JSON.stringify(json));
         $.ajax({
             type: 'POST',

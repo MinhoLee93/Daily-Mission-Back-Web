@@ -4,8 +4,9 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -14,19 +15,23 @@ public class MissionListResponseDto {
     private MissionRule missionRule;
     private String title;
     private String content;
-    private String imagePath;
-    private Date startDate;
-    private Date endDate;
-    private String endFlag;
+    private String thumbnailUrl;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
+    private boolean ended;
 
     public MissionListResponseDto(Mission entity){
         this.id = entity.getId();
         this.missionRule = entity.getMissionRule();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.imagePath = entity.getImagePath();
+        this.thumbnailUrl = entity.getThumbnailUrl();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
-        this.endFlag = entity.getEndFlag();
+        this.ended = entity.isEnded();
     }
 }

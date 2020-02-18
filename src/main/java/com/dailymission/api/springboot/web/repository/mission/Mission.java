@@ -5,6 +5,7 @@ import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Mission extends BaseTimeEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "MISSION_RULE_ID")
+    @JsonManagedReference
     private MissionRule missionRule;
 
     @ManyToOne
@@ -131,8 +133,13 @@ public class Mission extends BaseTimeEntity {
     }
 
     // 삭제
-    public void delete(){
+    public void delete(User user){
+        if(this.user.getId() != user.getId()){
+            throw new IllegalArgumentException("허용되지 않은 유저입니다.");
+        }
+
         this.deleted = true;
+        this.ended = true;
     }
 
     // 종료

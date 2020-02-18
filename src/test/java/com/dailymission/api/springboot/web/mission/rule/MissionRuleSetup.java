@@ -22,8 +22,8 @@ public class MissionRuleSetup {
                 .tue(true)
                 .wed(true)
                 .thu(true)
-                .fri(true)
-                .sat(true).build();
+                .fri(false)
+                .sat(false).build();
 
         MissionRule missionRule = MissionRule.builder().week(week).build();
 

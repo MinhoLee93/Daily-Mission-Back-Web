@@ -47,7 +47,7 @@ public class MissionServiceTest {
         given(missionRepository.save(any())).willReturn(mission);
 
         // when
-        Long id = missionService.save(requestDto, null);
+        Long id = missionService.save(requestDto);
 
         // then
         assertThat(id).isEqualTo(mission.getId());

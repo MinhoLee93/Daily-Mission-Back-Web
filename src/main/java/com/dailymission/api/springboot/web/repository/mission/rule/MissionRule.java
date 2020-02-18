@@ -2,6 +2,7 @@ package com.dailymission.api.springboot.web.repository.mission.rule;
 
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,15 +30,12 @@ public class MissionRule extends BaseTimeEntity {
             throw new IllegalArgumentException("week 값은 필수사항 입니다.");
         }
 
-        if(!ruleCheck(week)){
-            throw new IllegalArgumentException("week 값 내부엔 N/Y만 입력할 수 있습니다.");
-        }
-
         this.week = week;
         this.deleted = false;
     }
 
     @OneToOne(mappedBy = "missionRule")
+    @JsonBackReference
     private Mission mission;
 
     public void update(Week week){
@@ -46,19 +44,8 @@ public class MissionRule extends BaseTimeEntity {
             throw new IllegalArgumentException("week 값은 필수사항 입니다.");
         }
 
-        if(!ruleCheck(week)){
-            throw new IllegalArgumentException("week 값 내부엔 N/Y만 입력할 수 있습니다.");
-        }
-
         this.week = week;
 
-    }
-
-
-    public boolean ruleCheck(Week week){
-        RuleChecker checker = RuleChecker.builder().build();
-
-        return checker.ruleCheck(week);
     }
 
     public void delete(){

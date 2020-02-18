@@ -1,15 +1,13 @@
 package com.dailymission.api.springboot.web.controller.mission;
 
-import com.dailymission.api.springboot.web.dto.mission.MissionListResponseDto;
-import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
+import com.dailymission.api.springboot.security.CurrentUser;
+import com.dailymission.api.springboot.security.UserPrincipal;
+import com.dailymission.api.springboot.web.dto.mission.*;
 import com.dailymission.api.springboot.web.service.mission.MissionService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,47 +17,47 @@ public class MissionController {
     private final MissionService missionService;
 
     @PostMapping("/api/mission")
-    public Long save(@RequestPart("requestJson") String requestJson, @RequestPart("file") MultipartFile file) throws Exception {
+    @PreAuthorize("hasRole('USER')")
+    public MissionSaveResponseDto save(MissionSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws Exception {
 
-        MissionSaveRequestDto requestDto = new Gson().fromJson(requestJson, MissionSaveRequestDto.class);
-
-        return missionService.save(requestDto, file);
+         return MissionSaveResponseDto.builder().credential(missionService.save(requestDto, userPrincipal)).build();
     }
 
     @GetMapping("/api/mission/{id}")
-    public String findById(@PathVariable Long id){
-        String json  = new Gson().toJson(missionService.findById(id));
+    public MissionResponseDto findById(@PathVariable Long id){
 
-        return json;
+        return missionService.findById(id);
     }
 
-    @PutMapping("/api/mission/{id}")
-    public Long update(@PathVariable Long id, @RequestBody String requestJson) {
+//    @PutMapping("/api/mission/{id}")
+//    @PreAuthorize("hasRole('USER')")
+//    public Long update(@PathVariable Long id, @RequestBody String requestJson) {
+//
+//        MissionUpdateRequestDto requestDto = new Gson().fromJson(requestJson, MissionUpdateRequestDto.class);
+//
+//        return missionService.update(id, requestDto);
+//    }
 
-        MissionUpdateRequestDto requestDto = new Gson().fromJson(requestJson, MissionUpdateRequestDto.class);
-
-        return missionService.update(id, requestDto);
-    }
-
-    @PutMapping("/api/mission/{id}/image")
-    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
-
-        return missionService.updateImage(id, file);
-    }
+//    @PutMapping("/api/mission/{id}/image")
+//    @PreAuthorize("hasRole('USER')")
+//    public Long updateImage(@PathVariable Long id, @RequestPart("file") MultipartFile file) throws IOException {
+//
+//        return missionService.updateImage(id, file);
+//    }
 
 
     @DeleteMapping("/api/mission/{id}")
-    public Long delete(@PathVariable Long id){
-        missionService.delete(id);
+    @PreAuthorize("hasRole('USER')")
+    public MissionDeleteResponseDto delete(@PathVariable Long id, @CurrentUser UserPrincipal userPrincipal){
+        missionService.delete(id, userPrincipal);
 
-        return id;
+        return MissionDeleteResponseDto.builder().id(id).build();
     }
 
     @GetMapping("/api/mission/all")
-    public String all(){
+    public List<MissionListResponseDto> all(){
         List<MissionListResponseDto> responseDtoList = missionService.findAllDesc();
-        String json = new Gson().toJson(responseDtoList);
 
-        return json;
+        return responseDtoList;
     }
 }

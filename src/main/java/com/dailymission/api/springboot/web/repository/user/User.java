@@ -8,6 +8,7 @@ import com.dailymission.api.springboot.web.repository.post.Post;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
+@NoArgsConstructor
 public class User extends BaseTimeEntity {
 
     @Id
@@ -55,12 +57,15 @@ public class User extends BaseTimeEntity {
     private String providerId;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Mission> missions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Participant> participants = new ArrayList<>();
 
     // 테스트용 빌더

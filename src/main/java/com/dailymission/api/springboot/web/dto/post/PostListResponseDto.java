@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.dto.post;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -11,14 +12,16 @@ public class PostListResponseDto {
     private Long id;
     private String title;
     private User user;
-    private String imagePath;
+    private String thumbnailUrl;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
 
     public PostListResponseDto(Post entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.user = entity.getUser();
-        this.imagePath = entity.getImagePath();
+        this.thumbnailUrl = entity.getThumbnailUrl();
         this.modifiedDate = entity.getModifiedDate();
     }
 }

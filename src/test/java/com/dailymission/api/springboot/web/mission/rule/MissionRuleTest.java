@@ -2,6 +2,7 @@ package com.dailymission.api.springboot.web.mission.rule;
 
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,8 +22,8 @@ public class MissionRuleTest {
                 .tue(true)
                 .wed(true)
                 .thu(true)
-                .fri(true)
-                .sat(true).build();
+                .fri(false)
+                .sat(false).build();
     }
 
     @Test
@@ -39,6 +40,8 @@ public class MissionRuleTest {
         assertThat(checkWeek.isThu()).isTrue();
         assertThat(checkWeek.isFri()).isFalse();
         assertThat(checkWeek.isSat()).isFalse();
+
+        System.out.println(new Gson().toJson(missionRule).toString());
     }
 
     @Test

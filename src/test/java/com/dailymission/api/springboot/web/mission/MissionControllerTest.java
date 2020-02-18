@@ -1,15 +1,15 @@
 package com.dailymission.api.springboot.web.mission;
 
 
-import com.dailymission.api.springboot.web.user.UserSetup;
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
 import com.dailymission.api.springboot.web.mission.rule.MissionRuleSetup;
-import com.dailymission.api.springboot.web.repository.user.User;
-import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
+import com.dailymission.api.springboot.web.user.UserSetup;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -72,7 +72,7 @@ public class MissionControllerTest {
         mission = missionSetup.build();
 
         MissionSaveRequestDto requestDto = MissionSaveRequestDto.builder()
-                                                                .missionRule(mission.getMissionRule())
+                                                                .week(mission.getMissionRule().getWeek())
                                                                 .user(mission.getUser())
                                                                 .title(mission.getTitle())
                                                                 .content(mission.getContent())
@@ -110,8 +110,8 @@ public class MissionControllerTest {
                                                                   .missionRule(updateMissionRule)
                                                                   .title("update")
                                                                   .content("update")
-                                                                  .startDate(new Date())
-                                                                  .endDate(new Date())
+                                                                  .startDate(LocalDate.of(2020,01,01))
+                                                                  .endDate(LocalDate.of(2020,03,28))
                                                                   .build();
         // when
         mvc.perform(

@@ -10,12 +10,12 @@ public class ParticipantResponseDto {
     private Long id;
     private Mission mission;
     private User user;
-    private String attendFlag;
+    private boolean banned;
 
     public ParticipantResponseDto(Participant entity){
         this.id = entity.getId();
         this.mission = entity.getMission();
         this.user = entity.getUser();
-        this.attendFlag = entity.getAttendFlag();
+        this.banned = entity.isBanned();
     }
 }

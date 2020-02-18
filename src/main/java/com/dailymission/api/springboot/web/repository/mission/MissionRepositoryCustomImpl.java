@@ -1,31 +1,32 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-public class MissionRepositoryCustomImpl extends QuerydslRepositorySupport implements MissionRepositoryCustom {
+import static com.dailymission.api.springboot.web.repository.mission.QMission.mission;
 
-    @Autowired
-    EntityManager em;
+@RequiredArgsConstructor
+public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
 
-    private JPAQueryFactory queryFactory;
+//    @Autowired
+//    private EntityManager em;
 
-    public MissionRepositoryCustomImpl(){
-        super(Mission.class);
-        this.queryFactory = new JPAQueryFactory(em);
-    }
+    private final JPAQueryFactory queryFactory;
 
+//    public MissionRepositoryCustomImpl(){
+//        super(Mission.class);
+//        this.queryFactory = new JPAQueryFactory(em);
+//    }
 
     @Override
     public List<Mission> findAllDesc() {
-        QMission mission = QMission.mission;
-
-        List<Mission> missionList = queryFactory.selectFrom(mission).orderBy(mission.id.desc()).fetch();
-        return missionList;
+       return  queryFactory
+                .select(mission)
+                .from(mission)
+                .orderBy(mission.id.desc())
+                .fetch();
     }
 }
 

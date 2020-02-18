@@ -19,6 +19,7 @@ public class BaseTimeEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
 
+
     @LastModifiedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;

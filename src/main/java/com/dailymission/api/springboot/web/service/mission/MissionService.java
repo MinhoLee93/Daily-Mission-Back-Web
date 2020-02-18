@@ -1,12 +1,16 @@
 package com.dailymission.api.springboot.web.service.mission;
 
+import com.dailymission.api.springboot.exception.ResourceNotFoundException;
+import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.mission.MissionListResponseDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionResponseDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
+import com.dailymission.api.springboot.web.repository.common.S3Uploader;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
-import com.dailymission.api.springboot.web.service.image.ImageService;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,21 +28,27 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
 
-    private final ImageService imageService;
+    private final UserRepository userRepository;
+
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public Long save(MissionSaveRequestDto requestDto, MultipartFile file) throws Exception {
-        // create mission with default image
-        Mission mission = missionRepository.save(requestDto.toEntity());
+    public String save(MissionSaveRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-        // change image
-        if(!file.isEmpty()){
-            String imagePath = imageService.uploadS3(file, mission.getTitle());
-            mission.updateImage(imagePath);
-        }
+        // entity
+        Mission mission = requestDto.toEntity(user);
 
-        return mission.getId();
+        // upload image
+        String imageUrl = s3Uploader.upload(requestDto.getFile(), mission.getTitle());
+        mission.updateImage(imageUrl);
 
+        // create mission
+        mission = missionRepository.save(mission);
+
+        return mission.getCredential();
     }
 
     @Transactional(readOnly = true)
@@ -80,7 +90,7 @@ public class MissionService {
         Mission mission = optional.get();
 
         // change image
-        String imagePath = imageService.uploadS3(file, mission.getTitle());
+        String imagePath = s3Uploader.upload(file, mission.getTitle());
         mission.updateImage(imagePath);
 
         return id;
@@ -88,13 +98,19 @@ public class MissionService {
 
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Long id, UserPrincipal userPrincipal){
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+        // mission
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findById(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
 
+
         // delete flag -> 'Y'
         Mission mission = optional.get();
-        mission.delete();
+        mission.delete(user);
     }
 
     @Transactional

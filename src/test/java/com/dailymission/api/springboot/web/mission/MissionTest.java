@@ -34,8 +34,8 @@ public class MissionTest {
         // user
         String jsonAccount = "{\n" +
                 "  \"id\" : 1,\n" +
-                "  \"created_date\" : \"2020-02-07 09:07:34.703000\",\n" +
-                "  \"modified_date\" : \"2020-02-07 09:07:34.703000\",\n" +
+                "  \"created_date\" : \"2020-02-07'T'09:07:34\",\n" +
+                "  \"modified_date\" : \"2020-02-07'T'09:07:34\",\n" +
                 "  \"delete_flag\" : \"N\",\n" +
                 "  \"email\" : \"test\",\n" +
                 "  \"name\" : \"test\",\n" +
