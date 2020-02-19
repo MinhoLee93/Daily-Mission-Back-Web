@@ -1,8 +1,7 @@
 package com.dailymission.api.springboot.web.dto.mission;
 
 import com.dailymission.api.springboot.web.repository.mission.Mission;
-import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
-import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,8 +10,9 @@ import java.time.LocalDate;
 @Getter
 public class MissionResponseDto {
     private Long id;
-    private MissionRule missionRule;
-    private User user;
+    private Week week;
+    private Long userId;
+    private String userName;
     private String title;
     private String content;
     private String imageUrl;
@@ -26,8 +26,9 @@ public class MissionResponseDto {
 
     public MissionResponseDto(Mission entity){
         this.id = entity.getId();
-        this.missionRule = entity.getMissionRule();
-        this.user = entity.getUser();
+        this.week = entity.getMissionRule().getWeek();
+        this.userId = entity.getUser().getId();
+        this.userName = entity.getUser().getName();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.imageUrl = entity.getImageUrl();

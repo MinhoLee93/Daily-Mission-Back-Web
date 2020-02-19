@@ -21,11 +21,11 @@ public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
 //    }
 
     @Override
-    public List<Mission> findAllDesc() {
+    public List<Mission> findAllByCreatedDate() {
        return  queryFactory
                 .select(mission)
                 .from(mission)
-                .orderBy(mission.id.desc())
+                .orderBy(mission.createdDate.desc())
                 .fetch();
     }
 }

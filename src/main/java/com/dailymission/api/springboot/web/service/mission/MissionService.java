@@ -61,8 +61,8 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<MissionListResponseDto> findAllDesc(){
-        return missionRepository.findAllDesc().stream()
+    public List<MissionListResponseDto> findAllByCreatedDate(){
+        return missionRepository.findAllByCreatedDate().stream()
                 .map(MissionListResponseDto::new)
                 .collect(Collectors.toList());
     }

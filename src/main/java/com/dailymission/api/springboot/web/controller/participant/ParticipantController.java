@@ -3,7 +3,6 @@ package com.dailymission.api.springboot.web.controller.participant;
 import com.dailymission.api.springboot.security.CurrentUser;
 import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.participant.ParticipantSaveResponseDto;
 import com.dailymission.api.springboot.web.service.participant.ParticipantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,9 +18,9 @@ public class ParticipantController {
 
     @PostMapping("/api/participant")
     @PreAuthorize("hasRole('USER')")
-    public ParticipantSaveResponseDto save(@RequestBody ParticipantSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
+    public Long save(@RequestBody ParticipantSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
 
-        return ParticipantSaveResponseDto.builder().id(participantService.save(requestDto, userPrincipal)).build();
+        return participantService.save(requestDto, userPrincipal);
     }
 
 }

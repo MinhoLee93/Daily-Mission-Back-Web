@@ -2,10 +2,7 @@ package com.dailymission.api.springboot.web.controller.post;
 
 import com.dailymission.api.springboot.security.CurrentUser;
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.dto.post.PostDeleteResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
+import com.dailymission.api.springboot.web.dto.post.*;
 import com.dailymission.api.springboot.web.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,4 +73,12 @@ public class PostController {
         return postService.findAllByMission(id);
     }
 
+    // 스케줄
+    @GetMapping("/api/post/schedule/mission/{id}/{startDate}/{endDate}")
+    public PostScheduleResponseDto findSchedule(@PathVariable("id") Long id,
+                                                      @PathVariable("startDate") String startDate,
+                                                      @PathVariable("endDate") String endDate){
+
+        return postService.findSchedule(id, startDate, endDate);
+    }
 }

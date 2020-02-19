@@ -2,16 +2,14 @@ package com.dailymission.api.springboot.web.service.post;
 
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.dto.post.PostListResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.post.PostUpdateRequestDto;
+import com.dailymission.api.springboot.web.dto.post.*;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
+import com.dailymission.api.springboot.web.repository.schedule.Schedule;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
@@ -54,7 +52,7 @@ public class PostService {
 
         // participant
         Participant participant = participantRepository.findByMissionAndUser(mission, user)
-                .orElseThrow(()-> new NoSuchElementException("해당 참여내용은 존재하지 않습니다"));
+                .orElseThrow(()-> new NoSuchElementException("미션에 참여중인 사용자가 아닙니다."));
 
         // 강퇴여부 확인
         if(participant.isBanned()){
@@ -121,6 +119,24 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public PostScheduleResponseDto findSchedule(Long id, String startDate, String endDate){
+        // mission
+        Mission mission = missionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
+
+        // schedule
+        List<PostHistoryDto> historyDtoList = postRepository.findSchedule(id, startDate, endDate);
+        Schedule schedule = Schedule.builder()
+                                     .historyDtoList(historyDtoList)
+                                     .build();
+
+        return  PostScheduleResponseDto.builder()
+                                       .users(mission.getAllUser())
+                                        .schedules(schedule.getAllSchedule())
+                                        .build();
+    }
+
     @Transactional
     public Long update(Long id, PostUpdateRequestDto requestDto){
         Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
@@ -161,6 +177,7 @@ public class PostService {
         Post post = optional.get();
         post.delete(user);
     }
+
 
 
 }

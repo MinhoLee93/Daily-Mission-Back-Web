@@ -53,9 +53,11 @@ public class MissionController {
         return MissionDeleteResponseDto.builder().id(id).build();
     }
 
+    // 전체 (신규)
     @GetMapping("/api/mission/all")
-    public List<MissionListResponseDto> all(){
+    public List<MissionListResponseDto> findAllByCreatedDate(){
 
-        return  missionService.findAllDesc();
+        return  missionService.findAllByCreatedDate();
     }
+
 }
