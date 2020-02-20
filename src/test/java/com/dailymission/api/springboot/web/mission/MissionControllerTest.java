@@ -73,7 +73,6 @@ public class MissionControllerTest {
 
         MissionSaveRequestDto requestDto = MissionSaveRequestDto.builder()
                                                                 .week(mission.getMissionRule().getWeek())
-                                                                .user(mission.getUser())
                                                                 .title(mission.getTitle())
                                                                 .content(mission.getContent())
                                                                 .startDate(mission.getStartDate())
