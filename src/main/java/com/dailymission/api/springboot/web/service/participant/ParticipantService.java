@@ -42,6 +42,17 @@ public class ParticipantService {
         Mission mission = missionRepository.findById(requestDto.getMission().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", requestDto.getMission().getId()));
 
+        // 이미 참여중인지 확인
+        Optional<Participant> optional = participantRepository.findByMissionAndUser(mission,user);
+        if(optional.isPresent()){
+            // 강퇴된 회원
+            if(optional.get().isBanned()){
+                throw new IllegalArgumentException("강퇴된 미션에는 참여할 수 없습니다.");
+            }else{
+                throw new IllegalArgumentException("이미 참여중인 미션입니다.");
+            }
+        }
+
         // 종료 및 삭제여부 확인
         if(!mission.checkStatus()){
             throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
