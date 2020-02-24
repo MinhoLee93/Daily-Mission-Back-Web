@@ -7,6 +7,7 @@ import com.dailymission.api.springboot.web.dto.mission.MissionResponseDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.common.S3Uploader;
+import com.dailymission.api.springboot.web.repository.common.Validator;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
@@ -27,13 +28,14 @@ import java.util.stream.Collectors;
 public class MissionService {
 
     private final MissionRepository missionRepository;
-
     private final UserRepository userRepository;
-
     private final S3Uploader s3Uploader;
 
     @Transactional
     public String save(MissionSaveRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
+        // data validation
+        Validator.builder().build().checkValidation(requestDto);
+
         // user
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));

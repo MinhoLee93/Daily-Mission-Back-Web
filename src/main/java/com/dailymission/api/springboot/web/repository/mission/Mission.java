@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,12 @@ public class Mission extends BaseTimeEntity {
     @OneToMany(mappedBy = "mission")
     private List<Post> posts = new ArrayList<>();
 
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "TITLE", nullable = false, length = 15)
+    @Size(min = 1, max = 20)
     private String title;
 
-    @Column(name = "CONTENT", nullable = false)
+    @Column(name = "CONTENT", nullable = false, length = 50)
+    @Size(min = 10, max = 50)
     private String content;
 
     @Column(name="IMAGE_URL", nullable = false)
@@ -112,7 +115,7 @@ public class Mission extends BaseTimeEntity {
         }
     }
 
-    // 종료 및 삭제여부 확인
+    // 종료 및 삭제여부 확인 (Participant)
     public boolean checkStatus(){
         if(this.ended || this.deleted){
             return false;
@@ -121,7 +124,7 @@ public class Mission extends BaseTimeEntity {
         }
     }
 
-    // 시작날짜 확인
+    // 시작날짜 확인 (Participant Create)
     public boolean checkStartDate(LocalDate date){
         if(date.isAfter(this.startDate)){
             return false;
@@ -130,7 +133,7 @@ public class Mission extends BaseTimeEntity {
         }
     }
 
-    // 종료날짜 확인
+    // 종료날짜 확인 (Mission Create)
     public boolean checkEndDate(LocalDate date){
         if(date.isAfter(this.startDate)){
             return false;
