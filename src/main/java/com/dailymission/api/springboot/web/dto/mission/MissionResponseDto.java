@@ -1,21 +1,27 @@
 package com.dailymission.api.springboot.web.dto.mission;
 
+import com.dailymission.api.springboot.web.dto.user.UserNameImageDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
+import com.dailymission.api.springboot.web.repository.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class MissionResponseDto {
     private Long id;
     private Week week;
-    private Long userId;
     private String userName;
     private String title;
     private String content;
     private String imageUrl;
+    private List<UserNameImageDto> participants = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -24,10 +30,10 @@ public class MissionResponseDto {
     private LocalDate endDate;
     private boolean ended;
 
+    @Builder
     public MissionResponseDto(Mission entity){
         this.id = entity.getId();
         this.week = entity.getMissionRule().getWeek();
-        this.userId = entity.getUser().getId();
         this.userName = entity.getUser().getName();
         this.title = entity.getTitle();
         this.content = entity.getContent();
@@ -35,5 +41,17 @@ public class MissionResponseDto {
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.ended = entity.isEnded();
+
+        setParticipants(entity.getParticipants());
+    }
+
+    private void setParticipants(List<Participant> participants){
+        for(Participant p : participants){
+            User user = p.getUser();
+            this.participants.add(UserNameImageDto.builder()
+                                    .userName(user.getName())
+                                    .imageUrl(user.getImageUrl())
+                                    .banned(p.isBanned()).build());
+        }
     }
 }
