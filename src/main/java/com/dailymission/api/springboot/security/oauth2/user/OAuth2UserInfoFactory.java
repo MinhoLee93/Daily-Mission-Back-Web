@@ -12,7 +12,9 @@ public class OAuth2UserInfoFactory {
             return new GoogleOAuth2UserInfo(attributes);
         }else if (registrationId.equalsIgnoreCase(AuthProvider.naver.toString())) {
             return new NaverOAuth2UserInfo(attributes);
-        }else {
+        }else if (registrationId.equalsIgnoreCase(AuthProvider.kakao.toString())) {
+            return new KakaoOAuth2UserInfo(attributes);
+        } else {
             throw new OAuth2AuthenticationProcessingException("Sorry! Login with " + registrationId + " is not supported yet.");
         }
     }
