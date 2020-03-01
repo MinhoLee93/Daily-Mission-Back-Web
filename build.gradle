@@ -93,6 +93,10 @@ dependencies {
     // batch
     compile 'org.springframework.boot:spring-boot-starter-batch'
     testCompile 'org.springframework.batch:spring-batch-test'
+
+    // rabbitmq
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
 test {

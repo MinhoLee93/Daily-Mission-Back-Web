@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-* Let’s bind all the configurations prefixed with app to a POJO class using Spring Boot’s
+* Let’s bind all the configurations prefixed with app to a POJO class using Spring Boot's @ConfigurationProperties feature
 * */
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {

@@ -30,7 +30,7 @@ public class MissionListResponseDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.thumbnailUrl = entity.getThumbnailUrl();
+//        this.thumbnailUrl = entity.getThumbnailUrl();
         this.userName = entity.getUser().getName();
         this.userCount = count(entity.getParticipants());
         this.startDate = entity.getStartDate();

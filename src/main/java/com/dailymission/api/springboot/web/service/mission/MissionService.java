@@ -6,12 +6,14 @@ import com.dailymission.api.springboot.web.dto.mission.MissionListResponseDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionResponseDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
+import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.repository.common.S3Uploader;
 import com.dailymission.api.springboot.web.repository.common.Validator;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
+import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ public class MissionService {
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
+    private final MessageProducer messageProducer;
 
     @Transactional
     public String save(MissionSaveRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
@@ -49,6 +52,13 @@ public class MissionService {
 
         // create mission
         mission = missionRepository.save(mission);
+
+        // produce message
+        messageProducer.sendMessage(MessageDto.builder()
+                                            .id(mission.getId())
+                                            .type("mission")
+                                            .imageUrl(mission.getImageUrl())
+                                            .build(), mission.getFileExtension());
 
         return mission.getCredential();
     }

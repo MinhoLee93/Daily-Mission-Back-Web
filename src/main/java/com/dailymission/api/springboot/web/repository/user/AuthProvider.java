@@ -7,5 +7,7 @@ package com.dailymission.api.springboot.web.repository.user;
 * */
 public enum  AuthProvider {
     local,
-    google
+    google,
+    naver,
+    kakao
 }

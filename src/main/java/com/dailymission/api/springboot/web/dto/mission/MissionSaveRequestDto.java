@@ -39,12 +39,16 @@ public class MissionSaveRequestDto {
 
     public Mission toEntity(User user){
         MissionRule missionRule = MissionRule.builder().week(week).build();
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
         return Mission.builder()
                       .missionRule(missionRule)
                       .user(user)
                       .title(title)
                       .content(content)
+                      .originalFileName(file.getOriginalFilename())
+                      .fileExtension(fileExtension)
                       .startDate(startDate)
                       .endDate(endDate)
                       .build();

@@ -54,11 +54,34 @@ public class Mission extends BaseTimeEntity {
     @Size(min = 10, max = 50)
     private String content;
 
+    @Column(name = "ORIGINAL_FILE_NAME", nullable = false)
+    private String originalFileName;
+
+    @Column(name = "FILE_EXTENSION", nullable = false)
+    private String fileExtension;
+
     @Column(name="IMAGE_URL", nullable = false)
     private String imageUrl;
 
+        // 썸네일 (홈)
     @Column(name="THUMBNAIL_URL", nullable = false)
     private String thumbnailUrl;
+
+//    // 썸네일 (홈)
+//    @Column(name="THUMBNAIL_URL_HOME", nullable = false)
+//    private String thumbnailUrlHome;
+
+//    // 썸네일 (전체)
+//    @Column(name="THUMBNAIL_URL_ALL", nullable = false)
+//    private String thumbnailUrlAll;
+//
+//    // 썸네일 (Hot)
+//    @Column(name="THUMBNAIL_URL_HOT", nullable = false)
+//    private String thumbnailUrlHot;
+//
+//    // 썸네일 (디테일)
+//    @Column(name="THUMBNAIL_URL_DETAIL", nullable = false)
+//    private String thumbnailUrlDetail;
 
     @Column(name = "CREDENTIAL", nullable = false)
     private String credential;
@@ -79,13 +102,16 @@ public class Mission extends BaseTimeEntity {
 
     @Builder
     public Mission(MissionRule missionRule, User user, String title, String content,
-                   String imageUrl, LocalDate startDate, LocalDate endDate){
+                   String originalFileName, String fileExtension,  String imageUrl, LocalDate startDate, LocalDate endDate){
         this.missionRule = missionRule;
         this.user = user;
         this.title = title;
         this.content = content;
+        this.originalFileName = originalFileName;
+        this.fileExtension = fileExtension;
         this.startDate = startDate;
         this.endDate = endDate;
+
 
         // credential
         this.credential = createCredential();
@@ -93,6 +119,10 @@ public class Mission extends BaseTimeEntity {
         // s3
         this.imageUrl = imageUrl;
         this.thumbnailUrl = imageUrl;
+//        this.thumbnailUrlHome = imageUrl;
+//        this.thumbnailUrlAll = imageUrl;
+//        this.thumbnailUrlHot = imageUrl;
+//        this.thumbnailUrlDetail = imageUrl;
 
         this.ended = false;
         this.deleted = false;
@@ -148,12 +178,31 @@ public class Mission extends BaseTimeEntity {
         this.imageUrl = imageUrl;
         // 썸네일 -> 재생성
         this.thumbnailUrl = imageUrl;
+//        this.thumbnailUrlHome = imageUrl;
+//        this.thumbnailUrlAll = imageUrl;
+//        this.thumbnailUrlHot = imageUrl;
+//        this.thumbnailUrlDetail = imageUrl;
     }
 
-    // 썸네일 업데이트
-    public void updateThumbnail(String thumbnailUrl){
-        this.thumbnailUrl = thumbnailUrl;
-    }
+//    // 썸네일 업데이트 (홈)
+//    public void updateThumbnailHome(String thumbnailUrlHome){
+//        this.thumbnailUrlHome = thumbnailUrlHome;
+//    }
+//
+//    // 썸네일 업데이트 (ALL)
+//    public void updateThumbnailAll(String thumbnailUrlAll){
+//        this.thumbnailUrlAll = thumbnailUrlAll;
+//    }
+//
+//    // 썸네일 업데이트 (Hot)
+//    public void updateThumbnailHot(String thumbnailUrlHot){
+//        this.thumbnailUrlHot = thumbnailUrlHot;
+//    }
+//
+//    // 썸네일 업데이트 (Detail)
+//    public void updateThumbnailDetail(String thumbnailUrlDetail){
+//        this.thumbnailUrlDetail = thumbnailUrlDetail;
+//    }
 
     // 업데이트
     public void update(MissionRule missionRule, String title, String content, LocalDate startDate, LocalDate endDate) {
