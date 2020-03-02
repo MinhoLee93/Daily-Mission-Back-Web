@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostListResponseDto {
-    private Long id;
+    private Long postId;
+    private Long missionId;
+    private String missionTitle;
     private String userName;
     private String title;
     private String content;
@@ -18,7 +20,9 @@ public class PostListResponseDto {
     private LocalDateTime modifiedDate;
 
     public PostListResponseDto(Post entity){
-        this.id = entity.getId();
+        this.postId = entity.getId();
+        this.missionId = entity.getMission().getId();
+        this.missionTitle = entity.getMission().getTitle();
         this.userName = entity.getUser().getName();
         this.title = entity.getTitle();
         this.content = entity.getContent();
