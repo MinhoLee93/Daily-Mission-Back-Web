@@ -12,6 +12,7 @@ public class PostResponseDto {
     private Long missionId;
     private String missionTitle;
     private String userName;
+    private String userImageUrl;
     private String title;
     private String content;
     private String imageUrl;
@@ -27,6 +28,7 @@ public class PostResponseDto {
         this.missionId = entity.getMission().getId();
         this.missionTitle = entity.getMission().getTitle();
         this.userName = entity.getUser().getName();
+        this.userImageUrl = entity.getUser().getImageUrl();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.imageUrl = entity.getImageUrl();
