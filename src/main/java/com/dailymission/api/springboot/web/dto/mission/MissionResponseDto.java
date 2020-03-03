@@ -20,7 +20,7 @@ public class MissionResponseDto {
     private String userName;
     private String title;
     private String content;
-    private String imageUrl;
+    private String thumbnailUrlDetail;
     private List<UserNameImageDto> participants = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -37,7 +37,7 @@ public class MissionResponseDto {
         this.userName = entity.getUser().getName();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.imageUrl = entity.getImageUrl();
+        this.thumbnailUrlDetail = entity.getThumbnailUrlDetail();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.ended = entity.isEnded();

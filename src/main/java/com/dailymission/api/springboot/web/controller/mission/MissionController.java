@@ -53,11 +53,25 @@ public class MissionController {
         return MissionDeleteResponseDto.builder().id(id).build();
     }
 
+    // 홈
+    @GetMapping("/api/mission/home")
+    public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
+
+        return  missionService.findHomeListByCreatedDate();
+    }
+
     // 전체
     @GetMapping("/api/mission/all")
-    public List<MissionListResponseDto> findAllByCreatedDate(){
+    public List<MissionAllListResponseDto> findAllListByCreatedDate(){
 
-        return  missionService.findAllByCreatedDate();
+        return  missionService.findAllListByCreatedDate();
+    }
+
+    // Hot
+    @GetMapping("/api/mission/hot")
+    public List<MissionHotListResponseDto> findHotListByCreatedDate(){
+
+        return  missionService.findHotListByCreatedDate();
     }
 
 }

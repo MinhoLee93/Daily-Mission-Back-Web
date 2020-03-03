@@ -1,6 +1,7 @@
 package com.dailymission.api.springboot.web.service.image;
 
-import com.dailymission.api.springboot.web.repository.common.S3Uploader;
+import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
+import com.dailymission.api.springboot.web.repository.common.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 @Service
 public class ImageService {
 
-    private final S3Uploader s3Uploader;
+    private final S3Util s3Util;
 
     public String genDir(){
         // get calendar instance
@@ -28,8 +29,17 @@ public class ImageService {
         return datePath;
     }
 
-    public String uploadS3(MultipartFile multipartFile, String dirName) throws IOException {
-        return s3Uploader.upload(multipartFile, dirName + genDir());
+    /**
+     * /1일1알고리즘/2020/03/28/
+     * */
+    public MessageDto uploadPostS3(MultipartFile multipartFile, String dirName) throws IOException {
+        return s3Util.upload(multipartFile, dirName + genDir());
     }
 
+    /**
+     * /1일1알고리즘/
+     * */
+    public MessageDto uploadMissionS3(MultipartFile multipartFile, String dirName) throws IOException {
+        return s3Util.upload(multipartFile, dirName);
+    }
 }

@@ -13,6 +13,6 @@ public class MessageProducer {
     RabbitTemplate rabbitTemplate = new RabbitTemplate();
 
     public void sendMessage(MessageDto messageDto, String routingKey){
-        rabbitTemplate.convertAndSend("x.convert", routingKey, messageDto);
+        rabbitTemplate.convertAndSend("x.resize", routingKey, messageDto);
     }
 }

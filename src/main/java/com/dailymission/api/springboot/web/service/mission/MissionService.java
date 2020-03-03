@@ -2,17 +2,14 @@ package com.dailymission.api.springboot.web.service.mission;
 
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.dto.mission.MissionListResponseDto;
-import com.dailymission.api.springboot.web.dto.mission.MissionResponseDto;
-import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.mission.MissionUpdateRequestDto;
+import com.dailymission.api.springboot.web.dto.mission.*;
 import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
-import com.dailymission.api.springboot.web.repository.common.S3Uploader;
 import com.dailymission.api.springboot.web.repository.common.Validator;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
+import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +28,7 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
-    private final S3Uploader s3Uploader;
+    private final ImageService imageService;
     private final MessageProducer messageProducer;
 
     @Transactional
@@ -47,18 +44,18 @@ public class MissionService {
         Mission mission = requestDto.toEntity(user);
 
         // upload image
-        String imageUrl = s3Uploader.upload(requestDto.getFile(), mission.getTitle());
-        mission.updateImage(imageUrl);
+        MessageDto message = imageService.uploadMissionS3(requestDto.getFile(), mission.getTitle());
+        mission.updateImage(message.getImageUrl());
 
         // create mission
         mission = missionRepository.save(mission);
 
         // produce message
-        messageProducer.sendMessage(MessageDto.builder()
-                                            .id(mission.getId())
-                                            .type("mission")
-                                            .imageUrl(mission.getImageUrl())
-                                            .build(), mission.getFileExtension());
+        message.setId(mission.getId());
+        message.setType("mission");
+        message.setExtension(mission.getFileExtension());
+        message.setOriginalFileName(mission.getOriginalFileName());
+        messageProducer.sendMessage(message, "mission");
 
         return mission.getCredential();
     }
@@ -73,9 +70,23 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<MissionListResponseDto> findAllByCreatedDate(){
+    public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
         return missionRepository.findAllByCreatedDate().stream()
-                .map(MissionListResponseDto::new)
+                .map(MissionHomeListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MissionAllListResponseDto> findAllListByCreatedDate(){
+        return missionRepository.findAllByCreatedDate().stream()
+                .map(MissionAllListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<MissionHotListResponseDto> findHotListByCreatedDate(){
+        return missionRepository.findAllByCreatedDate().stream()
+                .map(MissionHotListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -102,8 +113,8 @@ public class MissionService {
         Mission mission = optional.get();
 
         // change image
-        String imagePath = s3Uploader.upload(file, mission.getTitle());
-        mission.updateImage(imagePath);
+        MessageDto message = imageService.uploadMissionS3(file, mission.getTitle());
+        mission.updateImage(message.getImageUrl());
 
         return id;
     }

@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.repository.common;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class S3Uploader {
+public class S3Util {
     private final AmazonS3 amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -31,18 +32,27 @@ public class S3Uploader {
         return genId;
     }
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+    public MessageDto upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
         return upload(uploadFile, dirName);
-    }
+}
 
-    private String upload(File uploadFile, String dirName) {
+    private MessageDto upload(File uploadFile, String dirName) {
+
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
+
+        // delete local file
         removeNewFile(uploadFile);
-        return uploadImageUrl;
+
+        return MessageDto.builder()
+                        .dirName(dirName)
+                        .fileName(uploadFile.getName())
+                        .keyName(fileName)
+                        .imageUrl(uploadImageUrl)
+                        .build();
     }
 
     private String putS3(File uploadFile, String fileName) {

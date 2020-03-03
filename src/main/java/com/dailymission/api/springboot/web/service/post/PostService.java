@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.service.post;
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.post.*;
+import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
@@ -73,8 +74,8 @@ public class PostService {
         Post post = requestDto.toEntity(user, mission);
 
         // upload image
-        String imageUrl = imageService.uploadS3(requestDto.getFile(), mission.getTitle());
-        post.updateImage(imageUrl);
+        MessageDto messageDto = imageService.uploadPostS3(requestDto.getFile(), mission.getTitle());
+        post.updateImage(messageDto.getImageUrl());
 
         // create post
         post = postRepository.save(post);
@@ -156,8 +157,8 @@ public class PostService {
         Post post = optional.get();
 
         // change image
-        String imagePath = imageService.uploadS3(file, post.getMission().getTitle() + imageService.genDir());
-        post.updateImage(imagePath);
+        MessageDto message = imageService.uploadPostS3(file, post.getMission().getTitle() + imageService.genDir());
+        post.updateImage(message.getImageUrl());
 
         return id;
     }
