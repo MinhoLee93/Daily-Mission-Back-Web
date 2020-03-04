@@ -28,12 +28,16 @@ public class PostSaveRequestDto  {
     }
 
     public Post toEntity(User user, Mission mission){
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
         return Post.builder()
                 .mission(mission)
                 .user(user)
                 .title(title)
                 .content(content)
+                .originalFileName(originalFileName)
+                .fileExtension(fileExtension)
                 .build();
     }
 }

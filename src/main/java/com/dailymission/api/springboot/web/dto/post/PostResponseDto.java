@@ -15,7 +15,7 @@ public class PostResponseDto {
     private String userImageUrl;
     private String title;
     private String content;
-    private String imageUrl;
+    private String thumbnailUrl;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdDate;
@@ -31,7 +31,7 @@ public class PostResponseDto {
         this.userImageUrl = entity.getUser().getImageUrl();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.imageUrl = entity.getImageUrl();
+        this.thumbnailUrl = entity.getThumbnailUrl();
 
         this.createdDate = entity.getCreatedDate();
         this.modifiedDate = entity.getModifiedDate();

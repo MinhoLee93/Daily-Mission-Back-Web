@@ -108,7 +108,6 @@ public class Mission extends BaseTimeEntity {
         this.startDate = startDate;
         this.endDate = endDate;
 
-
         // credential
         this.credential = createCredential();
 

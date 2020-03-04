@@ -13,8 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,11 +26,15 @@ public class S3Util {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String genUUID(){
-        String genId = UUID.randomUUID().toString();
-        genId = genId.replace("-","");
+    public String genSerialNumber(){
+        LocalDateTime now = LocalDateTime.now();
+        String serial = "" +  new DecimalFormat("0000").format(now.getYear())
+                + new DecimalFormat("00").format(now.getMonthValue())
+                + new DecimalFormat("00").format(now.getDayOfMonth())
+                + new DecimalFormat("00").format(now.getHour())
+                + new DecimalFormat("00").format(now.getMinute());
 
-        return genId;
+        return serial;
     }
 
     public MessageDto upload(MultipartFile multipartFile, String dirName) throws IOException {
@@ -37,7 +42,7 @@ public class S3Util {
             .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
         return upload(uploadFile, dirName);
-}
+    }
 
     private MessageDto upload(File uploadFile, String dirName) {
 
@@ -69,7 +74,7 @@ public class S3Util {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File(genUUID()+ "_" + file.getOriginalFilename());
+        File convertFile = new File(genSerialNumber()+ "_" + file.getOriginalFilename());
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());

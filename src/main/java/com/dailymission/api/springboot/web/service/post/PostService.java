@@ -14,6 +14,7 @@ import com.dailymission.api.springboot.web.repository.schedule.Schedule;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
+import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     private final ParticipantRepository participantRepository;
+
+    private final MessageProducer messageProducer;
 
 
     @Transactional
@@ -75,11 +78,15 @@ public class PostService {
         Post post = requestDto.toEntity(user, mission);
 
         // upload image
-        MessageDto messageDto = imageService.uploadPostS3(requestDto.getFile(), mission.getTitle());
-        post.updateImage(messageDto.getImageUrl());
+        MessageDto message = imageService.uploadPostS3(requestDto.getFile(), mission.getTitle());
+        post.updateImage(message.getImageUrl());
 
         // create post
         post = postRepository.save(post);
+
+        // produce message
+        messageProducer.sendMessage(post, message);
+
 
         return post.getId();
     }

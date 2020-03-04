@@ -22,7 +22,7 @@ public class ImageService {
 
         // get calc Path (year/month/day)
         String yearPath = "/" + cal.get(Calendar.YEAR);
-        String monthPath = yearPath + "/" + new DecimalFormat("00").format(cal.get(Calendar.MONTH));
+        String monthPath = yearPath + "/" + new DecimalFormat("00").format(cal.get(Calendar.MONTH)+1);
         String datePath = monthPath + "/" + new DecimalFormat("00").format(cal.get(Calendar.DATE));
 
         // return final directory path

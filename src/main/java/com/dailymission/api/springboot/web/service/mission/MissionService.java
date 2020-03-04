@@ -7,6 +7,8 @@ import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.repository.common.Validator;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
+import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
@@ -29,6 +31,7 @@ public class MissionService {
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final ParticipantRepository participantRepository;
     private final MessageProducer messageProducer;
 
     @Transactional
@@ -51,11 +54,16 @@ public class MissionService {
         mission = missionRepository.save(mission);
 
         // produce message
-        message.setId(mission.getId());
-        message.setType("mission");
-        message.setExtension(mission.getFileExtension());
-        message.setOriginalFileName(mission.getOriginalFileName());
-        messageProducer.sendMessage(message, "mission");
+        messageProducer.sendMessage(mission , message);
+
+        // create participant (미션 생성자는 바로 참여)
+        Participant participant = Participant.builder()
+                                            .mission(mission)
+                                            .user(user)
+                                            .build();
+
+        // save participant
+        participantRepository.save(participant);
 
         return mission.getCredential();
     }

@@ -34,6 +34,12 @@ public class Post extends BaseTimeEntity {
     @Column(name = "CONTENT", columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(name = "ORIGINAL_FILE_NAME", nullable = false)
+    private String originalFileName;
+
+    @Column(name = "FILE_EXTENSION", nullable = false)
+    private String fileExtension;
+
     @Column(name="IMAGE_URL", nullable = false)
     private String imageUrl;
 
@@ -45,16 +51,16 @@ public class Post extends BaseTimeEntity {
 
     @Builder
     public Post(Mission mission, User user, String title, String content
-                , String imageUrl){
+                , String originalFileName, String fileExtension, String imageUrl){
         this.mission = mission;
         this.user = user;
         this.title = title;
         this.content = content;
+        this.originalFileName = originalFileName;
+        this.fileExtension = fileExtension;
 
-        // 이미지
+        // s3
         this.imageUrl = imageUrl;
-
-        // 썸네일
         this.thumbnailUrl = imageUrl;
 
         this.deleted = false;
