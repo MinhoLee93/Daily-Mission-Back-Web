@@ -13,7 +13,7 @@ import static com.dailymission.api.springboot.web.repository.post.QPost.post;
 
 
 @RequiredArgsConstructor
-public class PostRepositoryCustomImpl  implements PostRepositoryCustom {
+public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -38,5 +38,17 @@ public class PostRepositoryCustomImpl  implements PostRepositoryCustom {
                 .where(post.mission.id.in(id).and(post.createdDate.after(start).and(post.createdDate.before(end))))
                 .fetch();
 
+    }
+
+    @Override
+    public List<Post> findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        return queryFactory
+                .select(post)
+                .from(post)
+                .where(post.mission.id.eq(missionId)
+                        .and(post.user.id.eq(userId))
+                        .and(post.createdDate.after(startDate)
+                                .and(post.createdDate.before(endDate))))
+                        .fetch();
     }
 }

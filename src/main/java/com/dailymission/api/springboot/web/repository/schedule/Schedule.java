@@ -15,11 +15,11 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 public class Schedule {
-    private List<PostHistoryDto> historyDtos;
+    private List<PostHistoryDto> historys;
 
     @Builder
     public Schedule(List<PostHistoryDto> historyDtoList){
-            this.historyDtos = historyDtoList;
+            this.historys = historyDtoList;
     }
 
     public Map<LocalDate, List<MissionUserListResponseDto>> getAllSchedule(){
@@ -27,7 +27,7 @@ public class Schedule {
         Map<LocalDate, List<MissionUserListResponseDto>> schedule = new HashMap<>();
 
         // key (localDate) : value (<MissionUserListResponseDto>)
-        for(PostHistoryDto p : historyDtos){
+        for(PostHistoryDto p : historys){
             // userMock (userId, userName)
             MissionUserListResponseDto user = MissionUserListResponseDto.builder()
                     .userId(p.getUserId())

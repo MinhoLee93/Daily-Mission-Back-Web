@@ -1,7 +1,6 @@
 package com.dailymission.api.springboot.web.dto.user;
 
 import com.dailymission.api.springboot.web.dto.mission.MissionMockDto;
-import com.dailymission.api.springboot.web.repository.participant.Participant;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,10 +24,7 @@ public class UserResponseDto {
         this.imageUrl = imageUrl;
     }
 
-    public void filter(List<Participant> participants){
-        for(Participant p : participants){
-            MissionMockDto missionMock = new MissionMockDto(p.getMission(), p.isBanned());
-            this.missions.add(missionMock);
-        }
+    public void addMissionMock(MissionMockDto missionMock){
+        missions.add(missionMock);
     }
 }

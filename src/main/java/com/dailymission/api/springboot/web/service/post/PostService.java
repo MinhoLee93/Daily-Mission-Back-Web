@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -120,6 +121,9 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 미션별 포스트 제출기록 (전체유저)
+     * */
     @Transactional(readOnly = true)
     public PostScheduleResponseDto findSchedule(Long id, String startDate, String endDate){
         // mission
@@ -136,6 +140,23 @@ public class PostService {
                                        .users(mission.getAllUser())
                                         .schedules(schedule.getAllSchedule())
                                         .build();
+    }
+
+    /**
+     * 유저 포스트 제출기록 (미션별)
+     * */
+    @Transactional(readOnly = true)
+    public boolean findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate){
+
+         // is submit exist?
+         List<Post> submit =  postRepository.findSubmitHistory(missionId, userId, startDate, endDate);
+
+         // true if exist
+         if(submit.size()>0){
+             return true;
+         }else{
+             return false;
+         }
     }
 
     @Transactional

@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+/**
+ * 미션별 포스트 제출 기록 (전체 참여유저)
+ * */
 public class PostHistoryDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
