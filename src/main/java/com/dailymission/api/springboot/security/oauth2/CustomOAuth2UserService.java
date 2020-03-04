@@ -29,6 +29,8 @@ import java.util.Optional;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+    public static final String DEFAULT_USER_IMAGE_URL = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80/user_default_image.png";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -76,7 +78,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
         user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
-        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+
+        if(oAuth2UserInfo.getImageUrl()!=null){
+            user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        }else{
+            user.setImageUrl(DEFAULT_USER_IMAGE_URL);
+        }
+
         return userRepository.save(user);
     }
 
