@@ -6,6 +6,7 @@ import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
 import com.dailymission.api.springboot.web.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class UserController {
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
+    @Cacheable(value = "users", key = "#userPrincipal.id")
     public UserResponseDto getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
 
         return userService.getCurrentUser(userPrincipal);

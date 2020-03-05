@@ -8,12 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseTimeEntity {
+public class BaseTimeEntity implements Serializable {
 
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

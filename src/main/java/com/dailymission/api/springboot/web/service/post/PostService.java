@@ -21,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -43,7 +45,6 @@ public class PostService {
     private final ParticipantRepository participantRepository;
 
     private final MessageProducer messageProducer;
-
 
     @Transactional
     public Long save(PostSaveRequestDto requestDto, UserPrincipal userPrincipal) throws IOException {
@@ -86,6 +87,8 @@ public class PostService {
 
         // produce message
         messageProducer.sendMessage(post, message);
+
+        // evict post list cache
 
 
         return post.getId();
@@ -132,7 +135,18 @@ public class PostService {
      * 미션별 포스트 제출기록 (전체유저)
      * */
     @Transactional(readOnly = true)
-    public PostScheduleResponseDto findSchedule(Long id, String startDate, String endDate){
+    public PostScheduleResponseDto findSchedule(Long id, Long week){
+        /**
+         * 조회 시작하는 일요일 정보
+         * 0 : 이번주 일요일
+         * 1 : 저번주 일요일
+         * */
+        LocalDate start = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(week);
+        LocalDate end = start.plusDays(7);
+
+        LocalDateTime startDate = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(), 03, 00, 00);
+        LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 03, 00 ,00);
+
         // mission
         Mission mission = missionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
@@ -141,6 +155,7 @@ public class PostService {
         List<PostHistoryDto> historyDtoList = postRepository.findSchedule(id, startDate, endDate);
         Schedule schedule = Schedule.builder()
                                      .historyDtoList(historyDtoList)
+                                     .startDate(start)
                                      .build();
 
         return  PostScheduleResponseDto.builder()

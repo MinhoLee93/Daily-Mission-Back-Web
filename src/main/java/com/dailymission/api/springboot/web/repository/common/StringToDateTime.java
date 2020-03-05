@@ -17,8 +17,8 @@ public class StringToDateTime {
     // date : yyyymmdd
     public StringToDateTime(String date){
         year = Integer.valueOf(date.substring(0,4));
-        month = Integer.valueOf(date.substring(4,6));
-        day   = Integer.valueOf(date.substring(6,8));
+        month = Integer.valueOf(date.substring(5,7));
+        day   = Integer.valueOf(date.substring(8,9));
     }
 
     public LocalDateTime get(){

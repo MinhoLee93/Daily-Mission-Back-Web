@@ -5,7 +5,9 @@ import com.dailymission.api.springboot.web.dto.post.PostHistoryDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,33 +16,37 @@ import java.util.Map;
 
 @Getter
 @NoArgsConstructor
-public class Schedule {
-    private List<PostHistoryDto> historys;
+public class Schedule implements Serializable {
+    private List<PostHistoryDto> histories;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
 
     @Builder
-    public Schedule(List<PostHistoryDto> historyDtoList){
-            this.historys = historyDtoList;
+    public Schedule(List<PostHistoryDto> historyDtoList, LocalDate startDate){
+            this.histories = historyDtoList;
+            this.startDate = startDate;
     }
 
     public Map<LocalDate, List<MissionUserListResponseDto>> getAllSchedule(){
         // schedule
         Map<LocalDate, List<MissionUserListResponseDto>> schedule = new HashMap<>();
 
+        // create key (일 ~ 토) 비어 있는 hashMap 생성
+        for(int i=0; i<7; i++){
+            List<MissionUserListResponseDto> list = new ArrayList<>();
+            schedule.put(startDate.plusDays(i), list);
+        }
+
         // key (localDate) : value (<MissionUserListResponseDto>)
-        for(PostHistoryDto p : historys){
+        for(PostHistoryDto p : histories){
             // userMock (userId, userName)
             MissionUserListResponseDto user = MissionUserListResponseDto.builder()
                     .userId(p.getUserId())
                     .userName(p.getUserName())
                     .build();
 
-            if(schedule.containsKey(p.getDate())){
-                schedule.get(p.getDate()).add(user);
-            }else{
-                List<MissionUserListResponseDto> list = new ArrayList<>();
-                list.add(user);
-                schedule.put(p.getDate(), list);
-            }
+            schedule.get(p.getDate()).add(user);
         }
 
         return schedule;

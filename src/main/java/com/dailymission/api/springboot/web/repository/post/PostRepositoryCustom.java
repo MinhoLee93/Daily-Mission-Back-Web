@@ -10,7 +10,7 @@ public interface PostRepositoryCustom {
     List<Post> findAllDescAndDeletedIsFalse();
 
     // 스케줄
-    List<PostHistoryDto> findSchedule(Long id, String startDate, String endDate);
+    List<PostHistoryDto> findSchedule(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
     // 제출기록
     List<Post> findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate);

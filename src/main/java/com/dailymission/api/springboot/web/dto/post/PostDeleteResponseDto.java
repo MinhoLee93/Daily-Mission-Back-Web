@@ -3,8 +3,10 @@ package com.dailymission.api.springboot.web.dto.post;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class PostDeleteResponseDto {
+public class PostDeleteResponseDto implements Serializable {
     private Long id;
 
     @Builder

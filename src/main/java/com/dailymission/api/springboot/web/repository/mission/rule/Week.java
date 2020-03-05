@@ -7,12 +7,13 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
 @Getter
 @Setter
 @NoArgsConstructor
-public class Week {
+public class Week implements Serializable {
 
     @Column(name = "SUNDAY", nullable = false)
     private boolean sun;

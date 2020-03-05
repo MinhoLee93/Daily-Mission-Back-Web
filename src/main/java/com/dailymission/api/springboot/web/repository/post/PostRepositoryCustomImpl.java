@@ -1,7 +1,6 @@
 package com.dailymission.api.springboot.web.repository.post;
 
 import com.dailymission.api.springboot.web.dto.post.PostHistoryDto;
-import com.dailymission.api.springboot.web.repository.common.StringToDateTime;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +27,12 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostHistoryDto> findSchedule(Long id, String startDate, String endDate) {
-        LocalDateTime start =  StringToDateTime.builder().date(startDate).build().get();
-        LocalDateTime end =  StringToDateTime.builder().date(endDate).build().get();
+    public List<PostHistoryDto> findSchedule(Long id, LocalDateTime startDate, LocalDateTime endDate) {
 
         return queryFactory
                 .select(Projections.constructor(PostHistoryDto.class, post.createdDate.as("date"), post.user.id.as("userId"), post.user.name.as("userName")) )
                 .from(post)
-                .where(post.mission.id.in(id).and(post.createdDate.after(start).and(post.createdDate.before(end))))
+                .where(post.mission.id.in(id).and(post.createdDate.after(startDate).and(post.createdDate.before(endDate))))
                 .fetch();
 
     }

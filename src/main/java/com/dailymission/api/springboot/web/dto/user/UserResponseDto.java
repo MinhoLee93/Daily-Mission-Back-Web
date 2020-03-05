@@ -4,11 +4,12 @@ import com.dailymission.api.springboot.web.dto.mission.MissionMockDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class UserResponseDto {
+public class UserResponseDto implements Serializable {
 
     private Long id;
     private String name;

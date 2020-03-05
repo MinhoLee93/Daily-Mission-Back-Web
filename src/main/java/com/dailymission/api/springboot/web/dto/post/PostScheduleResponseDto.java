@@ -4,12 +4,13 @@ import com.dailymission.api.springboot.web.dto.mission.MissionUserListResponseDt
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 @Getter
-public class PostScheduleResponseDto {
+public class PostScheduleResponseDto implements Serializable {
     private List<MissionUserListResponseDto> users;
     private Map<LocalDate, List<MissionUserListResponseDto>> schedules;
 

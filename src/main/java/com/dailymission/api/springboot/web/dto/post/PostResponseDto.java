@@ -4,10 +4,11 @@ import com.dailymission.api.springboot.web.repository.post.Post;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-public class PostResponseDto {
+public class PostResponseDto implements Serializable {
     private Long postId;
     private Long missionId;
     private String missionTitle;

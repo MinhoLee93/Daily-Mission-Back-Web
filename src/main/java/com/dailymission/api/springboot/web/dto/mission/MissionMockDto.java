@@ -4,8 +4,10 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class MissionMockDto {
+public class MissionMockDto implements Serializable {
     private Long id;
     private String title;
     private boolean banned;
