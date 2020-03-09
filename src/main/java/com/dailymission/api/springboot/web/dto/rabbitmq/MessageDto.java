@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageDto {
-    private Long id;
+    private Long userId;
+    private Long missionId;
+    private Long postId;
     private String type;
     private String dirName;
     private String fileName;
@@ -17,8 +19,10 @@ public class MessageDto {
     private String imageUrl;
 
     @Builder
-    public MessageDto(Long id, String type, String dirName, String fileName, String extension, String keyName, String originalFileName, String imageUrl){
-        this.id = id;
+    public MessageDto(Long userId, Long missionId, long postId, String type, String dirName, String fileName, String extension, String keyName, String originalFileName, String imageUrl){
+        this.userId = userId;
+        this.missionId = missionId;
+        this.postId = postId;
         this.type =type;
         this.dirName = dirName;
         this.fileName = fileName;

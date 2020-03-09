@@ -54,6 +54,8 @@ public class MissionService {
         mission = missionRepository.save(mission);
 
         // produce message
+        message.setUserId(user.getId());
+        message.setMissionId(mission.getId());
         messageProducer.sendMessage(mission , message);
 
         // create participant (미션 생성자는 바로 참여)
@@ -70,7 +72,7 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public MissionResponseDto findById (Long id){
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAAndDeletedIsFalse(id))
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
         Mission mission = optional.get();
@@ -100,7 +102,7 @@ public class MissionService {
 
     @Transactional
     public Long update(Long id, MissionUpdateRequestDto requestDto){
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAAndDeletedIsFalse(id))
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                             .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
         Mission mission = optional.get();
@@ -115,7 +117,7 @@ public class MissionService {
 
     @Transactional
     public Long updateImage(Long id, MultipartFile file) throws IOException {
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAAndDeletedIsFalse(id))
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
         Mission mission = optional.get();
@@ -135,7 +137,7 @@ public class MissionService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
         // mission
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAAndDeletedIsFalse(id))
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
 
 
@@ -146,7 +148,7 @@ public class MissionService {
 
     @Transactional
     public void end(Long id){
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAAndDeletedIsFalse(id))
+        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
 
         // end flag -> 'Y'

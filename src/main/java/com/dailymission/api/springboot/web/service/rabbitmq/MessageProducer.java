@@ -3,6 +3,7 @@ package com.dailymission.api.springboot.web.service.rabbitmq;
 import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.post.Post;
+import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ public class MessageProducer {
     RabbitTemplate rabbitTemplate = new RabbitTemplate();
 
     // mission image resize
-    public void sendMessage(Mission mission, MessageDto message){
+    public void sendMessage( Mission mission, MessageDto message){
 
-        message.setId(mission.getId());
+        message.setMissionId(mission.getId());
         message.setType("mission");
         message.setExtension(mission.getFileExtension());
         message.setOriginalFileName(mission.getOriginalFileName());
@@ -26,9 +27,11 @@ public class MessageProducer {
     }
 
     // post image resize
-    public void sendMessage(Post post, MessageDto message){
+    public void sendMessage(User user, Mission mission, Post post, MessageDto message){
 
-        message.setId(post.getId());
+        message.setUserId(user.getId());
+        message.setMissionId(mission.getId());
+        message.setPostId(post.getId());
         message.setType("post");
         message.setExtension(post.getFileExtension());
         message.setOriginalFileName(post.getOriginalFileName());

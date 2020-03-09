@@ -89,7 +89,7 @@ public class PostService {
         post = postRepository.save(post);
 
         // produce message
-        messageProducer.sendMessage(post, message);
+        messageProducer.sendMessage(user, mission, post, message);
 
         return post.getId();
     }
@@ -135,7 +135,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllByMission(Long id){
         // mission
-        Mission mission = missionRepository.findByIdAAndDeletedIsFalse(id)
+        Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
         return postRepository.findAllByMissionAndDeletedIsFalse(mission).stream()
@@ -160,7 +160,7 @@ public class PostService {
         LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 03, 00 ,00);
 
         // mission
-        Mission mission = missionRepository.findByIdAAndDeletedIsFalse(id)
+        Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
         // schedule

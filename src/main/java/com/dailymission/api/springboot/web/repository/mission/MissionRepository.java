@@ -10,5 +10,5 @@ public interface MissionRepository extends JpaRepository<Mission, Long>, Mission
     Mission save(Mission mission);
 
     // Mission 정보 (detail)
-    Optional<Mission> findByIdAAndDeletedIsFalse(Long id);
+    Optional<Mission> findByIdAndDeletedIsFalse(Long id);
 }
