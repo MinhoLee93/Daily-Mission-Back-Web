@@ -23,10 +23,16 @@ public class PostController {
     @PostMapping("/api/post")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {
+            // 전체 포스트 List
             @CacheEvict(value = "postLists", key = "'all'"),
+            // 유저별 포스트 List
             @CacheEvict(value = "postLists", key = "'user-'+ #userPrincipal.id"),
+            // 미션별 포스트 List
             @CacheEvict(value = "postLists", key = "'mission-' + #requestDto.missionId"),
-            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.missionId + '-week-0'")
+            // 금주 Schedule History
+            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.missionId + '-week-0'"),
+            // 유저 정보
+            @CacheEvict(value = "users", key = "#userPrincipal.id"),
     })
     public Long save(PostSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws Exception{
 
@@ -34,7 +40,8 @@ public class PostController {
     }
 
     @GetMapping("/api/post/{id}")
-    @Cacheable(value = "posts" , key = "'post-' + #id")
+    // 포스트 정보 (detail)
+    @Cacheable(value = "posts" , key = "#id")
     public PostResponseDto findById (@PathVariable Long id) throws Exception {
 
         return postService.findById(id);
@@ -55,14 +62,27 @@ public class PostController {
 
     @DeleteMapping("/api/post/{id}")
     @PreAuthorize("hasRole('USER')")
-    @CacheEvict(value = "posts" , key = "'post-' + #id")
+    @Caching(evict = {
+            // 전체 포스트 List
+            @CacheEvict(value = "postLists", key = "'all'"),
+            // 유저별 포스트 List
+            @CacheEvict(value = "postLists", key = "'user-'+ #userPrincipal.id"),
+            // 미션별 포스트 List
+            @CacheEvict(value = "postLists", key = "'mission-' + #requestDto.missionId"),
+            // 금주 Schedule History
+            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.missionId + '-week-0'"),
+            // 유저 정보
+            @CacheEvict(value = "users", key = "#userPrincipal.id"),
+            // 포스트 정보 (detail)
+            @CacheEvict(value = "posts" , key = "#id")
+    })
     public PostDeleteResponseDto delete(@PathVariable Long id, @CurrentUser UserPrincipal userPrincipal){
         postService.delete(id, userPrincipal);
 
         return PostDeleteResponseDto.builder().id(id).build();
     }
 
-    // 전체 (key= all)
+    // 전체 포스트 List (key= all)
     @GetMapping("/api/post/all")
     @Cacheable(value = "postLists", key = "'all'")
     public List<PostListResponseDto> findAll(){
@@ -70,7 +90,7 @@ public class PostController {
         return postService.findAll();
     }
 
-    // 개인별 (key = user-#userId)
+    // 유저별 포스트 List (key = user-#userId)
     @GetMapping("/api/post/all/me")
     @PreAuthorize("hasRole('USER')")
     @Cacheable(value = "postLists", key = "'user-' + #userPrincipal.id")
@@ -79,7 +99,7 @@ public class PostController {
         return postService.findAllByUser(userPrincipal);
     }
 
-    // 미션별 (key = mission-#missionId)
+    // 미션별 포스트 List (key = mission-#missionId)
     @GetMapping("/api/post/all/mission/{id}")
     @Cacheable(value = "postLists", key = "'mission-' + #id")
     public List<PostListResponseDto> findAllByMission (@PathVariable Long id) {
@@ -87,7 +107,7 @@ public class PostController {
         return postService.findAllByMission(id);
     }
 
-    // 스케줄 / week : 0 (이번주) / week : 1 (1주전) /
+    // 금주 Schedule History / week : 0 (이번주) / week : 1 (1주전) /
     @GetMapping("/api/post/schedule/mission/{id}/{week}")
     @Cacheable(value = "schedules", key = "'mission-' + #id + '-week-' + #week")
     public PostScheduleResponseDto findSchedule(@PathVariable("id") Long id,

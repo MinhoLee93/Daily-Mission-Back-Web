@@ -6,10 +6,10 @@ import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
 import com.dailymission.api.springboot.web.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.Cacheable;
 
 /*
 * The UserController class contains a protected API to get the details of the currently authenticated user

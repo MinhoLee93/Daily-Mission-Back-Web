@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -37,11 +38,30 @@ public class UserService {
 
         // submit (당일 + 익익 새벽 3시까지 각 미션별 제출했는지?)
         for(Participant participant : user.getParticipants()){
-            // 금일 03시 ~ 내일 03시
-            boolean isSubmit = postService.findSubmitHistory(participant.getMission().getId(),
-                                                             user.getId(),
-                                                             LocalDate.now().atTime(3,0),
-                                                             LocalDate.now().atTime(3,0).plusDays(1));
+
+            // deleted 미션 제외
+            if(participant.getMission().isDeleted()){
+                continue;
+            }
+
+            LocalDateTime start = LocalDateTime.now();
+            boolean isSubmit = false;
+
+            // 0시  ~ 03시
+            if(start.isBefore(LocalDate.now().atTime(3, 0))){
+                // 전날 새벽 3시 ~ 현재
+                isSubmit = postService.findSubmitHistory(participant.getMission().getId(),
+                        user.getId(),
+                        LocalDate.now().atTime(3,0).minusDays(1),
+                        start);
+            }else{
+            // 03시 ~ 24시
+                // 전날 새벽 3시 ~ 현재
+                isSubmit = postService.findSubmitHistory(participant.getMission().getId(),
+                        user.getId(),
+                        LocalDate.now().atTime(3,0),
+                        start);
+            }
 
             MissionMockDto missionMockDto = MissionMockDto.builder()
                                                         .entity(participant.getMission())
