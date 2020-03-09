@@ -30,9 +30,10 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     public List<PostHistoryDto> findSchedule(Long id, LocalDateTime startDate, LocalDateTime endDate) {
 
         return queryFactory
-                .select(Projections.constructor(PostHistoryDto.class, post.createdDate.as("date"), post.user.id.as("userId"), post.user.name.as("userName")) )
+                .select(Projections.constructor(PostHistoryDto.class, post.createdDate.as("date"), post.user.id.as("userId"), post.user.name.as("userName"), post.user.imageUrl.as("imageUrl")) )
                 .from(post)
                 .where(post.mission.id.in(id).and(post.createdDate.after(startDate).and(post.createdDate.before(endDate))))
+                .orderBy(post.createdDate.desc())
                 .fetch();
 
     }

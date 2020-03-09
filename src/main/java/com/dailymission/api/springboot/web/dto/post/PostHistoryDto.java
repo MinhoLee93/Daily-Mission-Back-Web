@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,16 +14,18 @@ import java.time.LocalDateTime;
 /**
  * 미션별 포스트 제출 기록 (전체 참여유저)
  * */
-public class PostHistoryDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+public class PostHistoryDto implements Serializable {
     private Long userId;
     private String userName;
+    private String imageUrl;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     @Builder
-    public PostHistoryDto(LocalDateTime datetime, Long userId, String userName){
+    public PostHistoryDto(LocalDateTime datetime, Long userId, String userName, String imageUrl){
         this.userId = userId;
         this.userName = userName;
+        this.imageUrl = imageUrl;
 
         // 새벽 3시 이전제출은 이전날 제출로 인식
         LocalDateTime check = LocalDateTime.of(datetime.getYear(),datetime.getMonth(),datetime.getDayOfMonth(), 3,0,0);

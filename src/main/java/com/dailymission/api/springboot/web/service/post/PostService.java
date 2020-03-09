@@ -10,7 +10,6 @@ import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.post.PostRepository;
-import com.dailymission.api.springboot.web.repository.schedule.Schedule;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
@@ -153,26 +152,23 @@ public class PostService {
          * 0 : 이번주 일요일
          * 1 : 저번주 일요일
          * */
-        LocalDate start = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(week);
-        LocalDate end = start.plusDays(7);
+        LocalDate startDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(week);
+        LocalDate endDate = startDate.plusDays(7);
 
-        LocalDateTime startDate = LocalDateTime.of(start.getYear(),start.getMonth(),start.getDayOfMonth(), 03, 00, 00);
-        LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 03, 00 ,00);
+        LocalDateTime startDateTime = LocalDateTime.of(startDate.getYear(),startDate.getMonth(),startDate.getDayOfMonth(), 03, 00, 00);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), 03, 00 ,00);
 
         // mission
         Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
-        // schedule
-        List<PostHistoryDto> historyDtoList = postRepository.findSchedule(id, startDate, endDate);
-        Schedule schedule = Schedule.builder()
-                                     .historyDtoList(historyDtoList)
-                                     .startDate(start)
-                                     .build();
+        // history
+        List<PostHistoryDto> historyDtoList = postRepository.findSchedule(id, startDateTime, endDateTime);
+
 
         return  PostScheduleResponseDto.builder()
-                                       .users(mission.getAllUser())
-                                        .schedules(schedule.getAllSchedule())
+                                        .startDate(startDate)
+                                        .histories(historyDtoList)
                                         .build();
     }
 

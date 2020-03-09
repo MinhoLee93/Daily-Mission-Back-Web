@@ -113,7 +113,6 @@ public class PostController {
     public PostScheduleResponseDto findSchedule(@PathVariable("id") Long id,
                                                 @PathVariable("week") Long week){
 
-
         return postService.findSchedule(id, week);
     }
 }
