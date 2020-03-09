@@ -20,11 +20,15 @@ public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
 //        this.queryFactory = new JPAQueryFactory(em);
 //    }
 
+    /**
+     * 삭제되지 않은 미션만 검색
+     * */
     @Override
     public List<Mission> findAllByCreatedDate() {
        return  queryFactory
                 .select(mission)
                 .from(mission)
+               .where(mission.deleted.isFalse())
                 .orderBy(mission.createdDate.desc())
                 .fetch();
     }
