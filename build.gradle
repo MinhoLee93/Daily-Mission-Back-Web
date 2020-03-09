@@ -99,7 +99,7 @@ dependencies {
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
 
     // redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    compile 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 test {
