@@ -15,8 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> , PostReposito
     // 특정 유저의 전체 post 목록
     List<Post> findAllByUserEqualsAndDeletedIsFalse(User user);
 
-
-    // 전체 post 목록 (삭제안된 것)
+    // Post 정보 (detail)
     Optional<Post> findByIdAndDeletedIsFalse(Long id);
 
 }

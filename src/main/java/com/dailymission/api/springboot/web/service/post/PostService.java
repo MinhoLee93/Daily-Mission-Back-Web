@@ -46,6 +46,9 @@ public class PostService {
 
     private final MessageProducer messageProducer;
 
+    /**
+     * POST 저장
+     * */
     @Transactional
     public Long save(PostSaveRequestDto requestDto, UserPrincipal userPrincipal) throws IOException {
         // user
@@ -88,12 +91,12 @@ public class PostService {
         // produce message
         messageProducer.sendMessage(post, message);
 
-        // evict post list cache
-
-
         return post.getId();
     }
 
+    /**
+     * POST 정보 (detail)
+     * */
     @Transactional(readOnly = true)
     public PostResponseDto findById (Long id) throws Exception {
         Post post = postRepository.findByIdAndDeletedIsFalse(id)
@@ -102,6 +105,9 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
+    /**
+     * 전체 POST List
+     * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAll(){
         return postRepository.findAllDescAndDeletedIsFalse().stream()
@@ -109,6 +115,9 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 유저별 전체 POST List
+     * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllByUser(UserPrincipal userPrincipal){
         // user
@@ -120,10 +129,13 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 미션별 전체 POST List
+     * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllByMission(Long id){
         // mission
-        Mission mission = missionRepository.findById(id)
+        Mission mission = missionRepository.findByIdAAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
         return postRepository.findAllByMissionAndDeletedIsFalse(mission).stream()
@@ -148,7 +160,7 @@ public class PostService {
         LocalDateTime endDate = LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 03, 00 ,00);
 
         // mission
-        Mission mission = missionRepository.findById(id)
+        Mission mission = missionRepository.findByIdAAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
         // schedule
@@ -181,9 +193,12 @@ public class PostService {
          }
     }
 
+    /**
+     * POST 업데이트
+     * */
     @Transactional
     public Long update(Long id, PostUpdateRequestDto requestDto){
-        Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
+        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
 
         Post post = optional.get();
@@ -192,9 +207,12 @@ public class PostService {
         return id;
     }
 
+    /**
+     * POST 이미지 업데이트
+     * */
     @Transactional
     public Long updateImage(Long id, MultipartFile file) throws IOException {
-        Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
+        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
 
         Post post = optional.get();
@@ -207,6 +225,9 @@ public class PostService {
     }
 
 
+    /**
+     * POST 삭제
+     * */
     @Transactional
     public void delete(Long id, UserPrincipal userPrincipal){
         // user
@@ -214,14 +235,12 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
         // post
-        Optional<Post> optional = Optional.ofNullable(postRepository.findById(id))
+        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
                         .orElseThrow(()-> new NoSuchElementException("해당 게시글이 없습니다. id =" + id));
 
         // delete flag -> 'Y'
         Post post = optional.get();
         post.delete(user);
     }
-
-
 
 }
