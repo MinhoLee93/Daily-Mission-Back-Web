@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 /*
@@ -16,6 +17,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableConfigurationProperties(AppProperties.class)
 @EnableBatchProcessing // 배치기능 활성화
 @EnableCaching // 캐시 활성화
+@EnableScheduling // 스케줄 활성화
 public class Application {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
