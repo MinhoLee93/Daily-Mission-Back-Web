@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -99,7 +100,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
 
     @Builder
     public Mission(MissionRule missionRule, User user, String title, String content,
-                   String originalFileName, String fileExtension,  String imageUrl, LocalDate startDate, LocalDate endDate){
+                   String originalFileName, String fileExtension, String imageUrl, LocalDate startDate, LocalDate endDate, PasswordEncoder passwordEncoder){
         this.missionRule = missionRule;
         this.user = user;
         this.title = title;
@@ -108,9 +109,6 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.fileExtension = fileExtension;
         this.startDate = startDate;
         this.endDate = endDate;
-
-        // credential
-        this.credential = createCredential();
 
         // s3
         this.imageUrl = imageUrl;
@@ -124,19 +122,25 @@ public class Mission extends BaseTimeEntity implements Serializable {
     }
 
     // 비밀번호 생성
-    private String createCredential(){
-        String genId = UUID.randomUUID().toString();
-        genId = genId.replace("-","");
+    public String setCredential(PasswordEncoder passwordEncoder){
 
-        return genId;
+        // generate UUID
+        String genUUID = UUID.randomUUID().toString();
+        genUUID = genUUID.replace("-","");
+
+        // encoded credential
+        this.credential = passwordEncoder.encode(genUUID);
+
+        // return not encoded credential
+        return genUUID;
     }
 
     // 비밀번호 확인
-    public boolean checkCredential(String credential){
-        if(!this.credential.equals(credential)){
-            return false;
-        }else{
+    public boolean checkCredential(String credential, PasswordEncoder passwordEncoder){
+        if(passwordEncoder.matches(credential, this.credential)){
             return true;
+        }else{
+            return false;
         }
     }
 

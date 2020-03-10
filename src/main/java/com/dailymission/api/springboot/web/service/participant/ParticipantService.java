@@ -13,6 +13,7 @@ import com.dailymission.api.springboot.web.repository.participant.ParticipantRep
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +26,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ParticipantService {
-
+    private final PasswordEncoder passwordEncoder;
     private final ParticipantRepository participantRepository;
-
     private final MissionRepository missionRepository;
-
     private final UserRepository userRepository;
 
     @Transactional
@@ -64,7 +63,7 @@ public class ParticipantService {
         }
 
         // 비밀번호 확인
-        if(!mission.checkCredential(requestDto.getCredential())){
+        if(!mission.checkCredential(requestDto.getCredential(), passwordEncoder)){
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 

@@ -14,6 +14,7 @@ import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MissionService {
-
+    private final PasswordEncoder passwordEncoder;
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
@@ -45,6 +46,9 @@ public class MissionService {
 
         // entity
         Mission mission = requestDto.toEntity(user);
+
+        // set credential
+        String credential = mission.setCredential(passwordEncoder);
 
         // upload image
         MessageDto message = imageService.uploadMissionS3(requestDto.getFile(), mission.getTitle());
@@ -67,7 +71,8 @@ public class MissionService {
         // save participant
         participantRepository.save(participant);
 
-        return mission.getCredential();
+        // not encoded credential
+        return credential;
     }
 
     @Transactional(readOnly = true)
