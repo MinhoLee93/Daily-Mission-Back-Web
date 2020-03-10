@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 public class UserNameImageDto {
     private String userName;
-    private String imageUrl;
+    private String thumbnailUrl;
     private Boolean banned;
 
     @Builder
-    public UserNameImageDto(String userName, String imageUrl, Boolean banned){
+    public UserNameImageDto(String userName, String thumbnailUrl, Boolean banned){
         this.userName = userName;
-        this.imageUrl = imageUrl;
+        this.thumbnailUrl = thumbnailUrl;
         this.banned = banned;
     }
 }

@@ -18,16 +18,16 @@ import java.util.List;
 public class PostHistoryAllDto  implements Serializable {
     private Long userId;
     private String userName;
-    private String imageUrl;
+    private String thumbnailUrl;
     private Boolean banned;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private List<LocalDate> date = new ArrayList<>();
 
     @Builder
-    public PostHistoryAllDto(Long userId, String userName, String imageUrl, Boolean banned){
+    public PostHistoryAllDto(Long userId, String userName, String thumbnailUrl, Boolean banned){
         this.userId = userId;
         this.userName = userName;
-        this.imageUrl = imageUrl;
+        this.thumbnailUrl = thumbnailUrl;
         this.banned = banned;
     }
 }

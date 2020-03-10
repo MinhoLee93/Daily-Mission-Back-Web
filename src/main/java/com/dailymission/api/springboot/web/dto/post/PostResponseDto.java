@@ -13,7 +13,7 @@ public class PostResponseDto implements Serializable {
     private Long missionId;
     private String missionTitle;
     private String userName;
-    private String userImageUrl;
+    private String userThumbnailUrl;
     private String title;
     private String content;
     private String thumbnailUrl;
@@ -29,7 +29,7 @@ public class PostResponseDto implements Serializable {
         this.missionId = entity.getMission().getId();
         this.missionTitle = entity.getMission().getTitle();
         this.userName = entity.getUser().getName();
-        this.userImageUrl = entity.getUser().getImageUrl();
+        this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.thumbnailUrl = entity.getThumbnailUrl();

@@ -51,7 +51,7 @@ public class MissionResponseDto implements Serializable {
             User user = p.getUser();
             this.participants.add(UserNameImageDto.builder()
                                     .userName(user.getName())
-                                    .imageUrl(user.getImageUrl())
+                                    .thumbnailUrl(user.getThumbnailUrl())
                                     .banned(p.isBanned()).build());
         }
     }

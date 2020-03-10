@@ -51,7 +51,7 @@ public class PostScheduleResponseDto implements Serializable {
             PostHistoryAllDto history = PostHistoryAllDto.builder()
                     .userId(user.getId())
                     .userName(user.getName())
-                    .imageUrl(user.getImageUrl())
+                    .thumbnailUrl(user.getThumbnailUrl())
                     .banned(participant.isBanned())
                     .build();
 
