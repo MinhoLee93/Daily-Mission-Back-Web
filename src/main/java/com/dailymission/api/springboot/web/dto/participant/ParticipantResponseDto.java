@@ -3,8 +3,10 @@ package com.dailymission.api.springboot.web.dto.participant;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
-public class ParticipantResponseDto {
+public class ParticipantResponseDto implements Serializable {
     private Long id;
     private Long missionId;
     private Long userId;

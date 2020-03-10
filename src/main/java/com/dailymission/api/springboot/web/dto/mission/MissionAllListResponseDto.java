@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class MissionAllListResponseDto {
+public class MissionAllListResponseDto  implements Serializable {
     private Long id;
     private String title;
     private String content;

@@ -5,9 +5,11 @@ import com.dailymission.api.springboot.web.repository.participant.Participant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Getter
 @NoArgsConstructor
-public class ParticipantListResponseDto {
+public class ParticipantListResponseDto implements Serializable {
     private Long id;
     private Mission mission;
     private Long userId;

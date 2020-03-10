@@ -9,12 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class MissionResponseDto {
+public class MissionResponseDto implements Serializable {
     private Long id;
     private Week week;
     private String userName;
