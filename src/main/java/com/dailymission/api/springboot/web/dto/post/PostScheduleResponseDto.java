@@ -56,15 +56,19 @@ public class PostScheduleResponseDto implements Serializable {
                     .build();
 
             List<PostHistoryDto> dtoLists = hash.get(user.getId());
-            for(PostHistoryDto dto : dtoLists){
-
-                /**
-                 * 중복 로직 제거 필요
-                 * */
-                if(!history.getDate().contains(dto.getDate())){
-                    history.getDate().add(dto.getDate());
+            // 제출 기록이 없을 경우 null 일 수 있다.
+            // 변경 필요
+            if(dtoLists != null){
+                for(PostHistoryDto dto : dtoLists){
+                    /**
+                     * 중복 로직 제거 필요
+                     * */
+                    if(!history.getDate().contains(dto.getDate())){
+                        history.getDate().add(dto.getDate());
+                    }
                 }
             }
+
 
             this.histories.add(history);
         }
