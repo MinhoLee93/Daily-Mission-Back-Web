@@ -77,6 +77,30 @@ public class PostService {
             throw new IllegalArgumentException("이미 종료된 미션입니다.");
         }
 
+        LocalDateTime start = LocalDateTime.now();
+        boolean isSubmit = false;
+
+        // 0시  ~ 03시
+        if(start.isBefore(LocalDate.now().atTime(3, 0))){
+            // 전날 새벽 3시 ~ 현재
+            isSubmit = findSubmitHistory(participant.getMission().getId(),
+                    user.getId(),
+                    LocalDate.now().atTime(3,0).minusDays(1),
+                    start);
+        }else{
+            // 03시 ~ 24시
+            // 전날 새벽 3시 ~ 현재
+            isSubmit = findSubmitHistory(participant.getMission().getId(),
+                    user.getId(),
+                    LocalDate.now().atTime(3,0),
+                    start);
+        }
+
+        // 이미 제출한 기록이 있을 경우
+        if(isSubmit){
+            throw new IllegalArgumentException("금일 인증을 완료한 미션입니다.");
+        }
+
         // entity
         Post post = requestDto.toEntity(user, mission);
 
