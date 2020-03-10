@@ -5,6 +5,7 @@ import com.dailymission.api.springboot.security.CurrentUser;
 import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.mission.MissionMockDto;
 import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
+import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
@@ -76,4 +77,19 @@ public class UserService {
         return userResponseDto;
     }
 
+    public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
+
+        // check current user
+        if(requestDto.getId()!=userPrincipal.getId()){
+            throw new IllegalAccessError("본인의 유저 정보만 변경할 수 있습니다.");
+        }
+
+        // user
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+
+
+
+        return  1L;
+    }
 }

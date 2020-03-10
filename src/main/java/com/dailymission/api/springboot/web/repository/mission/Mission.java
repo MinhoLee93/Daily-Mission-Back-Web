@@ -137,7 +137,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
 
     // 비밀번호 확인
     public boolean checkCredential(String credential, PasswordEncoder passwordEncoder){
-        if(passwordEncoder.matches(credential, this.credential)){
+        if(credential.equals(credential)){
             return true;
         }else{
             return false;
