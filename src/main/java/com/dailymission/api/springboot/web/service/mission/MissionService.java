@@ -143,18 +143,26 @@ public class MissionService {
 
         // mission
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
+                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
+
+        // entity
+        Mission mission = optional.get();
+
+
+        // 미션에 참여중인 사용자가 있을 경우 (참여인원 > 1)
+        if(mission.getParticipants().size()>1){
+            throw new IllegalArgumentException("사용자가 참여중인 미션은 삭제할 수 없습니다.");
+        }
 
 
         // delete flag -> 'Y'
-        Mission mission = optional.get();
         mission.delete(user);
     }
 
     @Transactional
     public void end(Long id){
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 룰이 없습니다. id=" + id));
+                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
         // end flag -> 'Y'
         Mission mission = optional.get();
