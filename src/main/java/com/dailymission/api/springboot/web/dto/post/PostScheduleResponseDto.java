@@ -1,11 +1,17 @@
 package com.dailymission.api.springboot.web.dto.post;
 
+import com.dailymission.api.springboot.web.repository.mission.rule.Week;
+import com.dailymission.api.springboot.web.repository.participant.Participant;
+import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 public class PostScheduleResponseDto implements Serializable {
@@ -13,17 +19,17 @@ public class PostScheduleResponseDto implements Serializable {
     private List<PostHistoryAllDto> histories = new ArrayList<>();
 
     @Builder
-    public PostScheduleResponseDto(LocalDate startDate, List<PostHistoryDto> histories){
+    public PostScheduleResponseDto(LocalDate startDate, Week week, List<PostHistoryDto> histories, List<Participant> participants){
 
         // fil dates array (7days)
-        fillDates(startDate);
+        fillDates(startDate, week);
 
         // file history
-        fillHistories(histories);
+        fillHistories(histories, participants);
 
     }
 
-    public void fillHistories(List<PostHistoryDto> postHistoryDtoList){
+    public void fillHistories(List<PostHistoryDto> postHistoryDtoList, List<Participant> participants){
         Map<Long, List<PostHistoryDto>> hash = new HashMap<>();
 
         /**
@@ -39,50 +45,71 @@ public class PostScheduleResponseDto implements Serializable {
             }
         }
 
-        Iterator<Long> iter = hash.keySet().iterator();
-        while(iter.hasNext()){
-            // id
-            Long id = iter.next();
-            // object
-            PostHistoryAllDto history = null;
-            // dtos
-            List<PostHistoryDto> dtos = hash.get(id);
+        // 전체 참여자
+        for(Participant participant : participants){
+            User user = participant.getUser();
+            PostHistoryAllDto history = PostHistoryAllDto.builder()
+                    .userId(user.getId())
+                    .userName(user.getName())
+                    .imageUrl(user.getImageUrl())
+                    .banned(participant.isBanned())
+                    .build();
 
-            /**
-             *  {
-             *     userId: 2,
-             *     userName: 'seowon lee',
-             *     banned: false,
-             *     submitDay: ['2020-03-07', '2020-03-06', '2020-03-05'],
-             *   }
-             * */
-            // get date
-            for(int i= 0; i< dtos.size(); i++){
-                PostHistoryDto dto = dtos.get(i);
-                if(i==0){
-                    history = PostHistoryAllDto.builder()
-                            .userId(dto.getUserId())
-                            .userName(dto.getUserName())
-                            .imageUrl(dto.getImageUrl())
-                            .build();
+            List<PostHistoryDto> dtoLists = hash.get(user.getId());
+            for(PostHistoryDto dto : dtoLists){
+
+                /**
+                 * 중복 로직 제거 필요
+                 * */
+                if(!history.getDate().contains(dto.getDate())){
+                    history.getDate().add(dto.getDate());
                 }
-                history.getDate().add(dto.getDate());
             }
 
             this.histories.add(history);
         }
     }
 
-    private void fillDates(LocalDate startDate){
+    private void fillDates(LocalDate startDate, Week week){
 
         // 일 ~ 토
         for(int i=0; i<7; i++){
-            LocalDate week = startDate.plusDays(i);
-            DateDto date = DateDto.builder()
-                                    .date(week)
+            LocalDate date = startDate.plusDays(i);
+            String day = date.getDayOfWeek().toString();
+            boolean mandatory = checkMandatory(day, week);
+
+
+            DateDto dateDto = DateDto.builder()
+                                    .date(date)
+                                    .day(day)
+                                    .mandatory(mandatory)
                                     .build();
 
-            dates.add(date);
+            dates.add(dateDto);
         }
+    }
+
+    /**
+     * 제출해야되는 요일인지 확인
+     * */
+    private boolean checkMandatory(String day, Week week){
+
+        if(day.equals("SUNDAY")){
+            return week.isSun();
+        }else if(day.equals("MONDAY")){
+            return week.isMon();
+        }else if(day.equals("TUESDAY")){
+            return week.isTue();
+        }else if(day.equals("WEDNESDAY")){
+            return week.isWed();
+        }else if(day.equals("THURSDAY")){
+            return week.isThu();
+        }else if(day.equals("FRIDAY")){
+            return week.isFri();
+        }else if(day.equals("SATURDAY")){
+            return week.isSat();
+        }
+
+        return false;
     }
 }

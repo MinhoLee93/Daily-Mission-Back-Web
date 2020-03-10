@@ -10,10 +10,12 @@ import java.time.LocalDate;
 public class DateDto  implements Serializable {
     private LocalDate date;
     private String day;
+    private boolean mandatory;
 
     @Builder
-    public DateDto(LocalDate date){
+    public DateDto(LocalDate date, String day, boolean mandatory){
         this.date = date;
-        this.day = date.getDayOfWeek().toString();
+        this.day = day;
+        this.mandatory =  mandatory;
     }
 }

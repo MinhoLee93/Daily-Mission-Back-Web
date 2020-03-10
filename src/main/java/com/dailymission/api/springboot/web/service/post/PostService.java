@@ -168,7 +168,9 @@ public class PostService {
 
         return  PostScheduleResponseDto.builder()
                                         .startDate(startDate)
+                                        .week(mission.getMissionRule().getWeek())
                                         .histories(historyDtoList)
+                                        .participants(mission.getParticipants())
                                         .build();
     }
 
