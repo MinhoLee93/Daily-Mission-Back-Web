@@ -30,6 +30,7 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     public static final String DEFAULT_USER_IMAGE_URL = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80/user_default_image.png";
+    public static final String DEFAULT_USER_THUMBNAIL_URL = "https://s3.ap-northeast-2.amazonaws.com/image.daily-mission.com/%EA%B8%B0%EB%B3%B8%EC%9D%B4%EB%AF%B8%EC%A7%80/user_default_thumbnail.png";
 
     @Autowired
     private UserRepository userRepository;
@@ -63,7 +64,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         user.getProvider() + " account. Please use your " + user.getProvider() +
                         " account to login.");
             }
-            user = updateExistingUser(user, oAuth2UserInfo);
+            /**
+             * 업데이트 제외 (2020-03-10)
+             * */
+            // user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
@@ -81,26 +85,32 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if(oAuth2UserInfo.getImageUrl()!=null){
             user.setImageUrl(oAuth2UserInfo.getImageUrl());
+            user.setThumbnailUrl(oAuth2UserInfo.getImageUrl());
         }else{
             user.setImageUrl(DEFAULT_USER_IMAGE_URL);
+            user.setThumbnailUrl(DEFAULT_USER_THUMBNAIL_URL);
         }
 
         return userRepository.save(user);
     }
 
-    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
-
-        // null -> not null
-        if(existingUser.getImageUrl().equals(DEFAULT_USER_IMAGE_URL) && oAuth2UserInfo.getImageUrl()!=null){
-            existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
-        }
-        // not null -> null
-        else if(!existingUser.getImageUrl().equals(DEFAULT_USER_IMAGE_URL) && oAuth2UserInfo.getImageUrl()==null){
-            existingUser.setImageUrl(DEFAULT_USER_IMAGE_URL);
-        }
-
-        return userRepository.save(existingUser);
-    }
+    /**
+     * OAuth provider 에서 변경되었다고해서 변경 x
+     * 사용자가 직접 (이름,이미지) 수정 하도록 변경 o
+     * */
+//    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
+//        existingUser.setName(oAuth2UserInfo.getName());
+//
+//        // null -> not null
+//        if(existingUser.getImageUrl().equals(DEFAULT_USER_IMAGE_URL) && oAuth2UserInfo.getImageUrl()!=null){
+//            existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
+//        }
+//        // not null -> null
+//        else if(!existingUser.getImageUrl().equals(DEFAULT_USER_IMAGE_URL) && oAuth2UserInfo.getImageUrl()==null){
+//            existingUser.setImageUrl(DEFAULT_USER_IMAGE_URL);
+//        }
+//
+//        return userRepository.save(existingUser);
+//    }
 
 }

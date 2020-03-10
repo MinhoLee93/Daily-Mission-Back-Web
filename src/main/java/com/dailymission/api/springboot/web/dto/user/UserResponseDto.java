@@ -14,15 +14,15 @@ public class UserResponseDto implements Serializable {
     private Long id;
     private String name;
     private String email;
-    private String imageUrl;
+    private String thumbnailUrl;
     private List<MissionMockDto> missions = new ArrayList<>();
 
     @Builder
-    public UserResponseDto(Long id, String name, String email, String imageUrl){
+    public UserResponseDto(Long id, String name, String email, String thumbnailUrl){
         this.id = id;
         this.name = name;
         this.email = email;
-        this.imageUrl = imageUrl;
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public void addMissionMock(MissionMockDto missionMock){

@@ -45,6 +45,14 @@ public class User extends BaseTimeEntity implements Serializable {
 
     private String imageUrl;
 
+    private String thumbnailUrl;
+
+    @Column(name = "ORIGINAL_FILE_NAME")
+    private String originalFileName;
+
+    @Column(name = "FILE_EXTENSION")
+    private String fileExtension;
+
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
@@ -76,5 +84,18 @@ public class User extends BaseTimeEntity implements Serializable {
         this.imageUrl = imageUrl;
         this.provider = provider;
         this.providerId = providerId;
+    }
+
+    // 이미지 업데이트
+    public void updateImage(String imageUrl){
+        // 이미지
+        this.imageUrl = imageUrl;
+        // 썸네일 -> 재생성
+        this.thumbnailUrl = imageUrl;
+    }
+
+    // 썸네일 업데이트
+    public void updateThumbnail(String thumbnailUrl){
+        this.thumbnailUrl = thumbnailUrl;
     }
 }

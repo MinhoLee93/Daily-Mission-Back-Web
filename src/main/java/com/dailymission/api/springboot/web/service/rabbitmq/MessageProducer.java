@@ -15,8 +15,19 @@ public class MessageProducer {
     @Autowired
     RabbitTemplate rabbitTemplate = new RabbitTemplate();
 
+    // mission user resize
+    public void sendMessage(User user, MessageDto message){
+
+        message.setUserId(user.getId());
+        message.setType("user");
+        message.setExtension(user.getFileExtension());
+        message.setOriginalFileName(user.getOriginalFileName());
+
+        sendMessage(message, "user");
+    }
+
     // mission image resize
-    public void sendMessage( Mission mission, MessageDto message){
+    public void sendMessage(Mission mission, MessageDto message){
 
         message.setMissionId(mission.getId());
         message.setType("mission");

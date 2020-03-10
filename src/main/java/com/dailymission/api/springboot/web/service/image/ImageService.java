@@ -42,4 +42,11 @@ public class ImageService {
     public MessageDto uploadMissionS3(MultipartFile multipartFile, String dirName) throws IOException {
         return s3Util.upload(multipartFile, dirName);
     }
+
+    /**
+     * /kakao/id/name/
+     * */
+    public MessageDto uploadUserS3(MultipartFile multipartFile, String dirName) throws IOException {
+        return s3Util.upload(multipartFile, dirName);
+    }
 }

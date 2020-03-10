@@ -26,6 +26,9 @@ public class S3Util {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    /**
+     * ex) 202003090000
+     * */
     public String genSerialNumber(){
         LocalDateTime now = LocalDateTime.now();
         String serial = "" +  new DecimalFormat("0000").format(now.getYear())
