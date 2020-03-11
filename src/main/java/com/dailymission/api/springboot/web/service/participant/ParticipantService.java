@@ -2,10 +2,7 @@ package com.dailymission.api.springboot.web.service.participant;
 
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.dto.participant.ParticipantListResponseDto;
-import com.dailymission.api.springboot.web.dto.participant.ParticipantResponseDto;
 import com.dailymission.api.springboot.web.dto.participant.ParticipantSaveRequestDto;
-import com.dailymission.api.springboot.web.dto.participant.ParticipantUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
@@ -18,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +25,11 @@ public class ParticipantService {
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
 
+
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 미션에 참여한다.
+     * */
     @Transactional
     public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
         // user
@@ -67,46 +66,48 @@ public class ParticipantService {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 
-        // entity
+        // participant entity
         Participant participant =  requestDto.toEntity(user);
+
+        // save entity
         return participantRepository.save(participant).getId();
     }
 
-    @Transactional(readOnly = true)
-    public ParticipantResponseDto findByMissionAndAccount (Mission mission, User user){
-        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(mission, user))
-                .orElseThrow(()-> new NoSuchElementException("해당 참여내용은 존재하지 않습니다"));
+//    @Transactional(readOnly = true)
+//    public ParticipantResponseDto findByMissionAndAccount (Mission mission, User user){
+//        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(mission, user))
+//                .orElseThrow(()-> new NoSuchElementException("해당 참여내용은 존재하지 않습니다"));
+//
+//        Participant participant = optional.get();
+//        return new ParticipantResponseDto(participant);
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public List<ParticipantListResponseDto> findAllByMission (Mission mission){
+//
+//        return participantRepository.findAllByMission(mission)
+//                .stream()
+//                .map(ParticipantListResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public List<ParticipantListResponseDto> findAllByAccount (User user){
+//
+//        return participantRepository.findAllByUser(user)
+//                .stream()
+//                .map(ParticipantListResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
 
-        Participant participant = optional.get();
-        return new ParticipantResponseDto(participant);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ParticipantListResponseDto> findAllByMission (Mission mission){
-
-        return participantRepository.findAllByMission(mission)
-                .stream()
-                .map(ParticipantListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ParticipantListResponseDto> findAllByAccount (User user){
-
-        return participantRepository.findAllByUser(user)
-                .stream()
-                .map(ParticipantListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public Long ban(ParticipantUpdateRequestDto requestDto){
-        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(requestDto.getMission(), requestDto.getUser()))
-                                        .orElseThrow(()-> new NoSuchElementException("미션에 참가하고 있는 사용자가 아닙니다"));
-
-        Participant participant = optional.get();
-        participant.ban();
-
-        return participant.getId();
-    }
+//    @Transactional
+//    public Long ban(ParticipantUpdateRequestDto requestDto){
+//        Optional<Participant> optional = Optional.ofNullable(participantRepository.findByMissionAndUser(requestDto.getMission(), requestDto.getUser()))
+//                                        .orElseThrow(()-> new NoSuchElementException("미션에 참가하고 있는 사용자가 아닙니다"));
+//
+//        Participant participant = optional.get();
+//        participant.ban();
+//
+//        return participant.getId();
+//    }
 }

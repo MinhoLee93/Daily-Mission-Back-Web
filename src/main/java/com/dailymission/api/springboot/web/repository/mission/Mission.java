@@ -135,9 +135,18 @@ public class Mission extends BaseTimeEntity implements Serializable {
         return genUUID;
     }
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 비밀번호 확인시에는 password encoder 를 사용해 decode 한다.
+     * */
     // 비밀번호 확인
     public boolean checkCredential(String credential, PasswordEncoder passwordEncoder){
-        if(credential.equals(credential)){
+
+        /**
+         * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         * 오픈전에 반드시 password encoder 로 변경한다.
+         * */
+        if(credential.equals(this.credential)){
             return true;
         }else{
             return false;
@@ -153,6 +162,10 @@ public class Mission extends BaseTimeEntity implements Serializable {
         }
     }
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 미션 시작날짜 이후에는 참여할 수 없다.
+     * */
     // 시작날짜 확인 (Participant Create)
     public boolean checkStartDate(LocalDate date){
         if(date.isAfter(this.startDate)){
@@ -161,6 +174,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
             return true;
         }
     }
+
 
     // 종료날짜 확인 (Mission Create)
     public boolean checkEndDate(LocalDate date){

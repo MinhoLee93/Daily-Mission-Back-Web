@@ -18,6 +18,10 @@ public class ParticipantController {
 
     private final ParticipantService participantService;
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 미션에 참여한다.
+     * */
     @PostMapping("/api/participant")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {

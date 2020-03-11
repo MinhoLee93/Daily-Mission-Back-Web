@@ -43,14 +43,6 @@ public class MissionController {
         return missionService.findById(id);
     }
 
-//    @PutMapping("/api/mission/{id}")
-//    @PreAuthorize("hasRole('USER')")
-//    public Long update(@PathVariable Long id, @RequestBody String requestJson) {
-//
-//        MissionUpdateRequestDto requestDto = new Gson().fromJson(requestJson, MissionUpdateRequestDto.class);
-//
-//        return missionService.update(id, requestDto);
-//    }
 
 //    @PutMapping("/api/mission/{id}/image")
 //    @PreAuthorize("hasRole('USER')")
