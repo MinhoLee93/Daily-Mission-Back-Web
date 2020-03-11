@@ -44,14 +44,14 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<Post> findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+    public Long countPostSubmit(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate) {
         return queryFactory
-                .select(post)
+                .select(post.countDistinct())
                 .from(post)
                 .where(post.mission.id.eq(missionId)
                         .and(post.user.id.eq(userId))
                         .and(post.createdDate.after(startDate)
                                 .and(post.createdDate.before(endDate))))
-                        .fetch();
+                        .fetchCount();
     }
 }

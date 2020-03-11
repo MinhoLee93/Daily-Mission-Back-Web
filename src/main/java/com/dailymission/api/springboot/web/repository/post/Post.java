@@ -21,11 +21,11 @@ public class Post extends BaseTimeEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MISSION_ID", referencedColumnName = "id",  nullable = false)
     private Mission mission;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "id", nullable = false)
     private User user;
 

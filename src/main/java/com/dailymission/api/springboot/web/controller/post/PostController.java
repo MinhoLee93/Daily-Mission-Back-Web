@@ -60,7 +60,7 @@ public class PostController {
 //        return postService.updateImage(id, file);
 //    }
 
-    @DeleteMapping("/api/post/{id}")
+    @DeleteMapping("/api/post/delete/{id}")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {
             // 전체 포스트 List

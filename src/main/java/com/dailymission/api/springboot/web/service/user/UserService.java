@@ -44,6 +44,14 @@ public class UserService {
                                                         .thumbnailUrl(user.getThumbnailUrl())
                                                         .build();
 
+        /**
+         * SQL :
+         * select *
+         * from participant
+         * left outer join mission      on      mission.id
+         * left outer join missionRule  on      mission.rule.id
+         * left outer join user         on      user.id
+         * */
         // submit (당일 + 익익 새벽 3시까지 각 미션별 제출했는지?)
         for(Participant participant : user.getParticipants()){
 
@@ -56,18 +64,19 @@ public class UserService {
             boolean isSubmit = false;
 
             // 0시  ~ 03시
-            if(start.isBefore(LocalDate.now().atTime(3, 0))){
+            LocalDateTime criteria = LocalDate.now().atTime(03,00);
+            if(start.isBefore(criteria)){
                 // 전날 새벽 3시 ~ 현재
-                isSubmit = postService.findSubmitHistory(participant.getMission().getId(),
+                isSubmit = postService.countPostSubmit(participant.getMission().getId(),
                         user.getId(),
-                        LocalDate.now().atTime(3,0).minusDays(1),
+                        criteria.minusDays(1),
                         start);
             }else{
             // 03시 ~ 24시
                 // 전날 새벽 3시 ~ 현재
-                isSubmit = postService.findSubmitHistory(participant.getMission().getId(),
+                isSubmit = postService.countPostSubmit(participant.getMission().getId(),
                         user.getId(),
-                        LocalDate.now().atTime(3,0),
+                        criteria,
                         start);
             }
 

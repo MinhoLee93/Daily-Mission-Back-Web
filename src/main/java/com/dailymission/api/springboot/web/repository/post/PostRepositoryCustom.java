@@ -13,5 +13,5 @@ public interface PostRepositoryCustom {
     List<PostHistoryDto> findSchedule(Long id, LocalDateTime startDate, LocalDateTime endDate);
 
     // 제출기록
-    List<Post> findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate);
+    Long countPostSubmit(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

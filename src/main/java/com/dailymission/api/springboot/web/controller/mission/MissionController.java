@@ -59,7 +59,7 @@ public class MissionController {
 //        return missionService.updateImage(id, file);
 //    }
 
-    @DeleteMapping("/api/mission/{id}")
+    @DeleteMapping("/api/mission/delete/{id}")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {
             // 유저 정보

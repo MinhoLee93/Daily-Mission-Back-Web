@@ -32,12 +32,12 @@ public class Mission extends BaseTimeEntity implements Serializable {
     @Column(name = "ID")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "MISSION_RULE_ID")
     @JsonManagedReference
     private MissionRule missionRule;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 

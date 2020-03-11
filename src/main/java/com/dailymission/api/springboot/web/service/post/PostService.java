@@ -83,14 +83,14 @@ public class PostService {
         // 0시  ~ 03시
         if(start.isBefore(LocalDate.now().atTime(3, 0))){
             // 전날 새벽 3시 ~ 현재
-            isSubmit = findSubmitHistory(participant.getMission().getId(),
+            isSubmit = countPostSubmit(participant.getMission().getId(),
                     user.getId(),
                     LocalDate.now().atTime(3,0).minusDays(1),
                     start);
         }else{
             // 03시 ~ 24시
             // 전날 새벽 3시 ~ 현재
-            isSubmit = findSubmitHistory(participant.getMission().getId(),
+            isSubmit = countPostSubmit(participant.getMission().getId(),
                     user.getId(),
                     LocalDate.now().atTime(3,0),
                     start);
@@ -202,13 +202,13 @@ public class PostService {
      * 유저 포스트 제출기록 (미션별)
      * */
     @Transactional(readOnly = true)
-    public boolean findSubmitHistory(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate){
+    public boolean countPostSubmit(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate){
 
          // is submit exist?
-         List<Post> submit =  postRepository.findSubmitHistory(missionId, userId, startDate, endDate);
+         Long count = postRepository.countPostSubmit(missionId, userId, startDate, endDate);
 
          // true if exist
-         if(submit.size()>0){
+         if(count > 0){
              return true;
          }else{
              return false;
