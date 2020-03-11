@@ -12,10 +12,10 @@ public class CacheEvictService {
     Logger log = LoggerFactory.getLogger(CacheEvictService.class);
 
     /**
-    * 매주 일요일 0시 0분 1초에 schedule 캐시 삭제
+    * 매주 일요일 3시 0분 1초에 schedule 캐시 삭제
     * week 가 바뀌었으므로..
     * */
-    @Scheduled(cron = "1 0 0 * * SUN")
+    @Scheduled(cron = "1 0 3 * * SUN")
     @CacheEvict(value = "schedules", allEntries = true)
     public void removeCache(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> remove cache");
