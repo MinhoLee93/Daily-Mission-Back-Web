@@ -26,6 +26,10 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 본인의 유저 정보를 가져온다. (아이디, 이름, 이메일, 썸네일, 참여중인 미션 목록 및 당일 포스트 제출여부)
+     * */
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     @Cacheable(value = "users", key = "#userPrincipal.id")
@@ -34,6 +38,10 @@ public class UserController {
         return userService.getCurrentUser(userPrincipal);
     }
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 유저의 정보를 업데이트 한다. (이름, 이미지)
+     * */
     @PostMapping("/user/me/update")
     @PreAuthorize("hasRole('USER')")
     @CacheEvict(value = "users", key = "#userPrincipal.id")

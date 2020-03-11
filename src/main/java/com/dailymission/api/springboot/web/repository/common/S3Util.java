@@ -40,11 +40,31 @@ public class S3Util {
         return serial;
     }
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : MultipartFile 로 전달받은 객체를 File 로 Convert 하고 S3에 업로드 한다.
+     *       업로드후에는 이미지 리사이징을 위한 MessageDto 를 생성해 return 한다.
+     * */
     public MessageDto upload(MultipartFile multipartFile, String dirName) throws IOException {
+        // convert MultipartFile -> File
         File uploadFile = convert(multipartFile)
             .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
-        return upload(uploadFile, dirName);
+        // messageDto
+        MessageDto messageDto = upload(uploadFile, dirName);
+
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : originalFileName + fileExtension 은 DB에 저장하기위한 정보
+         * */
+        String originalFileName = multipartFile.getOriginalFilename();
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+        // set message
+        messageDto.setOriginalFileName(multipartFile.getOriginalFilename());
+        messageDto.setExtension(fileExtension);
+
+        return messageDto;
     }
 
     private MessageDto upload(File uploadFile, String dirName) {

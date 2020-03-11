@@ -3,7 +3,7 @@ package com.dailymission.api.springboot.web.service.user;
 import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.CurrentUser;
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.dto.mission.MissionMockDto;
+import com.dailymission.api.springboot.web.dto.mission.MissionPostSubmitCheckDto;
 import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
 import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
@@ -11,32 +11,39 @@ import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
-import com.dailymission.api.springboot.web.service.post.PostService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
+import com.dailymission.api.springboot.web.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final ImageService imageService;
-    private final PostService postService;
+    private final ScheduleService scheduleService;
     private final UserRepository userRepository;
     private final MessageProducer messageProducer;
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 본인의 유저 정보를 가져온다.
+     *        아이디, 이름, 이메일, 썸네일, 참여중인 미션 목록 및 당일 포스트 제출여부
+     * */
     @Transactional(readOnly = true)
     public UserResponseDto getCurrentUser(@CurrentUser UserPrincipal userPrincipal){
 
-        // user
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : @CurrentUser UserPrincipal 정보를 가져올때 UserRepository.findById 와 같은 조회 query 를 수행한다.
+         * */
+        // user entity
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-        // response
+        // user response dto
         UserResponseDto userResponseDto = UserResponseDto.builder()
                                                         .id(user.getId())
                                                         .name(user.getName())
@@ -45,54 +52,53 @@ public class UserService {
                                                         .build();
 
         /**
-         * SQL :
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : participant 조회시 user 정보와 mission 정보를 left outer join 해서 같이 가져온다.
+         *
          * select *
          * from participant
          * left outer join mission      on      mission.id
-         * left outer join missionRule  on      mission.rule.id
          * left outer join user         on      user.id
          * */
-        // submit (당일 + 익익 새벽 3시까지 각 미션별 제출했는지?)
+        // check post today submit for every attended missions
         for(Participant participant : user.getParticipants()){
 
-            // deleted 미션 제외
+            // skip for deleted mission
             if(participant.getMission().isDeleted()){
                 continue;
             }
 
-            LocalDateTime start = LocalDateTime.now();
-            boolean isSubmit = false;
+            // check today submit history
+            boolean isSubmit = scheduleService.isSubmitToday(participant);
 
-            // 0시  ~ 03시
-            LocalDateTime criteria = LocalDate.now().atTime(03,00);
-            if(start.isBefore(criteria)){
-                // 전날 새벽 3시 ~ 현재
-                isSubmit = postService.countPostSubmit(participant.getMission().getId(),
-                        user.getId(),
-                        criteria.minusDays(1),
-                        start);
-            }else{
-            // 03시 ~ 24시
-                // 전날 새벽 3시 ~ 현재
-                isSubmit = postService.countPostSubmit(participant.getMission().getId(),
-                        user.getId(),
-                        criteria,
-                        start);
-            }
-
-            MissionMockDto missionMockDto = MissionMockDto.builder()
+            /**
+             * [ 2020-03-11 : 이민호 ]
+             * 설명 : 참여중인 mission 정보 + 당일 포스트 제출여부 & 강퇴여부
+             * */
+            MissionPostSubmitCheckDto missionPostSubmitCheckDto = MissionPostSubmitCheckDto.builder()
                                                         .entity(participant.getMission())
                                                         .banned(participant.isBanned())
                                                         .submit(isSubmit)
                                                         .build();
 
-            // add mission with today submit history
-            userResponseDto.addMissionMock(missionMockDto);
+            /**
+             * [ 2020-03-11 : 이민호 ]
+             * 설명 : user 정보에 참여중인 mission 정보와 당일 포스트 제출여부를 추가한다.
+             * */
+            // add to userResponseDto
+            userResponseDto.addMissionPostSubmitCheckDto(missionPostSubmitCheckDto);
+
         }
 
+        // return response dto
         return userResponseDto;
     }
 
+
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 유저의 정보를 업데이트 한다. (이름, 이미지)
+     * */
     @Transactional
     public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
 
@@ -101,36 +107,49 @@ public class UserService {
             throw new IllegalAccessError("본인의 유저 정보만 변경할 수 있습니다.");
         }
 
-        // user
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : UserPrincipal <-> User 중복된다.
+         *       하지만, UserPrincipal 은 security 를 위해서만 관리하는것이 좋을것 같아..
+         *       중복부븐을 합치지는 않겠다.
+         * */
+        // user entity
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
 
-        // change name
+        // change user name
         if(requestDto.getUserName()!=null){
             user.setName(requestDto.getUserName());
         }
 
-        // change image
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : 변경한 이미지를 AWS 에 저장하고, Message 를 생성해 리사이징을 요청한다. (rabbitmq)
+         * */
+        // change user image
         if(requestDto.getFile()!=null){
-            String dirName = "" + user.getProvider().toString() + "/" + user.getId();
+            // get dir name
+            String dirName = imageService.getUserDir(user);
+
+            // upload image
             MessageDto message = imageService.uploadUserS3(requestDto.getFile(), dirName);
+
+            // update user image & thumbnail url (DB)
             user.updateImage(message.getImageUrl());
 
-            /**
-             * 리팩토링 필요
-             * */
-            String originalFileName = requestDto.getFile().getOriginalFilename();
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            user.setOriginalFileName(originalFileName);
-            user.setFileExtension(fileExtension);
+            // update origin file name & file extension (DB)
+            user.setOriginalFileName(message.getOriginalFileName());
+            user.setFileExtension(message.getExtension());
 
-            // produce message
+            // produce message for image resize
             messageProducer.sendMessage(user, message);
         }
 
+        // update user info
         userRepository.save(user);
 
+        // return user id
         return  1L;
     }
 }

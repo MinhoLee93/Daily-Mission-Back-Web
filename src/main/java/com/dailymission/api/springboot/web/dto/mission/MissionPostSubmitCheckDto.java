@@ -6,8 +6,11 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
+/**
+ *
+ * */
 @Getter
-public class MissionMockDto implements Serializable {
+public class MissionPostSubmitCheckDto implements Serializable {
     private Long id;
     private String title;
     private boolean banned;
@@ -16,7 +19,7 @@ public class MissionMockDto implements Serializable {
     private boolean submit;
 
     @Builder
-    public MissionMockDto(Mission entity, Boolean banned, Boolean submit){
+    public MissionPostSubmitCheckDto(Mission entity, Boolean banned, Boolean submit){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.ended = entity.isEnded();

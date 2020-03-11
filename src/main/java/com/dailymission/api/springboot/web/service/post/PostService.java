@@ -14,6 +14,7 @@ import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
+import com.dailymission.api.springboot.web.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +35,12 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final ImageService imageService;
-
     private final PostRepository postRepository;
-
     private final MissionRepository missionRepository;
-
     private final UserRepository userRepository;
-
     private final ParticipantRepository participantRepository;
-
     private final MessageProducer messageProducer;
+    private final ScheduleService scheduleService;
 
     /**
      * POST 저장
@@ -77,24 +74,9 @@ public class PostService {
             throw new IllegalArgumentException("이미 종료된 미션입니다.");
         }
 
-        LocalDateTime start = LocalDateTime.now();
-        boolean isSubmit = false;
+        // 제출 기록 확인
+        boolean isSubmit =  scheduleService.isSubmitToday(participant);
 
-        // 0시  ~ 03시
-        if(start.isBefore(LocalDate.now().atTime(3, 0))){
-            // 전날 새벽 3시 ~ 현재
-            isSubmit = countPostSubmit(participant.getMission().getId(),
-                    user.getId(),
-                    LocalDate.now().atTime(3,0).minusDays(1),
-                    start);
-        }else{
-            // 03시 ~ 24시
-            // 전날 새벽 3시 ~ 현재
-            isSubmit = countPostSubmit(participant.getMission().getId(),
-                    user.getId(),
-                    LocalDate.now().atTime(3,0),
-                    start);
-        }
 
         // 이미 제출한 기록이 있을 경우
         if(isSubmit){
@@ -198,22 +180,7 @@ public class PostService {
                                         .build();
     }
 
-    /**
-     * 유저 포스트 제출기록 (미션별)
-     * */
-    @Transactional(readOnly = true)
-    public boolean countPostSubmit(Long missionId, Long userId, LocalDateTime startDate, LocalDateTime endDate){
 
-         // is submit exist?
-         Long count = postRepository.countPostSubmit(missionId, userId, startDate, endDate);
-
-         // true if exist
-         if(count > 0){
-             return true;
-         }else{
-             return false;
-         }
-    }
 
     /**
      * POST 업데이트
@@ -240,7 +207,7 @@ public class PostService {
         Post post = optional.get();
 
         // change image
-        MessageDto message = imageService.uploadPostS3(file, post.getMission().getTitle() + imageService.genDir());
+        MessageDto message = imageService.uploadPostS3(file, post.getMission().getTitle() + imageService.getPostDir());
         post.updateImage(message.getImageUrl());
 
         return id;

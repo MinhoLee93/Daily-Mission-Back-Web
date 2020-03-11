@@ -20,11 +20,11 @@ public class Participant extends BaseTimeEntity implements Serializable {
     @Column(name="ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "MISSION_ID")
     private Mission mission;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 

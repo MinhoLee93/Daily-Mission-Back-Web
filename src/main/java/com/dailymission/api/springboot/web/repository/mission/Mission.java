@@ -37,7 +37,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
     @JsonManagedReference
     private MissionRule missionRule;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
