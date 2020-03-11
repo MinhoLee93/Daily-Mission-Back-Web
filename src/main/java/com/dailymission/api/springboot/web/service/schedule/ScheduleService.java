@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 public class ScheduleService {
     private final PostRepository postRepository;
 
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 참여중인 미션에 금일 인증한 포스트 제출 기록이 있는지 확인한다.
+     * */
     @Transactional(readOnly = true)
     public boolean isSubmitToday(Participant participant){
         // result
@@ -27,8 +31,8 @@ public class ScheduleService {
 
         /**
          * [ 2020-03-11 : 이민호 ]
-         * 설명 : 현재시간이 0시 ~ 03시 경우에 전날 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
-         *       현재시간이 03시 ~ 24시 경우에 금일 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
+         * 설명 : 현재시간 0시 ~ 03시 : 전날 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
+         *       현재시간 03시 ~ 24시 : 금일 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
          * */
         // 0시  ~ 03시
         LocalDateTime criteria = LocalDate.now().atTime(03,00);
