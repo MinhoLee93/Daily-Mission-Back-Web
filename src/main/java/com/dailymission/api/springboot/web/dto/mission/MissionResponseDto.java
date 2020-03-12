@@ -1,10 +1,8 @@
 package com.dailymission.api.springboot.web.dto.mission;
 
-import com.dailymission.api.springboot.web.dto.user.UserNameImageDto;
+import com.dailymission.api.springboot.web.dto.participant.ParticipantUserDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
-import com.dailymission.api.springboot.web.repository.participant.Participant;
-import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +12,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * [ 2020-03-12 : 이민호 ]
+ * 설명 : 미션 디테일 정보 Dto
+ * */
 @Getter
 public class MissionResponseDto implements Serializable {
     private Long id;
@@ -22,7 +25,7 @@ public class MissionResponseDto implements Serializable {
     private String title;
     private String content;
     private String thumbnailUrlDetail;
-    private List<UserNameImageDto> participants = new ArrayList<>();
+    private List<ParticipantUserDto> participantUserList = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -42,17 +45,7 @@ public class MissionResponseDto implements Serializable {
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.ended = entity.isEnded();
-
-        setParticipants(entity.getParticipants());
+        this.participantUserList = entity.getAllParticipantUser();
     }
 
-    private void setParticipants(List<Participant> participants){
-        for(Participant p : participants){
-            User user = p.getUser();
-            this.participants.add(UserNameImageDto.builder()
-                                    .userName(user.getName())
-                                    .thumbnailUrl(user.getThumbnailUrl())
-                                    .banned(p.isBanned()).build());
-        }
-    }
 }

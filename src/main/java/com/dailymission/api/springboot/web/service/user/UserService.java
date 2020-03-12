@@ -10,6 +10,7 @@ import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
+import com.dailymission.api.springboot.web.repository.user.UserValidator;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
 import com.dailymission.api.springboot.web.service.schedule.ScheduleService;
@@ -22,9 +23,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    // service
     private final ImageService imageService;
     private final ScheduleService scheduleService;
+    // repository
     private final UserRepository userRepository;
+    // message producer
     private final MessageProducer messageProducer;
 
     /**
@@ -101,6 +105,9 @@ public class UserService {
      * */
     @Transactional
     public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
+
+        // check data validation
+        UserValidator.builder().build().checkValidation(requestDto);
 
         // check current user
         if(requestDto.getId()!=userPrincipal.getId()){

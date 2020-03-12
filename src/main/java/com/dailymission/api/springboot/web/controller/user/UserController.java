@@ -6,7 +6,6 @@ import com.dailymission.api.springboot.web.dto.user.UserResponseDto;
 import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
+    // service
     private final UserService userService;
 
     /**

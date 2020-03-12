@@ -1,6 +1,6 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
-import com.dailymission.api.springboot.web.dto.mission.MissionUserListResponseDto;
+import com.dailymission.api.springboot.web.dto.participant.ParticipantUserDto;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
@@ -48,7 +48,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
     @OneToMany(mappedBy = "mission")
     private List<Post> posts = new ArrayList<>();
 
-    @Column(name = "TITLE", nullable = false, length = 15)
+    @Column(name = "TITLE", nullable = false, length = 20)
     @Size(min = 1, max = 20)
     private String title;
 
@@ -146,7 +146,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
          * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          * 오픈전에 반드시 password encoder 로 변경한다.
          * */
-        if(credential.equals(this.credential)){
+        if(passwordEncoder.matches(credential, this.credential)){
             return true;
         }else{
             return false;
@@ -225,18 +225,15 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.endDate = endDate;
     }
 
-    // 삭제
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션 delete 하면 자동으로 end
+     * */
     public void delete(User user){
-        if(this.user.getId() != user.getId()){
-            throw new IllegalArgumentException("허용되지 않은 유저입니다.");
-        }
-
-        if(this.deleted){
-            throw new IllegalArgumentException("이미 삭제된 미션입니다.");
-        }
 
         this.deleted = true;
         this.ended = true;
+
     }
 
     // 종료
@@ -244,21 +241,92 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.ended = true;
     }
 
-
-    // 미션 참여 유저 목록 (강퇴여부 포함 / 스케줄 왼쪽)
-    public List<MissionUserListResponseDto> getAllUser(){
-        List<MissionUserListResponseDto> allUser = new ArrayList<>();
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션 참여중인 유저목록 List
+     *        아이디 / 이름 / 썸네일 / 강퇴여부
+     * */
+    public List<ParticipantUserDto> getAllParticipantUser(){
+        List<ParticipantUserDto> participantUserList = new ArrayList<>();
 
         for(Participant p : this.participants){
-            MissionUserListResponseDto user = MissionUserListResponseDto.builder()
-                    .userId(p.getUser().getId())
-                    .userName(p.getUser().getName())
-                    .banned(p.isBanned())
-                    .build();
+            User user = p.getUser();
 
-            allUser.add(user);
+            ParticipantUserDto participantUser = ParticipantUserDto.builder()
+                                                                    .id(user.getId())
+                                                                    .userName(user.getName())
+                                                                    .thumbnailUrl(user.getThumbnailUrl())
+                                                                    .banned(p.isBanned())
+                                                                    .build();
+
+            participantUserList.add(participantUser);
         }
 
-        return allUser;
+        return participantUserList;
+    }
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션에 참여중인 유저중에 ban 되지 않은 사용자들의 count
+     * */
+    public int getParticipantCountNotBanned(){
+
+            // count
+            int count = 0;
+
+            // check is not banned
+            for(Participant p : this.participants){
+                if(!p.isBanned()){
+                    count++;
+                }
+            }
+
+            // return count
+            return count;
+    }
+
+
+    // 미션 삭제 가능 확인
+    public boolean isDeletable(User user){
+
+        // check user
+        if(this.user.getId() != user.getId()){
+            throw new IllegalArgumentException("허용되지 않은 유저입니다.");
+        }
+
+        // check participant is exists
+        if(this.participants. size()>1){
+            throw new IllegalArgumentException("사용자가 참여중인 미션은 삭제할 수 없습니다.");
+        }
+
+        // check is already deleted
+        if(this.deleted){
+            throw new IllegalArgumentException("이미 삭제된 미션입니다.");
+        }
+
+        return true;
+    }
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 매일 새벽 3시에 미션 종료 batch 가 수행된다.
+     *        endDate 가 지난 미션을 종료한다.
+     * */
+    // 미션 종료 가능 확인
+    public boolean isEndable(){
+
+        // now
+        LocalDate now = LocalDate.now();
+
+        /**
+         * [ 2020-03-12 : 이민호 ]
+         * 설명 : 종료날짜가 현재보다 이후인 경우에는 종료할 수 없다.
+         *       만약 종료날짜가 되지 않았는데, 이 메서드를 호출한 경우는 종료 batch 로직에 문제가 있다.
+         * */
+        if(this.endDate.isAfter(now)){
+            throw new IllegalArgumentException("아직 종료날짜가 되지 않았습니다.");
+        }
+
+        return true;
     }
 }

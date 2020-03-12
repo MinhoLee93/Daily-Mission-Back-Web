@@ -1,5 +1,6 @@
 package com.dailymission.api.springboot.web.repository.participant;
 
+import com.dailymission.api.springboot.web.dto.participant.ParticipantUserDto;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.user.User;
@@ -43,5 +44,22 @@ public class Participant extends BaseTimeEntity implements Serializable {
     // 강퇴
     public void ban(){
         this.banned = true;
+    }
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션 참여중인 사용자의 이름/사진/강퇴여부를 가져온다
+     * */
+    private ParticipantUserDto getUserInfo(){
+
+            // user entity
+            User user = this.getUser();
+
+            // userName & image & banned
+            return ParticipantUserDto.builder()
+                    .userName(user.getName())
+                    .thumbnailUrl(user.getThumbnailUrl())
+                    .banned(this.isBanned()).build();
+
     }
 }

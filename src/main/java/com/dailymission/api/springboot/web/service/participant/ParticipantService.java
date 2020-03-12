@@ -7,6 +7,7 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
+import com.dailymission.api.springboot.web.repository.participant.ParticipantValidator;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +21,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ParticipantService {
-    private final PasswordEncoder passwordEncoder;
+    // repository
     private final ParticipantRepository participantRepository;
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
+    // password encoder
+    private final PasswordEncoder passwordEncoder;
 
-
-    /**
+    /**7
      * [ 2020-03-11 : 이민호 ]
      * 설명 : 미션에 참여한다.
      * */
     @Transactional
     public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
+
+        // check data validation
+        ParticipantValidator.builder().build().checkValidation(requestDto);
+
         // user
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
@@ -40,6 +46,12 @@ public class ParticipantService {
         Mission mission = missionRepository.findById(requestDto.getMission().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", requestDto.getMission().getId()));
 
+
+
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : 값이 Null 일 수도 있는 경우에는 Optional 을 사용하면 된다.
+         * */
         // 이미 참여중인지 확인
         Optional<Participant> optional = participantRepository.findByMissionAndUser(mission,user);
         if(optional.isPresent()){

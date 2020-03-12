@@ -1,4 +1,4 @@
-package com.dailymission.api.springboot.web.repository.common;
+package com.dailymission.api.springboot.web.repository.mission;
 
 import com.dailymission.api.springboot.web.dto.mission.MissionSaveRequestDto;
 import lombok.Builder;
@@ -7,19 +7,21 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 /**
- * data validation 기능 모아놓은 Util
- */
+ * [ 2020-03-11 : 이민호 ]
+ * 설명 : MISSION 에 대한 data validation 을 확인한다.
+ * */
 @Getter
-public class Validator {
+public class MissionValidator {
     private final int MISSION_TITLE_MIN_LENGTH = 1;
     private final int MISSION_TITLE_MAX_LENGTH = 20;
     private final int MISSION_CONTENT_MIN_LENGTH = 10;
     private final int MISSION_CONTENT_MAX_LENGTH = 50;
 
     @Builder
-    public Validator(){
+    public MissionValidator(){
 
     }
+
 
     public boolean checkValidation(MissionSaveRequestDto requestDto){
 

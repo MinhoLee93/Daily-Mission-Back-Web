@@ -15,6 +15,7 @@ import java.util.Calendar;
 @Service
 public class ImageService {
 
+    // s3 util
     private final S3Util s3Util;
 
     /**
@@ -24,6 +25,7 @@ public class ImageService {
      * return : /2020/03/11
      * */
     public String getPostDir(){
+
         // get calendar instance
         Calendar cal = Calendar.getInstance();
 
@@ -34,6 +36,7 @@ public class ImageService {
 
         // return final directory path
         return datePath;
+
     }
 
 
@@ -44,9 +47,11 @@ public class ImageService {
      * return : /google/123
      * */
     public String getUserDir(User user){
+
         String dirName = "" + user.getProvider().toString() + "/" + user.getId();
 
         return dirName;
+
     }
 
 
@@ -58,7 +63,9 @@ public class ImageService {
      *         ex) /1일1알고리즘/2020/03/28/
      * */
     public MessageDto uploadPostS3(MultipartFile multipartFile, String dirName) throws IOException {
+
         return s3Util.upload(multipartFile, dirName + getPostDir());
+
     }
 
     /**
@@ -69,7 +76,9 @@ public class ImageService {
      *         ex) /1일1알고리즘/
      * */
     public MessageDto uploadMissionS3(MultipartFile multipartFile, String dirName) throws IOException {
+
         return s3Util.upload(multipartFile, dirName);
+
     }
 
     /**
@@ -80,6 +89,8 @@ public class ImageService {
      *         ex) /google/123/
      * */
     public MessageDto uploadUserS3(MultipartFile multipartFile, String dirName) throws IOException {
+
         return s3Util.upload(multipartFile, dirName);
+
     }
 }

@@ -19,7 +19,7 @@ public class UserResponseDto implements Serializable {
     private String name;
     private String email;
     private String thumbnailUrl;
-    private List<MissionPostSubmitCheckDto> missions = new ArrayList<>();
+    private List<MissionPostSubmitCheckDto> postSubmitCheckList = new ArrayList<>();
 
     @Builder
     public UserResponseDto(Long id, String name, String email, String thumbnailUrl){
@@ -29,7 +29,7 @@ public class UserResponseDto implements Serializable {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public void addMissionPostSubmitCheckDto(MissionPostSubmitCheckDto missionMock){
-        missions.add(missionMock);
+    public void addMissionPostSubmitCheckDto(MissionPostSubmitCheckDto postSubmitCheck){
+        postSubmitCheckList.add(postSubmitCheck);
     }
 }

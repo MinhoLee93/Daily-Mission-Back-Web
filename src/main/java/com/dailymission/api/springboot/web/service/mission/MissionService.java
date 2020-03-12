@@ -4,9 +4,9 @@ import com.dailymission.api.springboot.exception.ResourceNotFoundException;
 import com.dailymission.api.springboot.security.UserPrincipal;
 import com.dailymission.api.springboot.web.dto.mission.*;
 import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
-import com.dailymission.api.springboot.web.repository.common.Validator;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
+import com.dailymission.api.springboot.web.repository.mission.MissionValidator;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
@@ -17,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,23 +26,33 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MissionService {
-    private final PasswordEncoder passwordEncoder;
+    // service
+    private final ImageService imageService;
+    // repository
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
-    private final ImageService imageService;
     private final ParticipantRepository participantRepository;
+    // message producer
     private final MessageProducer messageProducer;
+    // password encoder
+    private final PasswordEncoder passwordEncoder;
 
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 신규 미션을 생성한다.
+     * */
     @Transactional
     public String save(MissionSaveRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
-        // data validation
-        Validator.builder().build().checkValidation(requestDto);
 
-        // user
+        // check data validation
+        MissionValidator.builder().build().checkValidation(requestDto);
+
+        // user entity
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-        // entity
+
+        // mission entity
         Mission mission = requestDto.toEntity(user);
 
         // set credential
@@ -62,7 +70,10 @@ public class MissionService {
         message.setMissionId(mission.getId());
         messageProducer.sendMessage(mission , message);
 
-        // create participant (미션 생성자는 바로 참여)
+        /**
+         * [ 2020-03-12 : 이민호 ]
+         * 설명 : 미션 생성자 (방장) 은 해당 미션에 바로 참여
+         * */
         Participant participant = Participant.builder()
                                             .mission(mission)
                                             .user(user)
@@ -71,19 +82,40 @@ public class MissionService {
         // save participant
         participantRepository.save(participant);
 
-        // not encoded credential
+        /**
+         * [ 2020-03-12 : 이민호 ]
+         * 설명 : 임의로 생성한 credential 을 return 한다.
+         * */
         return credential;
     }
 
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션의 디테일 정보와 참여중인 사용자들의 이름/사진/강퇴여부를 가져온다
+     * */
     @Transactional(readOnly = true)
     public MissionResponseDto findById (Long id){
+
+        // find mission by id
         Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
                 .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
+
+        // mission entity
         Mission mission = optional.get();
+
+
+        // return mission response
         return new MissionResponseDto(mission);
     }
 
+
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : Home 미션 목록을 가져온다.
+     * */
     @Transactional(readOnly = true)
     public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
         return missionRepository.findAllByCreatedDate().stream()
@@ -91,6 +123,11 @@ public class MissionService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 전체 미션 목록을 가져온다.
+     * */
     @Transactional(readOnly = true)
     public List<MissionAllListResponseDto> findAllListByCreatedDate(){
         return missionRepository.findAllByCreatedDate().stream()
@@ -98,6 +135,11 @@ public class MissionService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : Hot 미션 목록을 가져온다.
+     * */
     @Transactional(readOnly = true)
     public List<MissionHotListResponseDto> findHotListByCreatedDate(){
         return missionRepository.findAllByCreatedDate().stream()
@@ -105,67 +147,95 @@ public class MissionService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public Long update(Long id, MissionUpdateRequestDto requestDto){
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                            .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
-
-        Mission mission = optional.get();
-        mission.update(requestDto.getMissionRule(),
-                       requestDto.getTitle(),
-                       requestDto.getContent(),
-                       requestDto.getStartDate(),
-                       requestDto.getEndDate());
-
-        return id;
-    }
-
-    @Transactional
-    public Long updateImage(Long id, MultipartFile file) throws IOException {
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
-
-        Mission mission = optional.get();
-
-        // change image
-        MessageDto message = imageService.uploadMissionS3(file, mission.getTitle());
-        mission.updateImage(message.getImageUrl());
-
-        return id;
-    }
 
 
+//    @Transactional
+//    public Long update(Long id, MissionUpdateRequestDto requestDto){
+//        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
+//                            .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
+//
+//        Mission mission = optional.get();
+//        mission.update(requestDto.getMissionRule(),
+//                       requestDto.getTitle(),
+//                       requestDto.getContent(),
+//                       requestDto.getStartDate(),
+//                       requestDto.getEndDate());
+//
+//        return id;
+//    }
+
+
+
+//    @Transactional
+//    public Long updateImage(Long id, MultipartFile file) throws IOException {
+//        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
+//                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
+//
+//        Mission mission = optional.get();
+//
+//        // change image
+//        MessageDto message = imageService.uploadMissionS3(file, mission.getTitle());
+//        mission.updateImage(message.getImageUrl());
+//
+//        return id;
+//    }
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션을 삭제한다.
+     *        삭제 요청은 방장만 할 수 있다.
+     *        미션 시작전 & 참여한 사용자가 없을 경우에만 삭제 가능하다.
+     * */
     @Transactional
     public void delete(Long id, UserPrincipal userPrincipal){
+
         // user
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
+
+
+        /**
+         * [ 2020-03-12 : 이민호 ]
+         * 설명 : Optional 은 Null 일 수도 있는 경우에 사용해야한다.
+         *        현재의 경우 Mission 이 없으면 안되므로 사용하지 말자.
+         * */
+        // Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
+        //                           .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
+
         // mission
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
-
-        // entity
-        Mission mission = optional.get();
+        Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mission.", "id", id));
 
 
-        // 미션에 참여중인 사용자가 있을 경우 (참여인원 > 1)
-        if(mission.getParticipants().size()>1){
-            throw new IllegalArgumentException("사용자가 참여중인 미션은 삭제할 수 없습니다.");
-        }
+        // check is deletable
+        mission.isDeletable(user);
 
 
-        // delete flag -> 'Y'
+        // delete mission
         mission.delete(user);
     }
 
+
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : 미션을 종료한다.
+     *        미션 종료날짜가 지난 미션을 종료시킨다.
+     * */
     @Transactional
     public void end(Long id){
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
 
-        // end flag -> 'Y'
-        Mission mission = optional.get();
+        // mission entity
+        Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
+
+
+        // check is end able
+        mission.isEndable();
+
+
+        // mission end
         mission.end();
+
     }
 }
