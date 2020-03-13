@@ -16,7 +16,9 @@ public class PostListResponseDto implements Serializable {
     private String userThumbnailUrl;
     private String title;
     private String content;
+    private String imageUrl;
     private String thumbnailUrl;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedDate;
@@ -29,6 +31,7 @@ public class PostListResponseDto implements Serializable {
         this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.title = entity.getTitle();
         this.content = entity.getContent();
+        this.imageUrl = entity.getImageUrl();
         this.thumbnailUrl = entity.getThumbnailUrl();
         this.modifiedDate = entity.getModifiedDate();
     }
