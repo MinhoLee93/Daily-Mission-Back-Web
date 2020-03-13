@@ -66,8 +66,13 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
     }
 
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 미션별 weekly post submit 를 PostSubmitDto 객체로 전달받는다.
+     *        0시 ~ 03 시 제출 기록은 이전날짜 제출 기록으로 변환한다.
+     * */
     @Override
-    public List<PostSubmitDto> findWeeklyPostHistoryByMission(Long id, LocalDate startDate) {
+    public List<PostSubmitDto> findWeeklyPostSubmitByMission(Long id, LocalDate startDate) {
 
         // get end date
         LocalDate endDate = startDate.plusDays(7);

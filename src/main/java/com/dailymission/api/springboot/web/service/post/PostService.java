@@ -197,10 +197,10 @@ public class PostService {
 
         /**
          * [ 2020-03-13 : 이민호 ]
-         * 설명 : 미션별 weekly post history 를 PostSubmitDto 객체로 전달받는다.
+         * 설명 : 미션별 weekly post submit 을 PostSubmitDto 객체로 전달받는다.
          *        0시 ~ 03 시 제출 기록은 이전날짜 제출 기록으로 변환한다.
          * */
-        List<PostSubmitDto> submits = postRepository.findWeeklyPostHistoryByMission(id, startDate);
+        List<PostSubmitDto> submits = postRepository.findWeeklyPostSubmitByMission(id, startDate);
 
 
         /**
@@ -213,7 +213,10 @@ public class PostService {
 
 
 
-        // return result
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : Schedule > histories > submits
+         * */
         return  PostScheduleResponseDto.builder()
                                         .weekDates(weekDates)
                                         .histories(histories)

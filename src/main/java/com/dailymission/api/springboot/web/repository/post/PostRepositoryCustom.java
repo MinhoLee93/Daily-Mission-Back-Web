@@ -29,7 +29,7 @@ public interface PostRepositoryCustom {
      * [ 2020-03-13 : 이민호 ]
      * 설명 : 미션별로 startDate 이후 일주일간의 포스트 제출 기록을 확인한다.
      * */
-    List<PostSubmitDto> findWeeklyPostHistoryByMission(Long id, LocalDate startDate);
+    List<PostSubmitDto> findWeeklyPostSubmitByMission(Long id, LocalDate startDate);
 
     // 제출기록
     Long countPostSubmit(Mission mission, User user, LocalDateTime startDate, LocalDateTime endDate);
