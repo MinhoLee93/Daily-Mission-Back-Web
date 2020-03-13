@@ -1,6 +1,7 @@
 package com.dailymission.api.springboot.web.dto.mission;
 
 import com.dailymission.api.springboot.web.repository.mission.Mission;
+import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,10 +15,11 @@ public class MissionAllListResponseDto  implements Serializable {
     private Long id;
     private String title;
     private String content;
+    private Week week;
     private String thumbnailUrlAll;
     private String userName;
+    private String userThumbnailUrl;
     private int userCount;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
@@ -29,8 +31,10 @@ public class MissionAllListResponseDto  implements Serializable {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.thumbnailUrlAll = entity.getThumbnailUrlAll();
+        this.week = entity.getMissionRule().getWeek();
+        this.thumbnailUrlAll = entity.getThumbnailUrlHome();
         this.userName = entity.getUser().getName();
+        this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.userCount = entity.getParticipantCountNotBanned();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
