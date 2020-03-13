@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -98,12 +96,8 @@ public class MissionService {
     public MissionResponseDto findById (Long id){
 
         // find mission by id
-        Optional<Mission> optional = Optional.ofNullable(missionRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 미션이 없습니다. id=" + id));
-
-
-        // mission entity
-        Mission mission = optional.get();
+        Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mission.", "id", id));
 
 
         // return mission response

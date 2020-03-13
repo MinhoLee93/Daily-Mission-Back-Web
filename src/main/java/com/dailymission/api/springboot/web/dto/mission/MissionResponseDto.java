@@ -25,7 +25,7 @@ public class MissionResponseDto implements Serializable {
     private String title;
     private String content;
     private String thumbnailUrlDetail;
-    private List<ParticipantUserDto> participantUserList = new ArrayList<>();
+    private List<ParticipantUserDto> participants = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -45,7 +45,7 @@ public class MissionResponseDto implements Serializable {
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.ended = entity.isEnded();
-        this.participantUserList = entity.getAllParticipantUser();
+        this.participants = entity.getAllParticipantUser();
     }
 
 }
