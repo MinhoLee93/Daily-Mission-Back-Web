@@ -17,9 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class PostController {
-
+    // service
     private final PostService postService;
 
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트를 저장한다.
+     * */
     @PostMapping("/api/post")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {
@@ -39,13 +43,17 @@ public class PostController {
         return postService.save(requestDto, userPrincipal);
     }
 
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트의 Detail 정보를 가져온다.
+     * */
     @GetMapping("/api/post/{id}")
-    // 포스트 정보 (detail)
     @Cacheable(value = "posts" , key = "#id")
     public PostResponseDto findById (@PathVariable Long id) throws Exception {
 
         return postService.findById(id);
     }
+
 
 //    @PutMapping("/api/post/{id}")
 //    public Long update(@PathVariable Long id, @RequestBody String requestJson){
@@ -60,6 +68,11 @@ public class PostController {
 //        return postService.updateImage(id, file);
 //    }
 
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트를 삭제한다.
+     * */
     @DeleteMapping("/api/post/delete/{id}")
     @PreAuthorize("hasRole('USER')")
     @Caching(evict = {
@@ -77,12 +90,18 @@ public class PostController {
             @CacheEvict(value = "posts" , key = "#id")
     })
     public PostDeleteResponseDto delete(@PathVariable Long id, @CurrentUser UserPrincipal userPrincipal){
+
+        // delete post
         postService.delete(id, userPrincipal);
 
         return PostDeleteResponseDto.builder().id(id).build();
     }
 
-    // 전체 포스트 List (key= all)
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 전체 포스트 목록을 가져온다.
+     * */
     @GetMapping("/api/post/all")
     @Cacheable(value = "postLists", key = "'all'")
     public List<PostListResponseDto> findAll(){
@@ -90,7 +109,11 @@ public class PostController {
         return postService.findAll();
     }
 
-    // 유저별 포스트 List (key = user-#userId)
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 유저별 전체 포스트 목록을 가져온다.
+     * */
     @GetMapping("/api/post/all/me")
     @PreAuthorize("hasRole('USER')")
     @Cacheable(value = "postLists", key = "'user-' + #userPrincipal.id")
@@ -99,7 +122,11 @@ public class PostController {
         return postService.findAllByUser(userPrincipal);
     }
 
-    // 미션별 포스트 List (key = mission-#missionId)
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 미션별 전체 포스트 목록을 가져온다.
+     * */
     @GetMapping("/api/post/all/mission/{id}")
     @Cacheable(value = "postLists", key = "'mission-' + #id")
     public List<PostListResponseDto> findAllByMission (@PathVariable Long id) {
@@ -107,7 +134,16 @@ public class PostController {
         return postService.findAllByMission(id);
     }
 
-    // 금주 Schedule History / week : 0 (이번주) / week : 1 (1주전) /
+
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 미션별로 해당 Week 의 post 제출 schedule 을 가져온다.
+     *        week : 0 -> 이번주
+     *        week : n -> n 주전
+     *
+     *        일/월/화/수/목/금/토 정보를 가져온다.
+     * */
     @GetMapping("/api/post/schedule/mission/{id}/{week}")
     @Cacheable(value = "schedules", key = "'mission-' + #id + '-week-' + #week")
     public PostScheduleResponseDto findSchedule(@PathVariable("id") Long id,

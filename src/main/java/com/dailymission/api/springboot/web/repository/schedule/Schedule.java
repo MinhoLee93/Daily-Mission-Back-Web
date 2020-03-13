@@ -1,7 +1,7 @@
 package com.dailymission.api.springboot.web.repository.schedule;
 
 import com.dailymission.api.springboot.web.dto.mission.MissionUserListResponseDto;
-import com.dailymission.api.springboot.web.dto.post.PostHistoryDto;
+import com.dailymission.api.springboot.web.dto.post.PostSubmitDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +17,13 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 public class Schedule implements Serializable {
-    private List<PostHistoryDto> histories;
+    private List<PostSubmitDto> histories;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @Builder
-    public Schedule(List<PostHistoryDto> historyDtoList, LocalDate startDate){
+    public Schedule(List<PostSubmitDto> historyDtoList, LocalDate startDate){
             this.histories = historyDtoList;
             this.startDate = startDate;
     }
@@ -39,7 +39,7 @@ public class Schedule implements Serializable {
         }
 
         // key (localDate) : value (<MissionUserListResponseDto>)
-        for(PostHistoryDto p : histories){
+        for(PostSubmitDto p : histories){
             // userMock (userId, userName)
             MissionUserListResponseDto user = MissionUserListResponseDto.builder()
                     .userId(p.getUserId())

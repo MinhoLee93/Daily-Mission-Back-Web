@@ -87,16 +87,26 @@ public class Post extends BaseTimeEntity implements Serializable {
     }
 
 
-    // 삭제
-    public void delete(User user){
-        if(this.user.getId() != user.getId()){
+    // 삭제 가능한지 확인
+    public boolean isDeletable(User user){
+
+        // check user
+        if(this.user != user){
             throw new IllegalArgumentException("허용되지 않은 유저입니다.");
         }
 
+        // check post status
         if(this.deleted){
             throw new IllegalArgumentException("이미 삭제된 게시글입니다.");
         }
 
+        return true;
+    }
+
+    // 삭제
+    public void delete(){
+
         this.deleted = true;
+
     }
 }

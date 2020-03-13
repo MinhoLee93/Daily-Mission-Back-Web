@@ -1,8 +1,12 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
 import com.dailymission.api.springboot.web.dto.participant.ParticipantUserDto;
+import com.dailymission.api.springboot.web.dto.post.DateDto;
+import com.dailymission.api.springboot.web.dto.post.PostHistoryDto;
+import com.dailymission.api.springboot.web.dto.post.PostSubmitDto;
 import com.dailymission.api.springboot.web.repository.common.BaseTimeEntity;
 import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
+import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.post.Post;
 import com.dailymission.api.springboot.web.repository.user.User;
@@ -18,9 +22,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -328,5 +330,165 @@ public class Mission extends BaseTimeEntity implements Serializable {
         }
 
         return true;
+    }
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : week 주의 일주일간 날짜 + 제출의무 요일인지를 반환한다. (일 ~ 월)
+     *      ex) 메서드 호출 일자 : 2020-03-13  / week : 0
+     *          -> 2020-03-08 ~ 2020-03-14
+     *          -> true/true/true/true/true/false/false
+     *  */
+    public List<DateDto> getWeekDates(LocalDate startDate){
+
+        // result list
+        List<DateDto> weekDates = new ArrayList<>();
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 일 ~ 월 요일의 날짜  + 제출 의무 요일인지 확인한다.
+         *       ## 입력값으로 받은 now 는 항상 일요일이다.
+         *  */
+        for(int i=0; i<7; i++){
+            LocalDate date = startDate.plusDays(i);
+            String day = date.getDayOfWeek().toString();
+            boolean mandatory = checkMandatory(day);
+
+            DateDto dateDto = DateDto.builder()
+                    .date(date)
+                    .day(day)
+                    .mandatory(mandatory)
+                    .build();
+
+            weekDates.add(dateDto);
+        }
+
+        return weekDates;
+    }
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : String 값인 요일(SUM/MON/TUE...)이 input 으로 주어졌을 때
+     *        해당 요일이 제출 의무 요일인지 확인
+     *  */
+    private boolean checkMandatory(String day){
+
+        Week week = this.missionRule.getWeek();
+
+        if(day.equals("SUNDAY")){
+            return week.isSun();
+        }else if(day.equals("MONDAY")){
+            return week.isMon();
+        }else if(day.equals("TUESDAY")){
+            return week.isTue();
+        }else if(day.equals("WEDNESDAY")){
+            return week.isWed();
+        }else if(day.equals("THURSDAY")){
+            return week.isThu();
+        }else if(day.equals("FRIDAY")){
+            return week.isFri();
+        }else if(day.equals("SATURDAY")){
+            return week.isSat();
+        }
+
+        return false;
+    }
+
+    /**
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 전달받은 PostSubmitDto 객체를 조합해 유저별로 묶는다.
+     *        결과값 : 유저정보 + 제출일자 리스트 {'2020-03-08', '2020-03-14'...}
+     * */
+    public List<PostHistoryDto> getHistories(List<PostSubmitDto> submits){
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 유저별 PostSubmitDto 를 담을 hashMap
+         *        key : user id
+         * */
+        // key : user id / value : post history
+        Map<Long, List<PostSubmitDto>> allUserSubmits = new HashMap<>();
+
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 유저별로 구분해서 PostHistory 를 hash map 에 담는다.
+         * */
+        for(PostSubmitDto dto : submits){
+            if(allUserSubmits.containsKey(dto.getUserId())){
+                allUserSubmits.get(dto.getUserId()).add(dto);
+            }else{
+                List<PostSubmitDto> temp = new ArrayList<>();
+                temp.add(dto);
+                allUserSubmits.put(dto.getUserId(), temp);
+            }
+        }
+
+        // result
+        List<PostHistoryDto> histories = new ArrayList<>();
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 미션에 참여중인 참여자들 별로
+         *        hash 에 담아놓은 PostSubmitDto 를 확인해
+         *        PostHistoryDto 로 묶는다.
+         *
+         *        즉 참여자별로 제출 기록을 하나로 묶어 historyDto 객체로 변환한다.
+         * */
+        for(Participant participant : this.participants){
+
+            // user
+            User user = participant.getUser();
+
+
+            /**
+             * [ 2020-03-13 : 이민호 ]
+             * 설명 : history 에 USER 의 기본정보를 담는다.
+             *       이때 미션에서 강퇴되었는지 여부도 포함한다. (isBanned)
+             * */
+            PostHistoryDto history = PostHistoryDto.builder()
+                    .userId(user.getId())
+                    .userName(user.getName())
+                    .thumbnailUrl(user.getThumbnailUrl())
+                    .banned(participant.isBanned())
+                    .build();
+
+
+            /**
+             * [ 2020-03-13 : 이민호 ]
+             * 설명 : hash 에서 user id key 해당하는 postHistoryDto list 를 가져온다.
+             * */
+            List<PostSubmitDto> userSubmits = allUserSubmits.get(user.getId());
+            // check null
+            if(userSubmits != null){
+                Iterator<PostSubmitDto> iterator = userSubmits.iterator();
+
+                /**
+                 * [ 2020-03-13 : 이민호 ]
+                 * 설명 : 유저의 제출 기록이 있는 경우 해당 기록들을 history 의 date array 에 담는다.
+                 * */
+                while(iterator.hasNext()){
+
+                    /**
+                     * [ 2020-03-13 : 이민호 ]
+                     * 설명 : 만약 중복된 date 가 담겼을 경우에는 포스트 제출 로직에 문제가 있다.
+                     *        동일 제출일자에 중복해서 동일 미션에 포스트를 제출할 수 없게 설계되어 있다.
+                     * */
+                    PostSubmitDto submit = iterator.next();
+                    history.getDate().add(submit.getDate());
+                }
+
+            }
+
+            /**
+             * [ 2020-03-13 : 이민호 ]
+             * 설명 : history 는 참여자 한명의 weekly submit history 를 담고 있다.
+             *       전체 참여자의 weekly submit history 를 담고 있는 histories 에 이를 add 한다.
+             * */
+            histories.add(history);
+        }
+
+        // return histories
+        return histories;
     }
 }

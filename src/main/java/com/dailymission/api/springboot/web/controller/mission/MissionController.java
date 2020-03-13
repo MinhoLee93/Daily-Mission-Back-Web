@@ -43,7 +43,6 @@ public class MissionController {
          *        미션에 참여하고 싶은사람은 이 credential 값을 알고 있어야 한다.
          * */
          return MissionSaveResponseDto.builder().credential(missionService.save(requestDto, userPrincipal)).build();
-
     }
 
 
@@ -56,7 +55,6 @@ public class MissionController {
     public MissionResponseDto findById(@PathVariable Long id){
 
         return missionService.findById(id);
-
     }
 
 

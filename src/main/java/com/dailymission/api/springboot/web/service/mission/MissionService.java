@@ -26,12 +26,15 @@ import java.util.stream.Collectors;
 public class MissionService {
     // service
     private final ImageService imageService;
+
     // repository
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
+
     // message producer
     private final MessageProducer messageProducer;
+
     // password encoder
     private final PasswordEncoder passwordEncoder;
 
@@ -112,7 +115,7 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
-        return missionRepository.findAllByCreatedDate().stream()
+        return missionRepository.findAll().stream()
                 .map(MissionHomeListResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -124,7 +127,7 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionAllListResponseDto> findAllListByCreatedDate(){
-        return missionRepository.findAllByCreatedDate().stream()
+        return missionRepository.findAll().stream()
                 .map(MissionAllListResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -136,7 +139,7 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionHotListResponseDto> findHotListByCreatedDate(){
-        return missionRepository.findAllByCreatedDate().stream()
+        return missionRepository.findAll().stream()
                 .map(MissionHotListResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -230,6 +233,5 @@ public class MissionService {
 
         // mission end
         mission.end();
-
     }
 }

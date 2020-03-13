@@ -12,8 +12,8 @@ import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.repository.user.UserValidator;
 import com.dailymission.api.springboot.web.service.image.ImageService;
+import com.dailymission.api.springboot.web.service.post.PostService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
-import com.dailymission.api.springboot.web.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +25,11 @@ import java.io.IOException;
 public class UserService {
     // service
     private final ImageService imageService;
-    private final ScheduleService scheduleService;
+    private final PostService postService;
+
     // repository
     private final UserRepository userRepository;
+
     // message producer
     private final MessageProducer messageProducer;
 
@@ -73,7 +75,7 @@ public class UserService {
             }
 
             // check today submit history
-            boolean isSubmit = scheduleService.isSubmitToday(participant);
+            boolean isSubmit = postService.isSubmitToday(participant);
 
             /**
              * [ 2020-03-11 : 이민호 ]

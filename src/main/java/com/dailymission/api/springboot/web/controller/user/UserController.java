@@ -21,7 +21,6 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-
     // service
     private final UserService userService;
 

@@ -14,11 +14,9 @@ import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
-import com.dailymission.api.springboot.web.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -27,23 +25,26 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
-
+    // service
     private final ImageService imageService;
+
+    // repository
     private final PostRepository postRepository;
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
+
+    // message producer
     private final MessageProducer messageProducer;
-    private final ScheduleService scheduleService;
 
     /**
-     * POST 저장
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트를 저장한다.
      * */
     @Transactional
     public Long save(PostSaveRequestDto requestDto, UserPrincipal userPrincipal) throws IOException {
@@ -69,13 +70,8 @@ public class PostService {
             throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
         }
 
-        // 미션 종료 날짜 확인 (이미 종료된 미션엔 제출 불가능)
-        if(!mission.checkEndDate(LocalDate.now())){
-            throw new IllegalArgumentException("이미 종료된 미션입니다.");
-        }
-
         // 제출 기록 확인
-        boolean isSubmit =  scheduleService.isSubmitToday(participant);
+        boolean isSubmit = isSubmitToday(participant);
 
 
         // 이미 제출한 기록이 있을 경우
@@ -96,14 +92,18 @@ public class PostService {
         // produce message
         messageProducer.sendMessage(user, mission, post, message);
 
+        // return post id
         return post.getId();
     }
 
     /**
-     * POST 정보 (detail)
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트의 Detail 정보를 가져온다.
      * */
     @Transactional(readOnly = true)
     public PostResponseDto findById (Long id) throws Exception {
+
+        // get post if not deleted
         Post post = postRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
 
@@ -111,125 +111,210 @@ public class PostService {
     }
 
     /**
-     * 전체 POST List
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 전체 포스트 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAll(){
-        return postRepository.findAllDescAndDeletedIsFalse().stream()
+
+        // get all posts
+        return postRepository.findAll().stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
+
     }
 
     /**
-     * 유저별 전체 POST List
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 유저별 전체 포스트 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllByUser(UserPrincipal userPrincipal){
+
         // user
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-        return postRepository.findAllByUserEqualsAndDeletedIsFalse(user).stream()
+        // get all posts by user
+        return postRepository.findAllByUser(user).stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 미션별 전체 POST List
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 미션별 전체 포스트 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
     public List<PostListResponseDto> findAllByMission(Long id){
+
         // mission
         Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
-        return postRepository.findAllByMissionAndDeletedIsFalse(mission).stream()
+        // get all posts by mission
+        return postRepository.findAllByMission(mission).stream()
                 .map(PostListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
+
     /**
-     * 미션별 포스트 제출기록 (전체유저)
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 미션별로 해당 Week 의 post 제출 schedule 을 가져온다.
+     *        week : 0 -> 이번주
+     *        week : n -> n 주전
+     *
+     *        일/월/화/수/목/금/토 정보를 가져온다.
      * */
     @Transactional(readOnly = true)
     public PostScheduleResponseDto findSchedule(Long id, Long week){
+
         /**
-         * 조회 시작하는 일요일 정보
-         * 0 : 이번주 일요일
-         * 1 : 저번주 일요일
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 현재 요일에서 가장 가까운 일요일을 찾는다. (previousOrSame)
+         *        ex) 월 -> 지난 일요일
+         *        ex) 토 -> 지난 일요일
+         *        ex) 일 -> 현재 일요일
          * */
         LocalDate startDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).minusWeeks(week);
-        LocalDate endDate = startDate.plusDays(7);
 
-        LocalDateTime startDateTime = LocalDateTime.of(startDate.getYear(),startDate.getMonth(),startDate.getDayOfMonth(), 03, 00, 00);
-        LocalDateTime endDateTime = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), 03, 00 ,00);
 
         // mission
         Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", id));
 
-        // history
-        List<PostHistoryDto> historyDtoList = postRepository.findSchedule(id, startDateTime, endDateTime);
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : week 주의 일주일간 날짜 + 제출의무 요일인지 확인
+         *      ex) 메서드 호출 일자 : 2020-03-13  / week : 0
+         *          -> 2020-03-08 ~ 2020-03-14
+         *          -> true/true/true/true/true/false/false
+         *  */
+        List<DateDto> weekDates = mission.getWeekDates(startDate);
 
 
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 미션별 weekly post history 를 PostSubmitDto 객체로 전달받는다.
+         *        0시 ~ 03 시 제출 기록은 이전날짜 제출 기록으로 변환한다.
+         * */
+        List<PostSubmitDto> submits = postRepository.findWeeklyPostHistoryByMission(id, startDate);
+
+
+        /**
+         * [ 2020-03-13 : 이민호 ]
+         * 설명 : 전달받은 PostSubmitDto 객체를 조합해 유저별로 묶는다.
+         *        결과값 : 유저정보 + 제출일자 리스트 {'2020-03-08', '2020-03-14'...}
+         *        ## submit 정보를 활용해 -> history 로 의미있게 만든다..
+         * */
+        List<PostHistoryDto> histories = mission.getHistories(submits);
+
+
+
+        // return result
         return  PostScheduleResponseDto.builder()
-                                        .startDate(startDate)
-                                        .week(mission.getMissionRule().getWeek())
-                                        .histories(historyDtoList)
-                                        .participants(mission.getParticipants())
+                                        .weekDates(weekDates)
+                                        .histories(histories)
                                         .build();
     }
 
 
 
+
+//    /**
+//     * POST 업데이트
+//     * */
+//    @Transactional
+//    public Long update(Long id, PostUpdateRequestDto requestDto){
+//        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
+//                .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
+//
+//        Post post = optional.get();
+//        post.update(requestDto.getTitle(), requestDto.getContent());
+//
+//        return id;
+//    }
+
+//    /**
+//     * POST 이미지 업데이트
+//     * */
+//    @Transactional
+//    public Long updateImage(Long id, MultipartFile file) throws IOException {
+//        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
+//                .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
+//
+//        Post post = optional.get();
+//
+//        // change image
+//        MessageDto message = imageService.uploadPostS3(file, post.getMission().getTitle() + imageService.getPostDir());
+//        post.updateImage(message.getImageUrl());
+//
+//        return id;
+//    }
+
+
     /**
-     * POST 업데이트
-     * */
-    @Transactional
-    public Long update(Long id, PostUpdateRequestDto requestDto){
-        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
-
-        Post post = optional.get();
-        post.update(requestDto.getTitle(), requestDto.getContent());
-
-        return id;
-    }
-
-    /**
-     * POST 이미지 업데이트
-     * */
-    @Transactional
-    public Long updateImage(Long id, MultipartFile file) throws IOException {
-        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
-                .orElseThrow(() -> new NoSuchElementException("해당 게시글이 없습니다. id=" + id));
-
-        Post post = optional.get();
-
-        // change image
-        MessageDto message = imageService.uploadPostS3(file, post.getMission().getTitle() + imageService.getPostDir());
-        post.updateImage(message.getImageUrl());
-
-        return id;
-    }
-
-
-    /**
-     * POST 삭제
+     * [ 2020-03-13 : 이민호 ]
+     * 설명 : 포스트를 삭제한다.
      * */
     @Transactional
     public void delete(Long id, UserPrincipal userPrincipal){
+
         // user
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
         // post
-        Optional<Post> optional = Optional.ofNullable(postRepository.findByIdAndDeletedIsFalse(id))
-                        .orElseThrow(()-> new NoSuchElementException("해당 게시글이 없습니다. id =" + id));
+        Post post = postRepository.findByIdAndDeletedIsFalse(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("Post", "id" , id));
+
+        // check is deletable
+        post.isDeletable(user);
+
 
         // delete flag -> 'Y'
-        Post post = optional.get();
-        post.delete(user);
+        post.delete();
     }
 
+
+    /**
+     * [ 2020-03-11 : 이민호 ]
+     * 설명 : 참여중인 미션에 금일 인증한 포스트 제출 기록이 있는지 확인한다.
+     * */
+    @Transactional(readOnly = true)
+    public boolean isSubmitToday(Participant participant){
+        // result
+        boolean isSubmit = false;
+
+        // now
+        LocalDateTime now = LocalDateTime.now();
+
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : 현재시간 0시 ~ 03시 : 전날 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
+         *       현재시간 03시 ~ 24시 : 금일 03시 ~ 현재시간까지 제출기록이 있는지 확인한다.
+         * */
+        // 0시  ~ 03시
+        LocalDateTime criteria = LocalDate.now().atTime(03,00); // 03시
+        if(now.isBefore(criteria)){
+            // 전날 새벽 3시 ~ 현재
+            isSubmit =  postRepository.countPostSubmit(participant.getMission()
+                    ,participant.getUser()
+                    ,criteria.minusDays(1)
+                    ,now) > 0;
+
+
+        }else{
+            // 03시 ~ 24시
+            // 금일 새벽 3시 ~ 현재
+            isSubmit =  postRepository.countPostSubmit(participant.getMission()
+                    ,participant.getUser()
+                    ,criteria
+                    ,now) > 0;
+        }
+
+        return isSubmit;
+    }
 }
