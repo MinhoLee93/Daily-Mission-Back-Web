@@ -69,6 +69,17 @@ public class MissionValidator {
             throw new IllegalArgumentException("미션 시작날짜는 미션종료날짜보다 느릴수 없습니다.");
         }
 
+        // true if all week == false
+        if(!(requestDto.getWeek().isSun()
+                || requestDto.getWeek().isMon()
+                || requestDto.getWeek().isTue()
+                || requestDto.getWeek().isWed()
+                || requestDto.getWeek().isThu()
+                || requestDto.getWeek().isFri()
+                || requestDto.getWeek().isSat())){
+            throw new IllegalArgumentException("최소 하루의 제출요일을 선택해야 합니다.");
+        }
+
         return true;
     }
 }
