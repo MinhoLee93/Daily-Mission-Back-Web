@@ -41,6 +41,11 @@ public class BatchJobConfig {
 
     private int chunkSize = 100;
 
+    /**
+     * [ 2020-03-16 : 이민호 ]
+     * 설명 : 미션 인증 요일에 인증하지 않은 사용자를 강퇴한다.
+     *       만약 미션의 endDate 가 지났을 경우 해당 미션을 종료한다.
+     * */
     @Bean
     public Job job(){
         return jobBuilderFactory.get(JOB_NAME)
@@ -103,43 +108,43 @@ public class BatchJobConfig {
             switch (week.getValue()){
                 case 1:
                     if(!rule.isMon()){
-                        log.info("Monday is free");
+                        log.info("Monday is not mandatory");
                         return null;
                     }
                     break;
                 case 2:
                     if(!rule.isTue()){
-                        log.info("Tuesday is free");
+                        log.info("Tuesday is not mandatory");
                         return null;
                     }
                     break;
                 case 3:
                     if(!rule.isWed()){
-                        log.info("Wednesday is free");
+                        log.info("Wednesday is not mandatory");
                         return null;
                     }
                     break;
                 case 4:
                     if(!rule.isThu()){
-                        log.info("Thursday is free");
+                        log.info("Thursday is not mandatory");
                         return null;
                     }
                     break;
                 case 5:
                     if(!rule.isFri()){
-                        log.info("friday is free");
+                        log.info("friday is not mandatory");
                         return null;
                     }
                     break;
                 case 6:
                     if(!rule.isSat()){
-                        log.info("saturday is free");
+                        log.info("saturday is not mandatory");
                         return null;
                     }
                     break;
                 case 7:
                     if(!rule.isSun()){
-                        log.info("sunday is free");
+                        log.info("sunday is not mandatory");
                         return null;
                     }
                     break;
