@@ -33,7 +33,7 @@ public class MissionHotListResponseDto  implements Serializable {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.week = entity.getMissionRule().getWeek();
-        this.thumbnailUrlHot = entity.getThumbnailUrlHome();
+        this.thumbnailUrlHot = entity.getThumbnailUrlHot();
         this.userName = entity.getUser().getName();
         this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.userCount = entity.getParticipantCountNotBanned();

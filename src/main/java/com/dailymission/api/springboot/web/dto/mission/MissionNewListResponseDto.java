@@ -16,7 +16,7 @@ public class MissionNewListResponseDto implements Serializable {
     private String title;
     private String content;
     private Week week;
-    private String thumbnailUrlHome;
+    private String thumbnailUrlNew;
     private String userName;
     private String userThumbnailUrl;
     private int userCount;
@@ -33,7 +33,7 @@ public class MissionNewListResponseDto implements Serializable {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.week = entity.getMissionRule().getWeek();
-        this.thumbnailUrlHome = entity.getThumbnailUrlHome();
+        this.thumbnailUrlNew = entity.getThumbnailUrlNew();
         this.userName = entity.getUser().getName();
         this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.userCount = entity.getParticipantCountNotBanned();

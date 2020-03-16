@@ -67,17 +67,17 @@ public class Mission extends BaseTimeEntity implements Serializable {
     @Column(name="IMAGE_URL", nullable = false)
     private String imageUrl;
 
-    // 썸네일 (홈)
-    @Column(name="THUMBNAIL_URL_HOME")
-    private String thumbnailUrlHome;
+    // 썸네일 (Hot)
+    @Column(name="THUMBNAIL_URL_HOT")
+    private String thumbnailUrlHot;
+
+    // 썸네일 (New)
+    @Column(name="THUMBNAIL_URL_NEW")
+    private String thumbnailUrlNew;
 
     // 썸네일 (전체)
     @Column(name="THUMBNAIL_URL_ALL")
     private String thumbnailUrlAll;
-
-    // 썸네일 (Hot)
-    @Column(name="THUMBNAIL_URL_HOT")
-    private String thumbnailUrlHot;
 
     // 썸네일 (디테일)
     @Column(name="THUMBNAIL_URL_DETAIL")
@@ -114,7 +114,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
 
         // s3
         this.imageUrl = imageUrl;
-        this.thumbnailUrlHome = imageUrl;
+        this.thumbnailUrlNew = imageUrl;
         this.thumbnailUrlAll = imageUrl;
         this.thumbnailUrlHot = imageUrl;
         this.thumbnailUrlDetail = imageUrl;
@@ -192,25 +192,25 @@ public class Mission extends BaseTimeEntity implements Serializable {
         // 이미지
         this.imageUrl = imageUrl;
         // 썸네일 -> 재생성
-        this.thumbnailUrlHome = imageUrl;
+        this.thumbnailUrlNew = imageUrl;
         this.thumbnailUrlAll = imageUrl;
         this.thumbnailUrlHot = imageUrl;
         this.thumbnailUrlDetail = imageUrl;
     }
 
-    // 썸네일 업데이트 (홈)
-    public void updateThumbnailHome(String thumbnailUrlHome){
-        this.thumbnailUrlHome = thumbnailUrlHome;
+    // 썸네일 업데이트 (Hot)
+    public void updateThumbnailHot(String thumbnailUrlHot){
+        this.thumbnailUrlHot = thumbnailUrlHot;
+    }
+
+    // 썸네일 업데이트 (New)
+    public void updateThumbnailNew(String thumbnailUrlNew){
+        this.thumbnailUrlNew = thumbnailUrlNew;
     }
 
     // 썸네일 업데이트 (ALL)
     public void updateThumbnailAll(String thumbnailUrlAll){
         this.thumbnailUrlAll = thumbnailUrlAll;
-    }
-
-    // 썸네일 업데이트 (Hot)
-    public void updateThumbnailHot(String thumbnailUrlHot){
-        this.thumbnailUrlHot = thumbnailUrlHot;
     }
 
     // 썸네일 업데이트 (Detail)

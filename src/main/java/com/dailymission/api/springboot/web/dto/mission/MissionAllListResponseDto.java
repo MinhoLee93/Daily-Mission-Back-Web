@@ -32,7 +32,7 @@ public class MissionAllListResponseDto  implements Serializable {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.week = entity.getMissionRule().getWeek();
-        this.thumbnailUrlAll = entity.getThumbnailUrlHome();
+        this.thumbnailUrlAll = entity.getThumbnailUrlAll();
         this.userName = entity.getUser().getName();
         this.userThumbnailUrl = entity.getUser().getThumbnailUrl();
         this.userCount = entity.getParticipantCountNotBanned();
