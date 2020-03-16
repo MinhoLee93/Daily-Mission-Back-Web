@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-public class MissionHomeListResponseDto  implements Serializable {
+public class MissionNewListResponseDto implements Serializable {
     private Long id;
     private String title;
     private String content;
@@ -28,7 +28,7 @@ public class MissionHomeListResponseDto  implements Serializable {
     private LocalDate endDate;
     private boolean ended;
 
-    public MissionHomeListResponseDto(Mission entity){
+    public MissionNewListResponseDto(Mission entity){
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();

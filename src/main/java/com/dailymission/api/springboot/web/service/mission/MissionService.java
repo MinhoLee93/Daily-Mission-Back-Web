@@ -108,15 +108,28 @@ public class MissionService {
     }
 
 
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : Hot 미션 목록을 가져온다.
+     * */
+    @Transactional(readOnly = true)
+    public List<MissionHotListResponseDto> findHotList(){
+
+        return missionRepository.findAllByParticipantSize().stream()
+                .map(MissionHotListResponseDto::new)
+                .collect(Collectors.toList());
+
+    }
+
 
     /**
      * [ 2020-03-12 : 이민호 ]
-     * 설명 : Home 미션 목록을 가져온다.
+     * 설명 : New 미션 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
-    public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
-        return missionRepository.findAll().stream()
-                .map(MissionHomeListResponseDto::new)
+    public List<MissionNewListResponseDto> findNewList(){
+        return missionRepository.findAllCreatedInMonth().stream()
+                .map(MissionNewListResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -126,21 +139,9 @@ public class MissionService {
      * 설명 : 전체 미션 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
-    public List<MissionAllListResponseDto> findAllListByCreatedDate(){
-        return missionRepository.findAll().stream()
+    public List<MissionAllListResponseDto> findAllList(){
+        return missionRepository.findAllByCreatedDate().stream()
                 .map(MissionAllListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-
-    /**
-     * [ 2020-03-12 : 이민호 ]
-     * 설명 : Hot 미션 목록을 가져온다.
-     * */
-    @Transactional(readOnly = true)
-    public List<MissionHotListResponseDto> findHotListByCreatedDate(){
-        return missionRepository.findAll().stream()
-                .map(MissionHotListResponseDto::new)
                 .collect(Collectors.toList());
     }
 

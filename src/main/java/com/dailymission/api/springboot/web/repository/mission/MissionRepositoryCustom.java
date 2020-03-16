@@ -10,7 +10,12 @@ import java.util.List;
  * */
 public interface MissionRepositoryCustom {
 
-    // 전체 미션 목록
-    List<Mission> findAll();
+    // Hot 미션 목록
+    List<Mission> findAllByParticipantSize();
 
+    // New 미션 목록
+    List<Mission> findAllCreatedInMonth();
+
+    // 전체 미션 목록
+    List<Mission> findAllByCreatedDate();
 }

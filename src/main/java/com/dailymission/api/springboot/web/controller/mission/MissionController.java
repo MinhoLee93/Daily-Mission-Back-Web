@@ -28,12 +28,12 @@ public class MissionController {
     @Caching(evict = {
             // 유저 정보
             @CacheEvict(value = "users", key = "#userPrincipal.id"),
-            // Home 미션 List
-            @CacheEvict(value = "missionLists", key = "'home'"),
-            // All 미션 List
-            @CacheEvict(value = "missionLists", key = "'all'"),
             // Hot 미션 List
             @CacheEvict(value = "missionLists", key = "'hot'"),
+            // New 미션 List
+            @CacheEvict(value = "missionLists", key = "'new'"),
+            // All 미션 List
+            @CacheEvict(value = "missionLists", key = "'all'")
     })
     public MissionSaveResponseDto save(MissionSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws Exception {
 
@@ -77,12 +77,12 @@ public class MissionController {
     @Caching(evict = {
             // 유저 정보
             @CacheEvict(value = "users", key = "#userPrincipal.id"),
-            // Home 미션 List
-            @CacheEvict(value = "missionLists", key = "'home'"),
-            // All 미션 List
-            @CacheEvict(value = "missionLists", key = "'all'"),
             // Hot 미션 List
             @CacheEvict(value = "missionLists", key = "'hot'"),
+            // New 미션 List
+            @CacheEvict(value = "missionLists", key = "'new'"),
+            // All 미션 List
+            @CacheEvict(value = "missionLists", key = "'all'"),
             // 미션 정보 (detail)
             @CacheEvict(value = "missions", key = "#id")
     })
@@ -93,17 +93,29 @@ public class MissionController {
         return MissionDeleteResponseDto.builder().id(id).build();
     }
 
+    /**
+     * [ 2020-03-12 : 이민호 ]
+     * 설명 : Hot 미션 목록을 가져온다.
+     * */
+    // Hot
+    @GetMapping("/api/mission/hot")
+    @Cacheable(value = "missionLists", key = "'hot'")
+    public List<MissionHotListResponseDto> findHotList(){
+
+        return  missionService.findHotList();
+    }
+
 
     /**
      * [ 2020-03-12 : 이민호 ]
-     * 설명 : Home 미션 목록을 가져온다.
+     * 설명 : 신규 미션 목록을 가져온다.
      * */
     // 홈
-    @GetMapping("/api/mission/home")
-    @Cacheable(value = "missionLists", key = "'home'")
-    public List<MissionHomeListResponseDto> findHomeListByCreatedDate(){
+    @GetMapping("/api/mission/new")
+    @Cacheable(value = "missionLists", key = "'new'")
+    public List<MissionNewListResponseDto> findNewList(){
 
-        return  missionService.findHomeListByCreatedDate();
+        return  missionService.findNewList();
     }
 
 
@@ -114,22 +126,12 @@ public class MissionController {
     // 전체
     @GetMapping("/api/mission/all")
     @Cacheable(value = "missionLists", key = "'all'")
-    public List<MissionAllListResponseDto> findAllListByCreatedDate(){
+    public List<MissionAllListResponseDto> findAllList(){
 
-        return  missionService.findAllListByCreatedDate();
+        return  missionService.findAllList();
     }
 
 
-    /**
-     * [ 2020-03-12 : 이민호 ]
-     * 설명 : Hot 미션 목록을 가져온다.
-     * */
-    // Hot
-    @GetMapping("/api/mission/hot")
-    @Cacheable(value = "missionLists", key = "'hot'")
-    public List<MissionHotListResponseDto> findHotListByCreatedDate(){
 
-        return  missionService.findHotListByCreatedDate();
-    }
 
 }
