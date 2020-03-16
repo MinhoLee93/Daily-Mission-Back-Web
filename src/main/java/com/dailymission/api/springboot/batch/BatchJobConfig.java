@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class BatchJobConfig {
 
     /**
-     * Web hook Test 2
+     * Web hook Test 3
      * */
     public final String JOB_NAME = "banJob";
 
