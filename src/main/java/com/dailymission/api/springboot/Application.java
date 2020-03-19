@@ -1,7 +1,6 @@
 package com.dailymission.api.springboot;
 
 import com.dailymission.api.springboot.config.AppProperties;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 * */
 @SpringBootApplication
 @EnableConfigurationProperties(AppProperties.class)
-@EnableBatchProcessing // 배치기능 활성화
 @EnableCaching // 캐시 활성화
 @EnableScheduling // 스케줄 활성화
 public class Application {

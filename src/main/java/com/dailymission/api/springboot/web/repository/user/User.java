@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.dailymission.api.springboot.web.repository.user.UserValidator.*;
+
 
 /*
 * Let’s now create the Entity classes of our application.
@@ -88,7 +90,38 @@ public class User extends BaseTimeEntity implements Serializable {
         this.providerId = providerId;
     }
 
-    // 이미지 업데이트
+    public boolean isValidUpdateName(String name){
+
+        // null name
+        if(name==null){
+            return false;
+        }
+
+        // check same name
+        if(this.name.equals(name)){
+            return false;
+        }
+
+        // USER_NAME_MIN_LENGTH = 1
+        if(name.length() < USER_NAME_MIN_LENGTH){
+            throw new IllegalArgumentException("유저 이름의 최소 길이는 " + USER_NAME_MIN_LENGTH + "입니다.");
+        }
+
+        // USER_NAME_MAX_LENGTH = 20
+        if(name.length() > USER_NAME_MAX_LENGTH){
+            throw new IllegalArgumentException("유저 이름의 최대 길이는 " + USER_NAME_MAX_LENGTH + "입니다.");
+        }
+
+        return true;
+    }
+
+    // 이름 업데이트
+    public void updateName(String name){
+        this.name = name;
+    }
+
+
+   // 이미지 업데이트
     public void updateImage(String imageUrl){
         // 이미지
         this.imageUrl = imageUrl;

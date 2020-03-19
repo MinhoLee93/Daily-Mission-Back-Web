@@ -7,7 +7,6 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
-import com.dailymission.api.springboot.web.repository.participant.ParticipantValidator;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,8 +33,15 @@ public class ParticipantService {
     @Transactional
     public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
 
-        // check data validation
-        ParticipantValidator.builder().build().checkValidation(requestDto);
+        // check mission id
+        if(requestDto.getMission().getId()==null){
+            throw new IllegalArgumentException("참여할 미션의 아이디가 입력되지 않았습니다.");
+        }
+
+        // check credential
+        if(requestDto.getCredential()==null){
+            throw new IllegalArgumentException("미션에 참여하기위한 비밀번호가 입력되지 않았습니다.");
+        }
 
         // user
         User user = userRepository.findById(userPrincipal.getId())
@@ -45,7 +50,6 @@ public class ParticipantService {
         // mission
         Mission mission = missionRepository.findById(requestDto.getMission().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mission", "id", requestDto.getMission().getId()));
-
 
 
         /**
@@ -63,25 +67,28 @@ public class ParticipantService {
             }
         }
 
-        // 종료 및 삭제여부 확인
-        if(!mission.checkStatus()){
-            throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
+        /**
+         * [ 2020-03-11 : 이민호 ]
+         * 설명 : 참여 가능한 미션인지 확인한다.
+         *        1. 종료되지 않은 미션
+         *        2. 삭제되지 않은 미션
+         *        3. 시작하지 않은 미션
+         * */
+        if(!mission.isPossibleToParticipate()){
+            throw new IllegalArgumentException("참여 가능한 미션이 아닙니다.");
         }
 
-        // 참여가능 날짜 확인 (시작 날짜가 지났으면 참여 불가능)
-        if(!mission.checkStartDate(LocalDate.now())){
-            throw new IllegalArgumentException("미션 참여 가능기간이 아닙니다.");
-        }
 
         // 비밀번호 확인
-        if(!mission.checkCredential(requestDto.getCredential(), passwordEncoder)){
+        if(!mission.matchCredential(requestDto.getCredential(), passwordEncoder)){
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
         }
 
         // participant entity
         Participant participant =  requestDto.toEntity(user);
 
-        // save entity
+
+        // save participant
         return participantRepository.save(participant).getId();
     }
 

@@ -66,7 +66,7 @@ public class PostService {
         }
 
         // 미션 종료 및 삭제여부 확인
-        if(!mission.checkStatus()){
+        if(mission.isEnded() || mission.isDeleted()){
             throw new IllegalArgumentException("참여가능한 미션이 아닙니다.");
         }
 

@@ -58,7 +58,9 @@ dependencies {
 
     // oauth
     compile 'org.springframework.boot:spring-boot-starter-security'
+    testCompile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    testCompile 'org.springframework.boot:spring-boot-starter-oauth2-client'
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     // session db
     // compile 'org.springframework.session:spring-session-jdbc'
@@ -89,10 +91,6 @@ dependencies {
 
     // AWS
     compile 'org.springframework.cloud:spring-cloud-starter-aws'
-
-    // batch
-    compile 'org.springframework.boot:spring-boot-starter-batch'
-    testCompile 'org.springframework.batch:spring-batch-test'
 
     // rabbitmq
     compile 'org.springframework.boot:spring-boot-starter-amqp'

@@ -142,11 +142,11 @@ public class Mission extends BaseTimeEntity implements Serializable {
      * 설명 : 비밀번호 확인시에는 password encoder 를 사용해 decode 한다.
      * */
     // 비밀번호 확인
-    public boolean checkCredential(String credential, PasswordEncoder passwordEncoder){
+    public boolean matchCredential(String credential, PasswordEncoder passwordEncoder){
 
         /**
-         * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         * 오픈전에 반드시 password encoder 로 변경한다.
+         * [ 2020-03-18 : 이민호 ]
+         * 설명 : password encoder 를 사용해 decode 한다.
          * */
         if(passwordEncoder.matches(credential, this.credential)){
             return true;
@@ -155,26 +155,31 @@ public class Mission extends BaseTimeEntity implements Serializable {
         }
     }
 
-    // 종료 및 삭제여부 확인 (Participant)
-    public boolean checkStatus(){
-        if(this.ended || this.deleted){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
     /**
      * [ 2020-03-11 : 이민호 ]
-     * 설명 : 미션 시작날짜 이후에는 참여할 수 없다.
+     * 설명 : 참여 가능한 미션인지 확인한다.
+     *        1. 종료되지 않은 미션
+     *        2. 삭제되지 않은 미션
+     *        3. 시작하지 않은 미션
      * */
-    // 시작날짜 확인 (Participant Create)
-    public boolean checkStartDate(LocalDate date){
-        if(date.isAfter(this.startDate)){
+    public boolean isPossibleToParticipate(){
+
+        // check is ended
+        if(this.ended){
             return false;
-        }else{
-            return true;
         }
+
+        // check is deleted
+        if(this.deleted){
+            return false;
+        }
+
+        // check is started
+        if(LocalDate.now().isAfter(this.startDate)){
+            return false;
+        }
+
+        return true;
     }
 
 

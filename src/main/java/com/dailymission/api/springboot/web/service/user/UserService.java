@@ -10,7 +10,6 @@ import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
-import com.dailymission.api.springboot.web.repository.user.UserValidator;
 import com.dailymission.api.springboot.web.service.image.ImageService;
 import com.dailymission.api.springboot.web.service.post.PostService;
 import com.dailymission.api.springboot.web.service.rabbitmq.MessageProducer;
@@ -108,12 +107,19 @@ public class UserService {
     @Transactional
     public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
 
-        // check data validation
-        UserValidator.builder().build().checkValidation(requestDto);
+        // check use id
+        if(requestDto.getId()==null){
+            throw new IllegalArgumentException("변경할 유저의 아이디가 입력되지 않았습니다.");
+        }
 
         // check current user
         if(requestDto.getId()!=userPrincipal.getId()){
             throw new IllegalAccessError("본인의 유저 정보만 변경할 수 있습니다.");
+        }
+
+        // check request data is exist
+        if(requestDto.getFile()==null && requestDto.getUserName()==null){
+            throw new IllegalArgumentException("변경할 정보가 존재하지 않습니다.");
         }
 
         /**
@@ -128,8 +134,8 @@ public class UserService {
 
 
         // change user name
-        if(requestDto.getUserName()!=null){
-            user.setName(requestDto.getUserName());
+        if(user.isValidUpdateName(requestDto.getUserName())){
+            user.updateName(requestDto.getUserName());
         }
 
         /**
@@ -159,6 +165,6 @@ public class UserService {
         userRepository.save(user);
 
         // return user id
-        return  1L;
+        return  user.getId();
     }
 }

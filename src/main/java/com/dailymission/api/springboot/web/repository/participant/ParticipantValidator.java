@@ -19,15 +19,7 @@ public class ParticipantValidator {
 
     public boolean checkValidation(ParticipantSaveRequestDto requestDto) {
 
-        // check mission id
-        if(requestDto.getMission().getId()==null){
-            throw new IllegalArgumentException("참여할 미션의 아이디가 입력되지 않았습니다.");
-        }
 
-        // check credential
-        if(requestDto.getCredential()==null){
-            throw new IllegalArgumentException("미션에 참여하기위한 비밀번호가 입력되지 않았습니다.");
-        }
 
         return true;
     }

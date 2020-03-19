@@ -5,8 +5,10 @@ import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,10 +16,18 @@ import java.util.List;
 import static com.dailymission.api.springboot.web.repository.post.QPost.post;
 
 
-@RequiredArgsConstructor
-public class PostRepositoryCustomImpl implements PostRepositoryCustom {
+//@RequiredArgsConstructor
+public class PostRepositoryCustomImpl  extends QuerydslRepositorySupport implements PostRepositoryCustom {
 
-    private final JPAQueryFactory queryFactory;
+    @Autowired
+    EntityManager em;
+
+    private JPAQueryFactory queryFactory;
+
+    public PostRepositoryCustomImpl(){
+        super(Post.class);
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
     /**
      * [ 2020-03-13 : 이민호 ]
