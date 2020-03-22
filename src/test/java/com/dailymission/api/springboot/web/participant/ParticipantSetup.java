@@ -16,7 +16,7 @@ public class ParticipantSetup {
         this.user = user;
     }
 
-    public Participant build(){
+    public Participant get(){
         return buildParticipant();
     }
 

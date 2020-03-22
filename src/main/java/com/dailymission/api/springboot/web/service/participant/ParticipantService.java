@@ -27,7 +27,7 @@ public class ParticipantService {
     // password encoder
     private final PasswordEncoder passwordEncoder;
 
-    /**7
+    /**
      * [ 2020-03-11 : 이민호 ]
      * 설명 : 미션에 참여한다.
      * */
@@ -35,8 +35,8 @@ public class ParticipantService {
     public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
 
         // check mission id
-        if(requestDto.getMission().getId()==null){
-            throw new IllegalArgumentException("참여할 미션의 아이디가 입력되지 않았습니다.");
+        if(requestDto.getMission()==null){
+            throw new IllegalArgumentException("참여할 미션을 선택하지 않았습니다.");
         }
 
         // check credential

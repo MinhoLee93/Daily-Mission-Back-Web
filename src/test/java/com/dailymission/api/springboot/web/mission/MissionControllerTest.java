@@ -281,25 +281,25 @@ public class MissionControllerTest {
         // then
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("[-1]id").value(mission.getId()));
-//                .andExpect(jsonPath("[0]week.sun").value(week.isSun()))
-//                .andExpect(jsonPath("[0]week.mon").value(week.isMon()))
-//                .andExpect(jsonPath("[0]week.tue").value(week.isTue()))
-//                .andExpect(jsonPath("[0]week.wed").value(week.isWed()))
-//                .andExpect(jsonPath("[0]week.thu").value(week.isThu()))
-//                .andExpect(jsonPath("[0]week.fri").value(week.isFri()))
-//                .andExpect(jsonPath("[0]week.sat").value(week.isSat()))
-//                .andExpect(jsonPath("[0]userName").value(user.getName()))
-//                .andExpect(jsonPath("[0]title").value(mission.getTitle()))
-//                .andExpect(jsonPath("[0]content").value(mission.getContent()))
-//                .andExpect(jsonPath("[0]thumbnailUrlAll").value(mission.getThumbnailUrlAll()))
-//                .andExpect(jsonPath("[0]userName").value(user.getName()))
-//                .andExpect(jsonPath("[0]userThumbnailUrl").value(user.getThumbnailUrl()))
-//                // REST API 를 사용해 USER 를 저장하면, 생성자는 바로 참여하지만, DB로 바로 Insert 하면 참여자는 0명이다.
-//                .andExpect(jsonPath("[0]userCount").value(0))
-//                .andExpect(jsonPath("[0]startDate").value(mission.getStartDate().toString()))
-//                .andExpect(jsonPath("[0]endDate").value(mission.getEndDate().toString()))
-//                .andExpect(jsonPath("[0]ended").value(mission.isEnded()));
+                .andExpect(jsonPath("[-1]id").value(mission.getId()))
+                .andExpect(jsonPath("[-1]week.sun").value(week.isSun()))
+                .andExpect(jsonPath("[-1]week.mon").value(week.isMon()))
+                .andExpect(jsonPath("[-1]week.tue").value(week.isTue()))
+                .andExpect(jsonPath("[-1]week.wed").value(week.isWed()))
+                .andExpect(jsonPath("[-1]week.thu").value(week.isThu()))
+                .andExpect(jsonPath("[-1]week.fri").value(week.isFri()))
+                .andExpect(jsonPath("[-1]week.sat").value(week.isSat()))
+                .andExpect(jsonPath("[-1]userName").value(user.getName()))
+                .andExpect(jsonPath("[-1]title").value(mission.getTitle()))
+                .andExpect(jsonPath("[-1]content").value(mission.getContent()))
+                .andExpect(jsonPath("[-1]thumbnailUrlHot").value(mission.getThumbnailUrlHot()))
+                .andExpect(jsonPath("[-1]userName").value(user.getName()))
+                .andExpect(jsonPath("[-1]userThumbnailUrl").value(user.getThumbnailUrl()))
+                // REST API 를 사용해 USER 를 저장하면, 생성자는 바로 참여하지만, DB로 바로 Insert 하면 참여자는 0명이다.
+                .andExpect(jsonPath("[-1]userCount").value(0))
+                .andExpect(jsonPath("[-1]startDate").value(mission.getStartDate().toString()))
+                .andExpect(jsonPath("[-1]endDate").value(mission.getEndDate().toString()))
+                .andExpect(jsonPath("[-1]ended").value(mission.isEnded()));
     }
 
     /**

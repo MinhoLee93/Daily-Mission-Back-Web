@@ -1,20 +1,18 @@
 package com.dailymission.api.springboot.web.repository.participant;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 
-import javax.persistence.EntityManager;
+@RequiredArgsConstructor
+public class ParticipantRepositoryCustomImpl implements ParticipantRepositoryCustom {
 
-public class ParticipantRepositoryCustomImpl extends QuerydslRepositorySupport implements ParticipantRepositoryCustom {
-
-    @Autowired
-    EntityManager em;
+//    @Autowired
+//    EntityManager em;
 
     private JPAQueryFactory queryFactory;
 
-    public ParticipantRepositoryCustomImpl(){
-        super(Participant.class);
-        this.queryFactory = new JPAQueryFactory(em);
-    }
+//    public ParticipantRepositoryCustomImpl(){
+//        super(Participant.class);
+//        this.queryFactory = new JPAQueryFactory(em);
+//    }
 }

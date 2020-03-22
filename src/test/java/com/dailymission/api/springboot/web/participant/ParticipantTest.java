@@ -1,6 +1,10 @@
 package com.dailymission.api.springboot.web.participant;
 
+import com.dailymission.api.springboot.web.mission.MissionSetup;
+import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
+import com.dailymission.api.springboot.web.repository.user.User;
+import com.dailymission.api.springboot.web.user.UserSetup;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,13 +19,27 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  * */
 public class ParticipantTest {
 
+    private Mission mission;
+    private User user;
     private Participant participant;
 
     @Before
     public void setup(){
         // user
-        ParticipantSetup participantSetup = ParticipantSetup.builder().mission(null).user(null).build();
-        participant = participantSetup.build();
+        user = UserSetup.builder().build().get();
+
+        // mission
+        mission = MissionSetup.builder()
+                                .user(user)
+                                .build()
+                                .get();
+
+        // participant
+        participant = ParticipantSetup.builder()
+                                        .mission(mission)
+                                        .user(user)
+                                        .build()
+                                        .get();
     }
 
     /**

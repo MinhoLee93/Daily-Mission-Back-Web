@@ -1,11 +1,6 @@
 package com.dailymission.api.springboot.web.participant;
 
-import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
-import com.dailymission.api.springboot.web.repository.user.AuthProvider;
-import com.dailymission.api.springboot.web.repository.user.User;
-import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,23 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ParticipantRepositoryTest {
-
-    @Autowired
-    private ParticipantRepository participantRepository;
-
-    // user
-    private User user;
-    private final String USER_NAME = "USER_NAME";
-    private final String EMAIL = "EMAIL@gmail.com";
-    private final String IMAGE_URL = "IMAGE_URL.jpg";
-    private final AuthProvider PROVIDER = AuthProvider.google;
-    private final String PROVIDER_ID = "PROVIDER_ID";
-
-    // mission
-
-
-    @Before
-    public void setup(){
-
-    }
+    /**
+     * [ 2020-03-22 : 이민호 ]
+     * 현재까지 custom query 가 존재하지 않으므로 패스한다.
+     * */
 }

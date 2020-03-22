@@ -4,7 +4,6 @@ import com.dailymission.api.springboot.web.repository.mission.rule.MissionRule;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import com.google.gson.Gson;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -84,28 +83,28 @@ public class MissionRuleTest {
     }
 
     // String -> Boolean으로 변경되면서 더이상 테스트할 필요가 없어졌다.
-    @Test(expected = IllegalArgumentException.class)
-    @Ignore
-    public void save할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
-        // given
-        givenWeek.update(true, true, true, true, true, true, true);
-
-        // when
-        MissionRule missionRule = new MissionRule(givenWeek);
-    }
+//    @Test(expected = IllegalArgumentException.class)
+//    @Ignore
+//    public void save할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
+//        // given
+//        givenWeek.update(true, true, true, true, true, true, true);
+//
+//        // when
+//        MissionRule missionRule = new MissionRule(givenWeek);
+//    }
 
     // String -> Boolean으로 변경되면서 더이상 테스트할 필요가 없어졌다.
-    @Test(expected = IllegalArgumentException.class)
-    @Ignore
-    public void update할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
-        // given
-        MissionRule missionRule = new MissionRule(givenWeek);
-
-        // when
-        givenWeek.update(true, true, true, true, true, true, true);
-        missionRule.update(givenWeek);
-
-    }
+//    @Test(expected = IllegalArgumentException.class)
+//    @Ignore
+//    public void update할때_Week_내부값에_Y_N_이외의_값이_들어왔을때_llegalArgumentException_에러를_반환하는지(){
+//        // given
+//        MissionRule missionRule = new MissionRule(givenWeek);
+//
+//        // when
+//        givenWeek.update(true, true, true, true, true, true, true);
+//        missionRule.update(givenWeek);
+//
+//    }
 
 
 }

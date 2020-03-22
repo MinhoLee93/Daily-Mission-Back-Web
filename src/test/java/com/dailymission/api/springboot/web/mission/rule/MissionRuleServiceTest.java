@@ -19,6 +19,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
+/**
+ * [ 2020-03-18 : 이민호 ]
+ * - 테스트 진행시 중요 관점이 아닌 것들은 Mocking 처리해서 외부 의존성들을 줄일 수 있습니다.
+ * - 예를 들어 주문 할인 로직이 제대로 동작하는지에 대한 테스트만 진행하지 이게 실제로 데이터베이스에 insert 되는지는 해당 테스트의 관심사가 아닙니다.
+ * - 주로 Service 영역을 테스트 합니다.
+ * */
 @RunWith(MockitoJUnitRunner.class)
 public class MissionRuleServiceTest {
 
