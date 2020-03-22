@@ -160,6 +160,163 @@ public class MissionControllerTest {
 
     /**
      * [ 2020-03-22 : 이민호 ]
+     * 설명 : 신규 미션 목록을 가져온다.
+     *     [
+     *     {"id":60,
+     *      "title":"주말마다 영화보기",
+     *      "content":"영화 같이 보실분?",
+     *      "week":{"sun":true,"mon":false,"tue":false,"wed":false,"thu":false,"fri":true,"sat":true},
+     *      "thumbnailUrlNew":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/%EC%A3%BC%EB%A7%90%EB%A7%88%EB%8B%A4%20%EC%98%81%ED%99%94%EB%B3%B4%EA%B8%B0/202003201637_unnamed_300_350.png",
+     *      "userName":"수박",
+     *      "userThumbnailUrl":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/google/2/202003161641_56552157-%EC%88%98%EB%B0%95-%EC%A1%B0%EA%B0%81%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98-_40_40.jpg",
+     *      "userCount":0,
+     *      "startDate":"2020-03-20",
+     *      "endDate":"2020-03-31",
+     *      "ended":true
+     *     },
+     *     ..]
+     * */
+    @Test
+    public void get_mission_new_list_success() throws Exception {
+
+        // when
+        final ResultActions resultActions = getRequest("/api/mission/new");
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("[0]id").value(mission.getId()))
+                .andExpect(jsonPath("[0]week.sun").value(week.isSun()))
+                .andExpect(jsonPath("[0]week.mon").value(week.isMon()))
+                .andExpect(jsonPath("[0]week.tue").value(week.isTue()))
+                .andExpect(jsonPath("[0]week.wed").value(week.isWed()))
+                .andExpect(jsonPath("[0]week.thu").value(week.isThu()))
+                .andExpect(jsonPath("[0]week.fri").value(week.isFri()))
+                .andExpect(jsonPath("[0]week.sat").value(week.isSat()))
+                .andExpect(jsonPath("[0]userName").value(user.getName()))
+                .andExpect(jsonPath("[0]title").value(mission.getTitle()))
+                .andExpect(jsonPath("[0]content").value(mission.getContent()))
+                .andExpect(jsonPath("[0]thumbnailUrlNew").value(mission.getThumbnailUrlNew()))
+                .andExpect(jsonPath("[0]userName").value(user.getName()))
+                .andExpect(jsonPath("[0]userThumbnailUrl").value(user.getThumbnailUrl()))
+                // REST API 를 사용해 USER 를 저장하면, 생성자는 바로 참여하지만, DB로 바로 Insert 하면 참여자는 0명이다.
+                .andExpect(jsonPath("[0]userCount").value(0))
+                .andExpect(jsonPath("[0]startDate").value(mission.getStartDate().toString()))
+                .andExpect(jsonPath("[0]endDate").value(mission.getEndDate().toString()))
+                .andExpect(jsonPath("[0]ended").value(mission.isEnded()));
+    }
+
+    /**
+     * [ 2020-03-22 : 이민호 ]
+     * 설명 : 전체 미션 목록을 가져온다.
+     *     [
+     *     {"id":60,
+     *      "title":"주말마다 영화보기",
+     *      "content":"영화 같이 보실분?",
+     *      "week":{"sun":true,"mon":false,"tue":false,"wed":false,"thu":false,"fri":true,"sat":true},
+     *      "thumbnailUrlAll":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/%EC%A3%BC%EB%A7%90%EB%A7%88%EB%8B%A4%20%EC%98%81%ED%99%94%EB%B3%B4%EA%B8%B0/202003201637_unnamed_300_350.png",
+     *      "userName":"수박",
+     *      "userThumbnailUrl":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/google/2/202003161641_56552157-%EC%88%98%EB%B0%95-%EC%A1%B0%EA%B0%81%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98-_40_40.jpg",
+     *      "userCount":0,
+     *      "startDate":"2020-03-20",
+     *      "endDate":"2020-03-31",
+     *      "ended":true
+     *     },
+     *     ..]
+     * */
+    @Test
+    public void get_mission_all_list_success() throws Exception {
+
+        // when
+        final ResultActions resultActions = getRequest("/api/mission/all");
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("[0]id").value(mission.getId()))
+                .andExpect(jsonPath("[0]week.sun").value(week.isSun()))
+                .andExpect(jsonPath("[0]week.mon").value(week.isMon()))
+                .andExpect(jsonPath("[0]week.tue").value(week.isTue()))
+                .andExpect(jsonPath("[0]week.wed").value(week.isWed()))
+                .andExpect(jsonPath("[0]week.thu").value(week.isThu()))
+                .andExpect(jsonPath("[0]week.fri").value(week.isFri()))
+                .andExpect(jsonPath("[0]week.sat").value(week.isSat()))
+                .andExpect(jsonPath("[0]userName").value(user.getName()))
+                .andExpect(jsonPath("[0]title").value(mission.getTitle()))
+                .andExpect(jsonPath("[0]content").value(mission.getContent()))
+                .andExpect(jsonPath("[0]thumbnailUrlAll").value(mission.getThumbnailUrlAll()))
+                .andExpect(jsonPath("[0]userName").value(user.getName()))
+                .andExpect(jsonPath("[0]userThumbnailUrl").value(user.getThumbnailUrl()))
+                // REST API 를 사용해 USER 를 저장하면, 생성자는 바로 참여하지만, DB로 바로 Insert 하면 참여자는 0명이다.
+                .andExpect(jsonPath("[0]userCount").value(0))
+                .andExpect(jsonPath("[0]startDate").value(mission.getStartDate().toString()))
+                .andExpect(jsonPath("[0]endDate").value(mission.getEndDate().toString()))
+                .andExpect(jsonPath("[0]ended").value(mission.isEnded()));
+    }
+
+    /**
+     * [ 2020-03-22 : 이민호 ]
+     * 설명 : HOT 미션 목록을 가져온다.
+     *     [
+     *     {"id":60,
+     *      "title":"주말마다 영화보기",
+     *      "content":"영화 같이 보실분?",
+     *      "week":{"sun":true,"mon":false,"tue":false,"wed":false,"thu":false,"fri":true,"sat":true},
+     *      "thumbnailUrlHot":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/%EC%A3%BC%EB%A7%90%EB%A7%88%EB%8B%A4%20%EC%98%81%ED%99%94%EB%B3%B4%EA%B8%B0/202003201637_unnamed_300_350.png",
+     *      "userName":"수박",
+     *      "userThumbnailUrl":"https://image.daily-mission.com.s3.ap-northeast-2.amazonaws.com/google/2/202003161641_56552157-%EC%88%98%EB%B0%95-%EC%A1%B0%EA%B0%81%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98-_40_40.jpg",
+     *      "userCount":0,
+     *      "startDate":"2020-03-20",
+     *      "endDate":"2020-03-31",
+     *      "ended":true
+     *     },
+     *     ..]
+     * */
+    @Test
+    public void get_mission_hot_list_success() throws Exception {
+
+        // when
+        final ResultActions resultActions = getRequest("/api/mission/hot");
+
+        // then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("[-1]id").value(mission.getId()));
+//                .andExpect(jsonPath("[0]week.sun").value(week.isSun()))
+//                .andExpect(jsonPath("[0]week.mon").value(week.isMon()))
+//                .andExpect(jsonPath("[0]week.tue").value(week.isTue()))
+//                .andExpect(jsonPath("[0]week.wed").value(week.isWed()))
+//                .andExpect(jsonPath("[0]week.thu").value(week.isThu()))
+//                .andExpect(jsonPath("[0]week.fri").value(week.isFri()))
+//                .andExpect(jsonPath("[0]week.sat").value(week.isSat()))
+//                .andExpect(jsonPath("[0]userName").value(user.getName()))
+//                .andExpect(jsonPath("[0]title").value(mission.getTitle()))
+//                .andExpect(jsonPath("[0]content").value(mission.getContent()))
+//                .andExpect(jsonPath("[0]thumbnailUrlAll").value(mission.getThumbnailUrlAll()))
+//                .andExpect(jsonPath("[0]userName").value(user.getName()))
+//                .andExpect(jsonPath("[0]userThumbnailUrl").value(user.getThumbnailUrl()))
+//                // REST API 를 사용해 USER 를 저장하면, 생성자는 바로 참여하지만, DB로 바로 Insert 하면 참여자는 0명이다.
+//                .andExpect(jsonPath("[0]userCount").value(0))
+//                .andExpect(jsonPath("[0]startDate").value(mission.getStartDate().toString()))
+//                .andExpect(jsonPath("[0]endDate").value(mission.getEndDate().toString()))
+//                .andExpect(jsonPath("[0]ended").value(mission.isEnded()));
+    }
+
+    /**
+     * [ 2020-03-22 : 이민호 ]
+     * 설명 : getRequest 를 수행한다.
+     *       api 에 호출할 GET Rest API 를 입력한다. ex) api = "/api/mission/51"
+     * */
+    private ResultActions getRequest(String api) throws Exception {
+        return  mvc.perform(
+                get(api)
+                )
+                .andDo(print());
+    }
+
+
+    /**
+     * [ 2020-03-22 : 이민호 ]
      * 설명 : getRequest 를 수행한다.
      *       UserDetails 를 with(user(***)) 에 넘겨, Authenticated User 를 사용한다.
      *       api 에 호출할 GET Rest API 를 입력한다. ex) api = "/api/mission/51"

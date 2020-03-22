@@ -1,25 +1,23 @@
 package com.dailymission.api.springboot.web.repository.mission;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import lombok.RequiredArgsConstructor;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.dailymission.api.springboot.web.repository.mission.QMission.mission;
 
-//@RequiredArgsConstructor
-public class MissionRepositoryCustomImpl extends QuerydslRepositorySupport implements MissionRepositoryCustom {
+@RequiredArgsConstructor
+public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
 
     /**
      * [ 2020-03-13 : 이민호 ]
      * 설명 : QueryDSL 테스트에서 DI 에러 발생시
      *       주석을 풀고 사용한다.
      * */
-    @Autowired
-    private EntityManager em;
+//    @Autowired
+//    private EntityManager em;
 
     private final JPAQueryFactory queryFactory;
 
@@ -28,10 +26,10 @@ public class MissionRepositoryCustomImpl extends QuerydslRepositorySupport imple
      * 설명 : QueryDSL 테스트에서 DI 에러 발생시
      *       주석을 풀고 사용한다.
      * */
-    public MissionRepositoryCustomImpl(){
-        super(Mission.class);
-        this.queryFactory = new JPAQueryFactory(em);
-    }
+//    public MissionRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory){
+//        super(Mission.class);
+//        this.queryFactory = jpaQueryFactory;
+//    }
 
     /**
      * [ 2020-03-16 : 이민호 ]
