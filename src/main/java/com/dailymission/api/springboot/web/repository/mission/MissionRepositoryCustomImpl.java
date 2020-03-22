@@ -79,7 +79,7 @@ public class MissionRepositoryCustomImpl extends QuerydslRepositorySupport imple
      *        정렬 : 최신 생성 순서
      * */
     @Override
-    public List<Mission> findAllByCreatedDate() {
+    public List<Mission> findAlByCreatedDate() {
 
        return  queryFactory
                 .select(mission)

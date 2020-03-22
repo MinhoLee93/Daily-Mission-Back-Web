@@ -52,4 +52,22 @@ public class MissionRule extends BaseTimeEntity implements Serializable {
     public void delete(){
         this.deleted = true;
     }
+
+
+    // check valid week
+    public boolean isValidWeek(){
+
+        // true if all week == false
+        if(!(this.week.isSun()
+                || this.week.isMon()
+                || this.week.isTue()
+                || this.week.isWed()
+                || this.week.isThu()
+                || this.week.isFri()
+                || this.week.isSat())){
+            throw new IllegalArgumentException("최소 하루의 제출요일을 선택해야 합니다.");
+        }
+
+        return true;
+    }
 }

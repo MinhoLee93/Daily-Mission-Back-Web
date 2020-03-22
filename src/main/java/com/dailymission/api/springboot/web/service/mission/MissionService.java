@@ -6,7 +6,6 @@ import com.dailymission.api.springboot.web.dto.mission.*;
 import com.dailymission.api.springboot.web.dto.rabbitmq.MessageDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
-import com.dailymission.api.springboot.web.repository.mission.MissionValidator;
 import com.dailymission.api.springboot.web.repository.participant.Participant;
 import com.dailymission.api.springboot.web.repository.participant.ParticipantRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,15 +26,12 @@ import java.util.stream.Collectors;
 public class MissionService {
     // service
     private final ImageService imageService;
-
     // repository
     private final MissionRepository missionRepository;
     private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
-
     // message producer
     private final MessageProducer messageProducer;
-
     // password encoder
     private final PasswordEncoder passwordEncoder;
 
@@ -45,16 +42,22 @@ public class MissionService {
     @Transactional
     public String save(MissionSaveRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
 
-        // check data validation
-        MissionValidator.builder().build().checkValidation(requestDto);
+        // file
+        if(requestDto.getFile()==null){
+            throw new IllegalArgumentException("미션 생성시 사진은 필수 입니다.");
+        }
 
         // user entity
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-
         // mission entity
         Mission mission = requestDto.toEntity(user);
+
+
+        if(!mission.isValidMission(LocalDate.now())){
+            throw new IllegalArgumentException("MISSION 데이터를 확인해 주세요");
+        }
 
         // set credential
         String credential = mission.setCredential(passwordEncoder);
@@ -114,11 +117,9 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionHotListResponseDto> findHotList(){
-
         return missionRepository.findAllByParticipantSize().stream()
                 .map(MissionHotListResponseDto::new)
                 .collect(Collectors.toList());
-
     }
 
 
@@ -140,7 +141,7 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionAllListResponseDto> findAllList(){
-        return missionRepository.findAllByCreatedDate().stream()
+        return missionRepository.findAlByCreatedDate().stream()
                 .map(MissionAllListResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -191,8 +192,6 @@ public class MissionService {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
 
-
-
         /**
          * [ 2020-03-12 : 이민호 ]
          * 설명 : Optional 은 Null 일 수도 있는 경우에 사용해야한다.
@@ -207,18 +206,19 @@ public class MissionService {
 
 
         // check is deletable
-        mission.isDeletable(user);
+        if(mission.isDeletable(user)){
 
-
-        // delete mission
-        mission.delete(user);
+            // delete mission
+            mission.delete();
+        }
     }
 
 
     /**
      * [ 2020-03-12 : 이민호 ]
-     * 설명 : 미션을 종료한다.
-     *        미션 종료날짜가 지난 미션을 종료시킨다.
+     * 설명 : 매일 새벽 3시에 미션 종료 batch 가 수행된다.
+     *        endDate 가 지난 미션을 종료한다.
+     *        모두 강퇴되서 참여자가 0명인 미션을 종료한다.
      * */
     @Transactional
     public void end(Long id){
@@ -229,10 +229,9 @@ public class MissionService {
 
 
         // check is end able
-        mission.isEndable();
-
-
-        // mission end
-        mission.end();
+        if(mission.isEndable(LocalDate.now())){
+            // mission end
+            mission.end();
+        }
     }
 }

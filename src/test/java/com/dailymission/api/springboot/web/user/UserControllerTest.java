@@ -1,6 +1,7 @@
 package com.dailymission.api.springboot.web.user;
 
 import com.dailymission.api.springboot.security.UserPrincipal;
+import com.dailymission.api.springboot.web.common.MultipartFileSetup;
 import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,12 +55,10 @@ public class UserControllerTest {
 
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private UserRepository userRepository;
 
     private User user;
-
     private MockMvc mvc;
 
     @Before
@@ -88,7 +87,7 @@ public class UserControllerTest {
      *        }
      * */
     @Test
-    public void user_me_유저_정보_조회_성공() throws Exception {
+    public void user_me_success() throws Exception {
         // given
         final UserPrincipal userPrincipal = UserPrincipal.create(user);
 
@@ -110,7 +109,7 @@ public class UserControllerTest {
      * 설명 : 유저의 이름을 변경한다.
      * */
     @Test
-    public void user_me_update_유저_정보_수정_성공() throws Exception {
+    public void user_me_update_success() throws Exception {
         // given
         final UserPrincipal userPrincipal = UserPrincipal.create(user);
         final String USER_UPDATE_NAME = "USER_UPDATE_NAME";
@@ -150,14 +149,17 @@ public class UserControllerTest {
      * [ 2020-03-19 : 이민호 ]
      * 설명 : postRequest 를 수행한다.
      *       UserDetails 를 with(user(***)) 에 넘겨, Authenticated User 를 사용한다.
-     *       UserUpdateRequestDto 를 objectMapper 를 사용해 JSON 으로 convert 한다.
-     *       content 값이 Controller 의 @RequestBody 에 empty 로 넘어온다면.. 해당 변수에 @RequestBody 를 명시한다.
+     *       MockMultipartFile 을 생성해 multipart 의 file 에 넘긴다.
+     *       multipart/form-data 는 requestBody JSON 이 아닌 param 으로 변수를 받는다.
      * */
     private ResultActions postRequest(UserUpdateRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
+        final MockMultipartFile file = MultipartFileSetup.builder().build().get();
+
         return  mvc.perform(
-                post("/user/me/update")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .content(new ObjectMapper().writeValueAsString(requestDto))
+                multipart("/user/me/update")
+                        .file(file)
+                        .param("id", requestDto.getId().toString())
+                        .param("userName",requestDto.getUserName())
                         .with(user(userPrincipal)))
                 .andDo(print());
     }

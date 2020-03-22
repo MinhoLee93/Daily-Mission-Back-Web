@@ -11,7 +11,7 @@ public class MissionRuleSetup {
 
     }
 
-    public MissionRule build(){
+    public MissionRule get(){
         return buildMissionRule();
     }
 
@@ -25,8 +25,8 @@ public class MissionRuleSetup {
                 .fri(false)
                 .sat(false).build();
 
-        MissionRule missionRule = MissionRule.builder().week(week).build();
-
-        return missionRule;
+        return MissionRule.builder()
+                          .week(week)
+                          .build();
     }
 }

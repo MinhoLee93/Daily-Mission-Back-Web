@@ -42,7 +42,6 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-
     @Mock
     private ImageService imageService;
     @Mock
@@ -55,12 +54,12 @@ public class UserServiceTest {
     // user
     private User user;
 
+    // variable
     private final String USER_NAME = "USER_NAME";
     private final String EMAIL = "EMAIL@gmail.com";
     private final String IMAGE_URL = "IMAGE_URL.jpg";
     private final AuthProvider PROVIDER = AuthProvider.google;
     private final String PROVIDER_ID = "PROVIDER_ID";
-
 
 
     @Before

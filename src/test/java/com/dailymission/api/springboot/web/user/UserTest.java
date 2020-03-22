@@ -23,6 +23,10 @@ public class UserTest {
     private User user;
 
 
+    /**
+     * [ 2020-03-18 : 이민호 ]
+     * 설명 : Test 에 사용할 USER 를 생성한다.
+     * */
     @Before
     public void setup() throws Exception {
         // user

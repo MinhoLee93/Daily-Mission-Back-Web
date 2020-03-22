@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
@@ -20,6 +21,7 @@ public class MissionSaveRequestDto {
     private Week week;
     private String title;
     private String content;
+    @NotNull
     private MultipartFile file;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

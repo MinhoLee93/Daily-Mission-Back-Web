@@ -11,7 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class UserController {
     @PostMapping("/user/me/update")
     @PreAuthorize("hasRole('USER')")
     @CacheEvict(value = "users", key = "#userPrincipal.id")
-    public Long updateUser(@RequestBody UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
+    public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
 
         // update
         userService.updateUser(requestDto, userPrincipal);

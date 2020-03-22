@@ -102,7 +102,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
 
     @Builder
     public Mission(MissionRule missionRule, User user, String title, String content,
-                   String originalFileName, String fileExtension, String imageUrl, LocalDate startDate, LocalDate endDate, PasswordEncoder passwordEncoder){
+                   String originalFileName, String fileExtension, String imageUrl, LocalDate startDate, LocalDate endDate){
         this.missionRule = missionRule;
         this.user = user;
         this.title = title;
@@ -119,6 +119,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.thumbnailUrlHot = imageUrl;
         this.thumbnailUrlDetail = imageUrl;
 
+        // status
         this.ended = false;
         this.deleted = false;
     }
@@ -162,7 +163,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
      *        2. 삭제되지 않은 미션
      *        3. 시작하지 않은 미션
      * */
-    public boolean isPossibleToParticipate(){
+    public boolean isPossibleToParticipate(LocalDate now){
 
         // check is ended
         if(this.ended){
@@ -175,7 +176,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
         }
 
         // check is started
-        if(LocalDate.now().isAfter(this.startDate)){
+        if(now.isAfter(this.startDate)){
             return false;
         }
 
@@ -183,14 +184,14 @@ public class Mission extends BaseTimeEntity implements Serializable {
     }
 
 
-    // 종료날짜 확인 (Mission Create)
-    public boolean checkEndDate(LocalDate date){
-        if(date.isAfter(this.endDate)){
-            return false;
-        }else{
-            return true;
-        }
-    }
+//    // 종료날짜 확인 (Mission Create)
+//    public boolean checkEndDate(LocalDate date){
+//        if(date.isAfter(this.endDate)){
+//            return false;
+//        }else{
+//            return true;
+//        }
+//    }
 
     // 이미지 변경
     public void updateImage(String imageUrl){
@@ -203,11 +204,6 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.thumbnailUrlDetail = imageUrl;
     }
 
-    // 썸네일 업데이트 (Hot)
-    public void updateThumbnailHot(String thumbnailUrlHot){
-        this.thumbnailUrlHot = thumbnailUrlHot;
-    }
-
     // 썸네일 업데이트 (New)
     public void updateThumbnailNew(String thumbnailUrlNew){
         this.thumbnailUrlNew = thumbnailUrlNew;
@@ -218,25 +214,30 @@ public class Mission extends BaseTimeEntity implements Serializable {
         this.thumbnailUrlAll = thumbnailUrlAll;
     }
 
+    // 썸네일 업데이트 (Hot)
+    public void updateThumbnailHot(String thumbnailUrlHot){
+        this.thumbnailUrlHot = thumbnailUrlHot;
+    }
+
     // 썸네일 업데이트 (Detail)
     public void updateThumbnailDetail(String thumbnailUrlDetail){
         this.thumbnailUrlDetail = thumbnailUrlDetail;
     }
 
-    // 업데이트
-    public void update(MissionRule missionRule, String title, String content, LocalDate startDate, LocalDate endDate) {
-        this.missionRule = missionRule;
-        this.title = title;
-        this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+//    // 업데이트
+//    public void update(MissionRule missionRule, String title, String content, LocalDate startDate, LocalDate endDate) {
+//        this.missionRule = missionRule;
+//        this.title = title;
+//        this.content = content;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//    }
 
     /**
      * [ 2020-03-12 : 이민호 ]
      * 설명 : 미션 delete 하면 자동으로 end
      * */
-    public void delete(User user){
+    public void delete(){
 
         this.deleted = true;
         this.ended = true;
@@ -318,23 +319,28 @@ public class Mission extends BaseTimeEntity implements Serializable {
      * [ 2020-03-12 : 이민호 ]
      * 설명 : 매일 새벽 3시에 미션 종료 batch 가 수행된다.
      *        endDate 가 지난 미션을 종료한다.
+     *        모두 강퇴되서 참여자가 0명인 미션을 종료한다.
      * */
     // 미션 종료 가능 확인
-    public boolean isEndable(){
-
-        // now
-        LocalDate now = LocalDate.now();
+    public boolean isEndable(LocalDate now){
 
         /**
-         * [ 2020-03-12 : 이민호 ]
-         * 설명 : 종료날짜가 현재보다 이후인 경우에는 종료할 수 없다.
-         *       만약 종료날짜가 되지 않았는데, 이 메서드를 호출한 경우는 종료 batch 로직에 문제가 있다.
+         * [ 2020-03-20 : 이민호 ]
+         * 설명 : 종료날짜가 지난 미션을 종료한다.
          * */
-        if(this.endDate.isAfter(now)){
-            throw new IllegalArgumentException("아직 종료날짜가 되지 않았습니다.");
+        if(now.isAfter(this.endDate)){
+            return true;
         }
 
-        return true;
+        /**
+         * [ 2020-03-20 : 이민호 ]
+         * 설명 : 모두 강퇴되서 참여자가 0명인 미션을 종료한다.
+         * */
+        if(getParticipantCountNotBanned()==0){
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -376,7 +382,7 @@ public class Mission extends BaseTimeEntity implements Serializable {
      * 설명 : String 값인 요일(SUM/MON/TUE...)이 input 으로 주어졌을 때
      *        해당 요일이 제출 의무 요일인지 확인
      *  */
-    private boolean checkMandatory(String day){
+    public boolean checkMandatory(String day){
 
         Week week = this.missionRule.getWeek();
 
@@ -495,5 +501,55 @@ public class Mission extends BaseTimeEntity implements Serializable {
 
         // return histories
         return histories;
+    }
+
+    // check valid file extension
+    public boolean isValidFileExtension(){
+
+        String extension = this.fileExtension.toLowerCase();
+
+        // check file extension
+        if(!extension.equals(".jpg")
+                && !extension.equals(".jpeg")
+                && !extension.equals(".gif")
+                && !extension.equals(".png")
+                && !extension.equals(".bmp")
+        ){
+            throw new IllegalArgumentException("저장할 수 있는 사진의 확장자는 jpg/jpeg/gif/png/bmp 입니다.");
+        }
+        return true;
+    }
+
+    // check valid start date
+    public boolean isValidStartDate(LocalDate now){
+        if(this.startDate.isBefore(now)){
+            throw new IllegalArgumentException("미션 시작날짜는 현재보다 빠를수 없습니다.");
+        }
+
+        if(this.startDate.isAfter(this.endDate)){
+            throw new IllegalArgumentException("미션 시작날짜는 미션종료날짜보다 느릴수 없습니다.");
+        }
+        return true;
+    }
+
+    // check mission validation
+    public boolean isValidMission(LocalDate now){
+
+        // check valid file extension
+        if(!isValidFileExtension()){
+            return false;
+        }
+
+        // check valid start date
+        if(!isValidStartDate(now)){
+            return false;
+        }
+
+        // check valid mission rule
+        if(!this.missionRule.isValidWeek()){
+            return false;
+        }
+
+        return true;
     }
 }

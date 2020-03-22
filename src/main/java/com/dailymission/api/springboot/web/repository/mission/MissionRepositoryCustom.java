@@ -17,5 +17,5 @@ public interface MissionRepositoryCustom {
     List<Mission> findAllCreatedInMonth();
 
     // 전체 미션 목록
-    List<Mission> findAllByCreatedDate();
+    List<Mission> findAlByCreatedDate();
 }

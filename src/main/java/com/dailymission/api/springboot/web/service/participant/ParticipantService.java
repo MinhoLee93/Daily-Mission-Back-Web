@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -74,7 +75,7 @@ public class ParticipantService {
          *        2. 삭제되지 않은 미션
          *        3. 시작하지 않은 미션
          * */
-        if(!mission.isPossibleToParticipate()){
+        if(!mission.isPossibleToParticipate(LocalDate.now())){
             throw new IllegalArgumentException("참여 가능한 미션이 아닙니다.");
         }
 

@@ -97,7 +97,6 @@ public class MissionController {
      * [ 2020-03-12 : 이민호 ]
      * 설명 : Hot 미션 목록을 가져온다.
      * */
-    // Hot
     @GetMapping("/api/mission/hot")
     @Cacheable(value = "missionLists", key = "'hot'")
     public List<MissionHotListResponseDto> findHotList(){
@@ -110,7 +109,6 @@ public class MissionController {
      * [ 2020-03-12 : 이민호 ]
      * 설명 : 신규 미션 목록을 가져온다.
      * */
-    // 홈
     @GetMapping("/api/mission/new")
     @Cacheable(value = "missionLists", key = "'new'")
     public List<MissionNewListResponseDto> findNewList(){
@@ -123,15 +121,11 @@ public class MissionController {
      * [ 2020-03-12 : 이민호 ]
      * 설명 : 전체 미션 목록을 가져온다.
      * */
-    // 전체
     @GetMapping("/api/mission/all")
     @Cacheable(value = "missionLists", key = "'all'")
     public List<MissionAllListResponseDto> findAllList(){
 
         return  missionService.findAllList();
     }
-
-
-
 
 }
