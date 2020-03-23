@@ -20,7 +20,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 //    @Autowired
 //    EntityManager em;
 
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
 //    public PostRepositoryCustomImpl(){
 //        super(Post.class);

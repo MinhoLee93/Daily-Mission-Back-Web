@@ -9,7 +9,7 @@ public class ParticipantRepositoryCustomImpl implements ParticipantRepositoryCus
 //    @Autowired
 //    EntityManager em;
 
-    private JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
 //    public ParticipantRepositoryCustomImpl(){
 //        super(Participant.class);

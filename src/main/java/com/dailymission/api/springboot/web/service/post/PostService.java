@@ -71,7 +71,8 @@ public class PostService {
         }
 
         // 제출 기록 확인
-        boolean isSubmit = isSubmitToday(participant);
+        LocalDateTime now = LocalDateTime.now();
+        boolean isSubmit = isSubmitToday(participant, now);
 
 
         // 이미 제출한 기록이 있을 경우
@@ -79,6 +80,11 @@ public class PostService {
             throw new IllegalArgumentException("금일 인증을 완료한 미션입니다.");
         }
 
+
+        /**
+         * [ 2020-03-23 : 이민호 ]
+         * 설명 : POST 객체 변환시 @Column 어노테이션이 TITLE/CONTENT 의 Null 을 검사한다.
+         * */
         // entity
         Post post = requestDto.toEntity(user, mission);
 
@@ -212,7 +218,6 @@ public class PostService {
         List<PostHistoryDto> histories = mission.getHistories(submits);
 
 
-
         /**
          * [ 2020-03-13 : 이민호 ]
          * 설명 : Schedule > histories > submits
@@ -274,11 +279,10 @@ public class PostService {
                         .orElseThrow(()-> new ResourceNotFoundException("Post", "id" , id));
 
         // check is deletable
-        post.isDeletable(user);
-
-
-        // delete flag -> 'Y'
-        post.delete();
+        if(post.isDeletable(user)){
+            // delete flag -> 'Y'
+            post.delete();
+        }
     }
 
 
@@ -287,12 +291,9 @@ public class PostService {
      * 설명 : 참여중인 미션에 금일 인증한 포스트 제출 기록이 있는지 확인한다.
      * */
     @Transactional(readOnly = true)
-    public boolean isSubmitToday(Participant participant){
+    public boolean isSubmitToday(Participant participant, LocalDateTime now){
         // result
         boolean isSubmit = false;
-
-        // now
-        LocalDateTime now = LocalDateTime.now();
 
         /**
          * [ 2020-03-11 : 이민호 ]

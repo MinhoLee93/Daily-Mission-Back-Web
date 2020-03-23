@@ -80,10 +80,10 @@ public class PostController {
             @CacheEvict(value = "postLists", key = "'all'"),
             // 유저별 포스트 List
             @CacheEvict(value = "postLists", key = "'user-'+ #userPrincipal.id"),
-            // 미션별 포스트 List
-            @CacheEvict(value = "postLists", key = "'mission-' + #requestDto.missionId"),
-            // 금주 Schedule History
-            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.missionId + '-week-0'"),
+//            // 미션별 포스트 List
+//            @CacheEvict(value = "postLists", key = "'mission-' + #requestDto.missionId"),
+//            // 금주 Schedule History
+//            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.missionId + '-week-0'"),
             // 유저 정보
             @CacheEvict(value = "users", key = "#userPrincipal.id"),
             // 포스트 정보 (detail)
@@ -135,7 +135,6 @@ public class PostController {
     }
 
 
-
     /**
      * [ 2020-03-13 : 이민호 ]
      * 설명 : 미션별로 해당 Week 의 post 제출 schedule 을 가져온다.
@@ -144,7 +143,7 @@ public class PostController {
      *
      *        일/월/화/수/목/금/토 정보를 가져온다.
      * */
-    @GetMapping("/api/post/schedule/mission/{id}/{week}")
+    @GetMapping("/api/post/schedule/mission/{id}/week/{week}")
     @Cacheable(value = "schedules", key = "'mission-' + #id + '-week-' + #week")
     public PostScheduleResponseDto findSchedule(@PathVariable("id") Long id,
                                                 @PathVariable("week") Long week){

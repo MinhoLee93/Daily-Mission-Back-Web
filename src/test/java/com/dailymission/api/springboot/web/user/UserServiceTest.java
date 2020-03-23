@@ -84,7 +84,7 @@ public class UserServiceTest {
         // given
         final UserPrincipal userPrincipal = UserPrincipal.create(user);
         given(userRepository.findById(any())).willReturn(Optional.of(user));
-        given(postService.isSubmitToday(any())).willReturn(false);
+        given(postService.isSubmitToday(any(), any())).willReturn(false);
 
         // when
         final UserResponseDto responseDto = userService.getCurrentUser(userPrincipal);

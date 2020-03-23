@@ -458,11 +458,11 @@ public class Mission extends BaseTimeEntity implements Serializable {
              *       이때 미션에서 강퇴되었는지 여부도 포함한다. (isBanned)
              * */
             PostHistoryDto history = PostHistoryDto.builder()
-                    .userId(user.getId())
-                    .userName(user.getName())
-                    .thumbnailUrl(user.getThumbnailUrl())
-                    .banned(participant.isBanned())
-                    .build();
+                                                   .userId(user.getId())
+                                                   .userName(user.getName())
+                                                   .thumbnailUrl(user.getThumbnailUrl())
+                                                   .banned(participant.isBanned())
+                                                   .build();
 
 
             /**

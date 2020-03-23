@@ -67,12 +67,12 @@ public class Post extends BaseTimeEntity implements Serializable {
         this.deleted = false;
     }
 
-    // 내용 업데이트
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
+//    // 내용 업데이트
+//    public void update(String title, String content) {
+//        this.title = title;
+//        this.content = content;
+//    }
+//
     // 이미지 업데이트
     public void updateImage(String imageUrl){
         // 이미지
@@ -85,7 +85,6 @@ public class Post extends BaseTimeEntity implements Serializable {
     public void updateThumbnail(String thumbnailUrl){
         this.thumbnailUrl = thumbnailUrl;
     }
-
 
     // 삭제 가능한지 확인
     public boolean isDeletable(User user){

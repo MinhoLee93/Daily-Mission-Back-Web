@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -74,7 +75,8 @@ public class UserService {
             }
 
             // check today submit history
-            boolean isSubmit = postService.isSubmitToday(participant);
+            LocalDateTime now = LocalDateTime.now();
+            boolean isSubmit = postService.isSubmitToday(participant, now);
 
             /**
              * [ 2020-03-11 : 이민호 ]

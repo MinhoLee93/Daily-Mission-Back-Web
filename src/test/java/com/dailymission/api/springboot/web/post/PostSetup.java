@@ -13,8 +13,13 @@ import lombok.Builder;
 * */
 public class PostSetup {
 
-    private Mission mission;
+    private final String TITLE = "TITLE";
+    private final String CONTENT = "CONTENT";
+    private final String ORIGINAL_FILE_NAME = "ORIGINAL_FILE_NAME.jpg";
+    private final String FILE_EXTENSION = ".jpg";
+    private final String IMAGE_URL = "IMAGE_URL.jpg";
 
+    private Mission mission;
     private User user;
 
     @Builder
@@ -27,7 +32,7 @@ public class PostSetup {
         this.user = user;
     }
 
-    public Post build(){
+    public Post get(){
         return buildPost();
     }
 
@@ -35,8 +40,11 @@ public class PostSetup {
         return Post.builder()
                     .mission(mission)
                     .user(user)
-                    .title("test")
-                    .content("test")
+                    .title(TITLE)
+                    .content(CONTENT)
+                    .originalFileName(ORIGINAL_FILE_NAME)
+                    .fileExtension(FILE_EXTENSION)
+                    .imageUrl(IMAGE_URL)
                     .build();
     }
 }

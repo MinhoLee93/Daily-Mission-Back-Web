@@ -74,10 +74,9 @@ public class MissionServiceTest {
     private final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
     private final String IMAGE_URL = "IMAGE_URL.jpg";
 
-
     @Before
     public void setup() throws Exception {
-        // save user
+        // user
         user = UserSetup.builder().build().get();
 
         // mission rule (fri/sat :false)

@@ -1,6 +1,7 @@
 package com.dailymission.api.springboot.web.mission;
 
 import com.dailymission.api.springboot.config.JpaConfig;
+import com.dailymission.api.springboot.config.QueryDslConfig;
 import com.dailymission.api.springboot.web.mission.rule.MissionRuleSetup;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
@@ -42,7 +43,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest(includeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        classes = JpaConfig.class
+        classes = {JpaConfig.class, QueryDslConfig.class}
 ))
 public class MissionRepositoryTest {
 
@@ -51,7 +52,7 @@ public class MissionRepositoryTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    EntityManager em;
+    private EntityManager em;
     private JPAQueryFactory queryFactory;
 
     private Mission mission;
@@ -108,7 +109,7 @@ public class MissionRepositoryTest {
      * Query : select mission0_.id as id1_0_,
      *                mission0_.created_date as created_2_0_,
      *                mission0_.modified_date as modified3_0_,
-     *                mission0_.content as content4_0_,
+     *                 mission0_.content as content4_0_,
      *                mission0_.credential as credenti5_0_,
      *                mission0_.deleted as deleted6_0_,
      *                mission0_.end_date as end_date7_0_,

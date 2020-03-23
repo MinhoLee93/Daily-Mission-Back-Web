@@ -22,6 +22,6 @@ public class MultipartFileSetup {
         return new MockMultipartFile("file",
                 "file.jpg",
                 "multipart/form-data",
-                new FileInputStream("C:/portfolio/daily-mission/src/test/resources/로고.jpg"));
+                new FileInputStream("C:/portfolio/daily-mission/src/test/resources/이민호.jpg"));
     }
 }
