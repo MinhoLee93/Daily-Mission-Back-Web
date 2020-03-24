@@ -95,7 +95,14 @@ public class S3Util {
 
         // upload image to s3
         String fileName = dirName + "/" + uploadFile.getName();
+        // s3 url
         String uploadImageUrl = putS3(uploadFile, fileName);
+        /**
+         * [ 2020-03-24 : 이민호 ]
+         * 설명 : S3에 업로드한 이미지 URL 에서 ".s3.ap-northeast-2.amazonaws.com" 를 제거해
+         *        https CloudFront url 로 변경한다.
+         * */
+        String cloudFrontUrl =  uploadImageUrl.replace(".s3.ap-northeast-2.amazonaws.com", "");
 
         // delete local file
         removeNewFile(uploadFile);
@@ -104,7 +111,7 @@ public class S3Util {
                         .dirName(dirName)
                         .fileName(uploadFile.getName())
                         .keyName(fileName)
-                        .imageUrl(uploadImageUrl)
+                        .imageUrl(cloudFrontUrl)
                         .build();
     }
 
