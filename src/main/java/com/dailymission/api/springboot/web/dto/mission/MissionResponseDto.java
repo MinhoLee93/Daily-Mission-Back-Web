@@ -21,6 +21,7 @@ import java.util.List;
 public class MissionResponseDto implements Serializable {
     private Long id;
     private Week week;
+    private Long userId; // 방장 아이디
     private String userName;
     private String title;
     private String content;
@@ -38,6 +39,7 @@ public class MissionResponseDto implements Serializable {
     public MissionResponseDto(Mission entity){
         this.id = entity.getId();
         this.week = entity.getMissionRule().getWeek();
+        this.userId = entity.getUser().getId();
         this.userName = entity.getUser().getName();
         this.title = entity.getTitle();
         this.content = entity.getContent();

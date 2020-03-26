@@ -302,10 +302,14 @@ public class Mission extends BaseTimeEntity implements Serializable {
             throw new IllegalArgumentException("허용되지 않은 유저입니다.");
         }
 
+        /**
+         * [ 2020-03-26 : 이민호 ]
+         * 설명 : 사용자가 참여중이더라도, 삭제할 수 있도록 변경
+         * */
         // check participant is exists
-        if(this.participants. size()>1){
-            throw new IllegalArgumentException("사용자가 참여중인 미션은 삭제할 수 없습니다.");
-        }
+//        if(this.participants. size()>1){
+//            throw new IllegalArgumentException("사용자가 참여중인 미션은 삭제할 수 없습니다.");
+//        }
 
         // check is already deleted
         if(this.deleted){
