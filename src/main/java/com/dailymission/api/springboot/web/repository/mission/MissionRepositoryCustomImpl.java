@@ -77,7 +77,7 @@ public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
      *        정렬 : 최신 생성 순서
      * */
     @Override
-    public List<Mission> findAlByCreatedDate() {
+    public List<Mission> findAllByCreatedDate() {
 
        return  queryFactory
                 .select(mission)

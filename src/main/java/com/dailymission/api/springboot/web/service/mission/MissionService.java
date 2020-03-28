@@ -141,7 +141,7 @@ public class MissionService {
      * */
     @Transactional(readOnly = true)
     public List<MissionAllListResponseDto> findAllList(){
-        return missionRepository.findAlByCreatedDate().stream()
+        return missionRepository.findAllByCreatedDate().stream()
                 .map(MissionAllListResponseDto::new)
                 .collect(Collectors.toList());
     }
