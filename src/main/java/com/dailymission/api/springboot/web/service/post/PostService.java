@@ -135,7 +135,7 @@ public class PostService {
      * 설명 : 유저별 전체 포스트 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
-    public List<PostListResponseDto> findAllByUser(UserPrincipal userPrincipal){
+    public List<PostListMyResponseDto> findAllByUser(UserPrincipal userPrincipal){
 
         // user
         User user = userRepository.findById(userPrincipal.getId())
@@ -143,7 +143,7 @@ public class PostService {
 
         // get all posts by user
         return postRepository.findAllByUser(user).stream()
-                .map(PostListResponseDto::new)
+                .map(PostListMyResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -152,7 +152,7 @@ public class PostService {
      * 설명 : 미션별 전체 포스트 목록을 가져온다.
      * */
     @Transactional(readOnly = true)
-    public List<PostListResponseDto> findAllByMission(Long id){
+    public List<PostListMissionResponseDto> findAllByMission(Long id){
 
         // mission
         Mission mission = missionRepository.findByIdAndDeletedIsFalse(id)
@@ -160,7 +160,7 @@ public class PostService {
 
         // get all posts by mission
         return postRepository.findAllByMission(mission).stream()
-                .map(PostListResponseDto::new)
+                .map(PostListMissionResponseDto::new)
                 .collect(Collectors.toList());
     }
 

@@ -49,6 +49,8 @@ public class User extends BaseTimeEntity implements Serializable {
 
     private String thumbnailUrl;
 
+    private String thumbnailUrlUserInfo;
+
     @Column(name = "ORIGINAL_FILE_NAME")
     private String originalFileName;
 
@@ -115,10 +117,16 @@ public class User extends BaseTimeEntity implements Serializable {
         this.imageUrl = imageUrl;
         // 썸네일 -> 재생성
         this.thumbnailUrl = imageUrl;
+        this.thumbnailUrlUserInfo = imageUrl;
     }
 
-    // 썸네일 업데이트
+    // 썸네일(Profile) 업데이트
     public void updateThumbnail(String thumbnailUrl){
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    // 썸네일(UserInfo) 업데이트
+    public void updateThumbnailUserInfo(String thumbnailUrlUserInfo){
+        this.thumbnailUrlUserInfo = thumbnailUrlUserInfo;
     }
 }

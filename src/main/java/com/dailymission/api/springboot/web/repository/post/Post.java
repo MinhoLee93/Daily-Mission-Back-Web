@@ -47,6 +47,12 @@ public class Post extends BaseTimeEntity implements Serializable {
     @Column(name="THUMBNAIL_URL", nullable = false)
     private String thumbnailUrl;
 
+    @Column(name="THUMBNAIL_URL_MISSION", nullable = false)
+    private String thumbnailUrlMission;
+
+    @Column(name="THUMBNAIL_URL_MY", nullable = false)
+    private String thumbnailUrlMy;
+
     @Column(name = "DELETED")
     private boolean deleted;
 
@@ -63,6 +69,8 @@ public class Post extends BaseTimeEntity implements Serializable {
         // s3
         this.imageUrl = imageUrl;
         this.thumbnailUrl = imageUrl;
+        this.thumbnailUrlMy = imageUrl;
+        this.thumbnailUrlMission = imageUrl;
 
         this.deleted = false;
     }
@@ -79,11 +87,23 @@ public class Post extends BaseTimeEntity implements Serializable {
         this.imageUrl = imageUrl;
         // 썸네일 -> 재생성
         this.thumbnailUrl = imageUrl;
+        this.thumbnailUrlMy = imageUrl;
+        this.thumbnailUrlMission = imageUrl;
     }
 
-    // 썸네일 업데이트
+    // 썸네일 업데이트 (포스트 목록)
     public void updateThumbnail(String thumbnailUrl){
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    // 썸네일 업데이트 (My)
+    public void updateThumbnailMy(String thumbnailUrlMy){
+        this.thumbnailUrlMy = thumbnailUrlMy;
+    }
+
+    // 썸네일 업데이트 (Mission)
+    public void updateThumbnailMission(String thumbnailUrlMission){
+        this.thumbnailUrlMission = thumbnailUrlMission;
     }
 
     // 삭제 가능한지 확인

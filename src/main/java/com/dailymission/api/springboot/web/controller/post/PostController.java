@@ -117,7 +117,7 @@ public class PostController {
     @GetMapping("/api/post/all/me")
     @PreAuthorize("hasRole('USER')")
     @Cacheable(value = "postLists", key = "'user-' + #userPrincipal.id")
-    public List<PostListResponseDto> findAllByUser (@CurrentUser UserPrincipal userPrincipal) {
+    public List<PostListMyResponseDto> findAllByUser (@CurrentUser UserPrincipal userPrincipal) {
 
         return postService.findAllByUser(userPrincipal);
     }
@@ -129,7 +129,7 @@ public class PostController {
      * */
     @GetMapping("/api/post/all/mission/{id}")
     @Cacheable(value = "postLists", key = "'mission-' + #id")
-    public List<PostListResponseDto> findAllByMission (@PathVariable Long id) {
+    public List<PostListMissionResponseDto> findAllByMission (@PathVariable Long id) {
 
         return postService.findAllByMission(id);
     }

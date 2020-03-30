@@ -86,9 +86,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if(oAuth2UserInfo.getImageUrl()!=null){
             user.setImageUrl(oAuth2UserInfo.getImageUrl());
             user.setThumbnailUrl(oAuth2UserInfo.getImageUrl());
+            user.setThumbnailUrlUserInfo(oAuth2UserInfo.getImageUrl());
         }else{
             user.setImageUrl(DEFAULT_USER_IMAGE_URL);
             user.setThumbnailUrl(DEFAULT_USER_THUMBNAIL_URL);
+            user.setThumbnailUrlUserInfo(DEFAULT_USER_IMAGE_URL);
         }
 
         return userRepository.save(user);

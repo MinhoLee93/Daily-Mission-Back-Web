@@ -19,14 +19,16 @@ public class UserResponseDto implements Serializable {
     private String name;
     private String email;
     private String thumbnailUrl;
+    private String thumbnailUrlUserInfo;
     private List<MissionPostSubmitCheckDto> missions = new ArrayList<>();
 
     @Builder
-    public UserResponseDto(Long id, String name, String email, String thumbnailUrl){
+    public UserResponseDto(Long id, String name, String email, String thumbnailUrl, String thumbnailUrlUserInfo){
         this.id = id;
         this.name = name;
         this.email = email;
         this.thumbnailUrl = thumbnailUrl;
+        this.thumbnailUrlUserInfo = thumbnailUrlUserInfo;
     }
 
     public void addMissionPostSubmitCheckDto(MissionPostSubmitCheckDto postSubmitCheck){

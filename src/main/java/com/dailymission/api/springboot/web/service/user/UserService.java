@@ -55,6 +55,7 @@ public class UserService {
                                                         .name(user.getName())
                                                         .email(user.getEmail())
                                                         .thumbnailUrl(user.getThumbnailUrl())
+                                                        .thumbnailUrlUserInfo(user.getThumbnailUrlUserInfo())
                                                         .build();
 
         /**

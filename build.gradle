@@ -18,6 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+archivesBaseName = 'springboot-deploy'
 group = 'com.dailymission.api'
 version = '0.0.1-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
 sourceCompatibility = '1.8'
@@ -141,3 +142,13 @@ dependencyManagement {
         mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RC2'
     }
 }
+
+// CI/CD
+//tasks.jar {
+//    enabled = false
+//}
+//
+//tasks.bootJar {
+//    enabled = true
+//    mainClassName = "com.dailymission.api.springboot.Application"
+//}
