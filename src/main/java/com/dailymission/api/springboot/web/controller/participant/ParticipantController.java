@@ -29,7 +29,8 @@ public class ParticipantController {
             @CacheEvict(value = "missionLists", key = "'hot'"),
             @CacheEvict(value = "missionLists", key = "'new'"),
             @CacheEvict(value = "missionLists", key = "'all'"),
-            @CacheEvict(value = "missions", key = "#requestDto.mission.id")
+            @CacheEvict(value = "missions", key = "#requestDto.mission.id"),
+            @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.mission.id + '-week-0'")
     })
     public Long save(@RequestBody ParticipantSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
 
