@@ -43,7 +43,7 @@ public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
         return  queryFactory
                 .select(mission)
                 .from(mission)
-                .where(mission.deleted.isFalse())
+                .where(mission.deleted.isFalse().and(mission.ended.isFalse()))
                 .orderBy(mission.participants.size().desc(), mission.createdDate.desc())
                 .fetch();
 
@@ -65,6 +65,7 @@ public class MissionRepositoryCustomImpl implements MissionRepositoryCustom {
                 .select(mission)
                 .from(mission)
                 .where(mission.deleted.isFalse()
+                        .and(mission.ended.isFalse())
                         .and(mission.createdDate.between(monthBefore, now)))
                 .orderBy(mission.createdDate.desc())
                 .fetch();
