@@ -12,13 +12,13 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 public class UserUpdateRequestDto implements Serializable {
-    private Long id;
+    // private Long id;
     private String userName;
     private MultipartFile file;
 
     @Builder
-    public UserUpdateRequestDto(Long id, String userName, MultipartFile file){
-        this.id = id;
+    public UserUpdateRequestDto(String userName, MultipartFile file){
+        // this.id = id;
         this.userName = userName;
         this.file = file;
     }

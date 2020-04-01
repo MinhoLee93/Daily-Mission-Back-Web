@@ -110,15 +110,19 @@ public class UserService {
     @Transactional
     public Long updateUser(UserUpdateRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal) throws IOException {
 
-        // check use id
-        if(requestDto.getId()==null){
-            throw new IllegalArgumentException("변경할 유저의 아이디가 입력되지 않았습니다.");
-        }
-
-        // check current user
-        if(requestDto.getId()!=userPrincipal.getId()){
-            throw new IllegalAccessError("본인의 유저 정보만 변경할 수 있습니다.");
-        }
+        /**
+         * [ 2020-04-01 : 이민호 ]
+         * 설명 : Token 에 이미 id가 포함되어 있으므로 생략한다.
+         * */
+//        // check use id
+//        if(requestDto.getId()==null){
+//            throw new IllegalArgumentException("변경할 유저의 아이디가 입력되지 않았습니다.");
+//        }
+//
+//        // check current user
+//        if(!requestDto.getId().equals(userPrincipal.getId())){
+//            throw new IllegalAccessError("본인의 유저 정보만 변경할 수 있습니다.");
+//        }
 
         // check request data is exist
         if(requestDto.getFile()==null && requestDto.getUserName()==null){
@@ -168,6 +172,6 @@ public class UserService {
         userRepository.save(user);
 
         // return user id
-        return  user.getId();
+        return user.getId();
     }
 }
