@@ -13,7 +13,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // oauth2
+    // oauth2
     Optional<User> findByEmail(String email);
+
+    // oauth2
+    Optional<User> findByEmailAndProvider(String email, AuthProvider provider);
 
     // oauth2
     Boolean existsByEmail(String email);
