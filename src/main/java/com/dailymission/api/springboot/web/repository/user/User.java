@@ -27,9 +27,10 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "user", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
+//@Table(name = "user", uniqueConstraints = {
+//        @UniqueConstraint(columnNames = "email")
+//})
+@Table(name = "user")
 @NoArgsConstructor
 public class User extends BaseTimeEntity implements Serializable {
 
