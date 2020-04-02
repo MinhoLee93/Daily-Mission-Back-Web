@@ -46,10 +46,13 @@ public class User extends BaseTimeEntity implements Serializable {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false, length = 2000)
     private String imageUrl;
 
+    @Column(nullable = false, length = 2000)
     private String thumbnailUrl;
 
+    @Column(nullable = false, length = 2000)
     private String thumbnailUrlUserInfo;
 
     @Column(name = "ORIGINAL_FILE_NAME")
