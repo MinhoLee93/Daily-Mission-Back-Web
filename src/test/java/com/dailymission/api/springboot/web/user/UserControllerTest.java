@@ -5,7 +5,6 @@ import com.dailymission.api.springboot.web.common.MultipartFileSetup;
 import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,7 +113,7 @@ public class UserControllerTest {
         final UserPrincipal userPrincipal = UserPrincipal.create(user);
         final String USER_UPDATE_NAME = "USER_UPDATE_NAME";
         UserUpdateRequestDto requestDto = UserUpdateRequestDto.builder()
-                                                                    .id(user.getId())
+//                                                                    .id(user.getId())
                                                                     .userName(USER_UPDATE_NAME)
                                                                     .file(null)
                                                                     .build();
@@ -158,22 +157,22 @@ public class UserControllerTest {
         return  mvc.perform(
                 multipart("/user/me/update")
                         .file(file)
-                        .param("id", requestDto.getId().toString())
+//                        .param("id", requestDto.getId().toString())
                         .param("userName",requestDto.getUserName())
                         .with(user(userPrincipal)))
                 .andDo(print());
     }
 
-    /**
-     * [ 2020-03-19 : 이민호 ]
-     * 설명 : object 를 Json 으로 convert 한다.
-     *
-     * */
-    private String asJsonString(final Object obj){
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    /**
+//     * [ 2020-03-19 : 이민호 ]
+//     * 설명 : object 를 Json 으로 convert 한다.
+//     *
+//     * */
+//    private String asJsonString(final Object obj){
+//        try {
+//            return new ObjectMapper().writeValueAsString(obj);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

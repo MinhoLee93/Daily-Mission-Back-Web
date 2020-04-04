@@ -2,21 +2,17 @@ package com.dailymission.api.springboot.web.mission;
 
 
 import com.dailymission.api.springboot.security.UserPrincipal;
-import com.dailymission.api.springboot.web.common.MultipartFileSetup;
-import com.dailymission.api.springboot.web.dto.user.UserUpdateRequestDto;
 import com.dailymission.api.springboot.web.repository.mission.Mission;
 import com.dailymission.api.springboot.web.repository.mission.MissionRepository;
 import com.dailymission.api.springboot.web.repository.mission.rule.Week;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.user.UserSetup;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,7 +22,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -341,35 +338,4 @@ public class MissionControllerTest {
                 .andDo(print());
     }
 
-    /**
-     * [ 2020-03-19 : 이민호 ]
-     * 설명 : postRequest 를 수행한다.
-     *       UserDetails 를 with(user(***)) 에 넘겨, Authenticated User 를 사용한다.
-     *       MockMultipartFile 을 생성해 multipart 의 file 에 넘긴다.
-     *       multipart/form-data 는 requestBody JSON 이 아닌 param 으로 변수를 받는다.
-     * */
-    private ResultActions postRequest(UserUpdateRequestDto requestDto, UserPrincipal userPrincipal) throws Exception {
-        final MockMultipartFile file = MultipartFileSetup.builder().build().get();
-
-        return  mvc.perform(
-                multipart("/user/me/update")
-                        .file(file)
-                        .param("id", requestDto.getId().toString())
-                        .param("userName",requestDto.getUserName())
-                        .with(user(userPrincipal)))
-                .andDo(print());
-    }
-
-    /**
-     * [ 2020-03-19 : 이민호 ]
-     * 설명 : object 를 Json 으로 convert 한다.
-     *
-     * */
-    private String asJsonString(final Object obj){
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

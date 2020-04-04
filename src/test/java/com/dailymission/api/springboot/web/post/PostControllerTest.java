@@ -14,7 +14,6 @@ import com.dailymission.api.springboot.web.repository.post.PostRepository;
 import com.dailymission.api.springboot.web.repository.user.User;
 import com.dailymission.api.springboot.web.repository.user.UserRepository;
 import com.dailymission.api.springboot.web.user.UserSetup;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -408,18 +407,5 @@ public class PostControllerTest {
                         .param("content", requestDto.getContent())
                         .with(user(userPrincipal)))
                 .andDo(print());
-    }
-
-    /**
-     * [ 2020-03-19 : 이민호 ]
-     * 설명 : object 를 Json 으로 convert 한다.
-     *
-     * */
-    private String asJsonString(final Object obj){
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

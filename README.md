@@ -220,13 +220,50 @@ spring.cache.type : none
 
 구조는 다음과 같습니다.
 
-- Domain 테스트 : domain 객체들은 가장 핵심이며, 이 객체를 사용하는 계층들이 프로젝트에 다양하게 분포되기 때문에 반드시 테스트 코드를 작성한다.
+• Domain 테스트 : domain 객체들은 가장 핵심이며, 이 객체를 사용하는 계층들이 프로젝트에 다양하게 분포되기 때문에 반드시 테스트 코드를 작성한다.
 
-- Repository 테스트 : @DataJpaTest 어노테이션을 통해서 Repository 에 대한 Bean 만 등록한다. 커스텀하게 작성한 쿼리 메서드, QueryDSL 등의  메서드를 테스트한다. ORM 은 SQL 을 직접 작성하지 않으니 반드시 실제 쿼리가 어떻게 출력되는지 확인한다.
+```
+public class MissionTest {
+...
+}
+```
 
-- Service 테스트 : 테스트 진행시 중요 관점이 아닌 것들은 Mocking 처리해서 외부 의존성을 줄인다.
+• Repository 테스트 : @DataJpaTest 어노테이션을 통해서 Repository 에 대한 Bean 만 등록한다. 커스텀하게 작성한 쿼리 메서드, QueryDSL 등의  메서드를 테스트한다. ORM 은 SQL 을 직접 작성하지 않으니 반드시 실제 쿼리가 어떻게 출력되는지 확인한다.
 
-- Controller 테스트 : 모든 Bean 을 올리고 테스트를 진행한다. @Transactional 어노테이션을 추가해 테스트 후 DB를 자동으로 RollBack 한다.
+```
+@RunWith(SpringRunner.class)
+@DataJpaTest(includeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = {JpaConfig.class, QueryDslConfig.class}
+))
+public class MissionRepositoryTest {
+...
+}  
+```
+
+• Service 테스트 : 테스트 진행시 중요 관점이 아닌 것들은 Mocking 처리해서 외부 의존성을 줄인다.
+
+```
+@RunWith(MockitoJUnitRunner.class)
+public class MissionServiceTest {
+...
+}
+```
+
+• Controller 테스트 : 모든 Bean 을 올리고 테스트를 진행한다. @Transactional 어노테이션을 추가해 테스트 후 DB를 자동으로 RollBack 한다.
+
+```
+@RunWith(SpringRunner.class)
+@SpringBootTest(properties = "spring.config.location=" +
+        "classpath:/application.yml" +
+        ",classpath:/application-oauth.yml" +
+        ",classpath:/aws.yml"
+)
+@Transactional
+public class MissionControllerTest {
+...
+}
+```
 
 🔑 총 96개의 Test Case를 작성했습니다. (mission : 45 / Participant : 8 / Post : 26 / User : 17)
 
