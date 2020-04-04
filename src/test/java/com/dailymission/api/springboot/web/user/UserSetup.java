@@ -8,7 +8,7 @@ import lombok.Builder;
 
 public class UserSetup {
 
-    private String name;
+//    private String name;
     private final String THUMBNAIL_URL = "THUMBNAIL_URL.jpg";
     private final String USER_NAME = "USER_NAME";
     private final String EMAIL = "EMAIL@gmail.com";
