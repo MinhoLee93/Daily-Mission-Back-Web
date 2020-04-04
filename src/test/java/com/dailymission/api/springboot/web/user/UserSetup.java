@@ -5,7 +5,7 @@ import com.dailymission.api.springboot.web.repository.user.AuthProvider;
 import com.dailymission.api.springboot.web.repository.user.User;
 import lombok.Builder;
 
-
+// test2
 public class UserSetup {
 
 //    private String name;
