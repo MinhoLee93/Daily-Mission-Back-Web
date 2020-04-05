@@ -26,5 +26,5 @@ else
   sleep 5
 fi
 
-echo "> $APPLICATION_JAR 배포 2"
+echo "> $APPLICATION_JAR 배포 3"
 nohup java -jar $APPLICATION_JAR 2>&1 &
