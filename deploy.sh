@@ -27,6 +27,6 @@ else
 fi
 
 echo "> $APPLICATION_JAR 배포 3"
-nohup java -jar $APPLICATION_JAR > /dev/null 2>&1 &
+sudo nohup java -jar $APPLICATION_JAR > /dev/null 2>&1 &
 
 
