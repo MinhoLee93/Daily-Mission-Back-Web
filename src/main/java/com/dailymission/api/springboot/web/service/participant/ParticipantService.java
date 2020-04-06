@@ -32,7 +32,7 @@ public class ParticipantService {
      * 설명 : 미션에 참여한다.
      * */
     @Transactional
-    public Long save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
+    public boolean save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
 
         // check mission id
         if(requestDto.getMission()==null){
@@ -82,15 +82,16 @@ public class ParticipantService {
 
         // 비밀번호 확인
         if(!mission.matchCredential(requestDto.getCredential(), passwordEncoder)){
-            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+            return false;
         }
 
         // participant entity
         Participant participant =  requestDto.toEntity(user);
 
-
         // save participant
-        return participantRepository.save(participant).getId();
+        participantRepository.save(participant).getId();
+
+        return true;
     }
 
 //    @Transactional(readOnly = true)

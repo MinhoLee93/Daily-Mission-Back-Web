@@ -32,7 +32,7 @@ public class ParticipantController {
             @CacheEvict(value = "missions", key = "#requestDto.mission.id"),
             @CacheEvict(value = "schedules", key = "'mission-' + #requestDto.mission.id + '-week-0'")
     })
-    public Long save(@RequestBody ParticipantSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
+    public boolean save(@RequestBody ParticipantSaveRequestDto requestDto, @CurrentUser UserPrincipal userPrincipal){
 
         return participantService.save(requestDto, userPrincipal);
     }
