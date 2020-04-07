@@ -1,5 +1,4 @@
 # Daily Mission (daily-mission.com)
-> 대국민 미션 인증 프로젝트 😎
 
 [1일 1알고리즘](https://okky.kr/article/696425) 온라인 모임을 운영하며, 체계적인 관리의 필요성을 느껴 프로젝트를 진행했습니다.
 
