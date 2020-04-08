@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class ParticipantService {
      * 설명 : 미션에 참여한다.
      * */
     @Transactional
-    public boolean save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal){
+    public boolean save(ParticipantSaveRequestDto requestDto, UserPrincipal userPrincipal) {
 
         // check mission id
         if(requestDto.getMission()==null){
@@ -82,7 +83,7 @@ public class ParticipantService {
 
         // 비밀번호 확인
         if(!mission.matchCredential(requestDto.getCredential(), passwordEncoder)){
-            return false;
+            throw new NotAcceptableStatusException("비밀번호가 일치하지 않습니다.");
         }
 
         // participant entity
