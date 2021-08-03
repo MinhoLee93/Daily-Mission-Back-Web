@@ -16,7 +16,7 @@
 > 현재 미션 생성은 관리자만 할 수 있으며, 조만간 일반 사용자들에게 open 할 예정입니다.	
 ## 1. 로그인	
 > 구글/깃허브/네이버로 로그인을 할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/login.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/c79703d4-0265-40ac-bca0-a85c4a4b8c70/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.33.41.png">
 
 ## 2. 사용자 정보 변경	
 > 로그인 후 사용자 이름 / 이미지를 변경할 수 있습니다.	
