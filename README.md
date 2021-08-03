@@ -20,50 +20,50 @@
 
 ## 2. 사용자 정보 변경	
 > 로그인 후 사용자 이름 / 이미지를 변경할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/change.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/c62d18a0-3bb9-4504-8cbd-c58c81c501fd/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.35.55.png"></img>	
 
 ## 3. 홈	
 > 참여자가 많은 미션과 신규 생성된 미션을 조회 할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/home.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/b258ac95-53f1-4695-b699-3a2d46dbb564/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.38.33.png"></img>	
 
 ## 4. 전체 미션	
 > 종료된 미션을 포함해 전체 미션을 조회 할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/all.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/64c19881-617c-4eff-871b-66add96e11fd/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.40.10.png"></img>	
 
 
 ## 5. 미션 디테일	
 > 미션 디테일 정보를 확인할 수 있습니다. 또한, 현재 참여중인 사용자와 해당 미션에 제출된 포스트 목록을 조회 할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/detail.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/597d07f1-74c9-4f63-b586-67df0a7c025b/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.40.52.png"></img>	
 
 ## 6. 미션 참여	
 
 > 미션 생성후 전달받은 참여코드를 입력해 미션에 참여할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/attend.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/47b7b498-3d5f-4b95-b3d0-4e5d10e89291/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.41.26.png"></img>	
 
 ## 7. 포스팅 목록	
 
 > 전체 인증 포스트 목록을 조회할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/post.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/4134abf4-4aa5-4b13-9024-978e86adccb0/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.42.07.png"></img>	
 
 ## 8. 내 미션 목록	
 > 내가 참여중인 미션 목록과 제출한 포스트 목록을 조회할 수 있습니다. 강퇴당한 미션에는 입장할 수 없습니다.	
-<img src="https://image.daily-mission.com/README/my.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/be1c2656-b1b2-4c54-8f95-338b3abc2559/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.42.36.png"></img>	
 
 ## 9. 인증 포스트 History	
 > 참여중인 미션의 Weekly 포스트 History를 조회할 수 있습니다.	
-<img src="https://image.daily-mission.com/README/submit.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/55a57f37-8cde-4b66-87cf-891f71767f40/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.43.10.png"></img>	
 
 제출 완료 후에는 아래와 같이 화면이 변경됩니다.	
 
-<img src="https://image.daily-mission.com/README/submit_success.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/1fd5d293-8041-4b91-8f6a-9c8e6365439f/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.43.44.png"></img>	
 
 ## 10. 포스트 제출	
 > 제목/내용/사진을 입력해 인증 포스트를 작성합니다.	
-<img src="https://image.daily-mission.com/README/post_submit.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/c67ab427-0688-436f-9804-ea171a801399/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.44.11.png"></img>	
 
 # Project Structure	
 > React(SPA) + Spring Boot(API Server) 구조로 개발했으며, 저는 API Server 를 담당했습니다.	
-프로젝트에 사용할 기술 목록을 사전에 정의하고, 약 5개월간 해당 기술들을 학습 후 [기술 블로그](https://velog.io/@minholee_93/series)에 정리했습니다. 	
+프로젝트에 사용할 기술 목록을 사전에 정의하고, 약 5개월간 해당 기술들을 학습 후 [기술 블로그](https://minholee93.tistory.com/)에 정리했습니다. 	
 
 > 사용한 기술스택은 다음과 같습니다.	
 • Spring Boot (API Server)   	
@@ -138,7 +138,7 @@ mission.isValidMission()
 > 매일 새벽 3시에 jenkins job이 미인증 사용자들을 강퇴하고, 종료일자가 지난 미션을 종료한다.	
 구조는 다음과 같습니다.	
 
-<img src="https://image.daily-mission.com/README/batch.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/d7b1e4f1-69be-4cc3-9d21-2e2e49a00bfa/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.45.01.png"></img>	
 
 🔑  Batch Job의 중복 처리방지를 위해 job parameter를 전달받아 batch job의 멱등성을 유지했습니다.	
 
@@ -178,7 +178,7 @@ order by (
 > 구글/깃허브/네이버 oauth provider를 사용해 불필요한 회원가입 프로세스를 제거한다. 또한, JWT Token을 사용해 Authorizaton Header 기반 인증 시스템을 구현한다.	
 구조는 다음과 같습니다.	
 
-<img src="https://image.daily-mission.com/README/jwt.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/7f30041f-97b6-4fcb-8cce-2f0aaf0cc064/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.45.34.png"></img>	
 
 🔑 이름/이메일/사진 3가지 정보만 oauth provider에 요청해, token 유출에 따른 보안 문제를 최소화했습니다. 	
 
@@ -252,7 +252,7 @@ public class MissionControllerTest {
 > 전체 프로젝트 인프라 구성 및 계정 별 권한을 관리한다.	
 구조는 다음과 같습니다.	
 
-<img src="https://image.daily-mission.com/README/aws.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/ee694854-e6bd-4a0e-83b8-9bc79d1a279d/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.46.26.png"></img>	
 
 🔑 EC2의 ssh 접근권한은 반드시 본인의 IP 만 허용했습니다. 또한, 사용자/서버 별 IAM 계정 및 권한을 부여해 보안성을 강화했습니다.	
 
@@ -285,7 +285,7 @@ public class MissionControllerTest {
 > 화면 별 규격에 맞게 image를 resize 한다. direct exchange와 routing key를 사용해 queue와 연결된 consumer에게 resizing job을 분배한다.	
 구조는 다음과 같습니다.	
 
-<img src="https://image.daily-mission.com/README/rabbitmq.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/6e14b8a5-7e59-4f33-9bee-b8e6dbf7610c/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.47.01.png"></img>	
 
 
 🔑 spring amqp를 사용해 손쉽게 retry mechanism 을 구현했습니다.	
@@ -298,6 +298,6 @@ public class MissionControllerTest {
 > Jenkins와 AWS의 CodeDeploy를 사용해 CI/CD를 구현한다.	
 구조는 다음과 같습니다.	
 
-<img src="https://image.daily-mission.com/README/jenkins.png"></img>	
+<img src="https://images.velog.io/images/minholee93/post/38dff1ba-a36b-4904-9a98-92c903a96d9f/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-08-03%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%2010.47.28.png"></img>	
 
 🔑 AWS의 ELB를 사용해 무중단 배포를 구축했습니다.
